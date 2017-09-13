@@ -1,0 +1,33 @@
+//
+//  AppDelegate.h
+//  LiveAgentPhone
+//
+//  Created by Rastislav Kostrab on 7.12.16.
+//  Copyright © 2016 Quality Unit. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import <PushKit/PushKit.h>
+#import "CallManager.h"
+#import <UserNotifications/UserNotifications.h>
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate, PKPushRegistryDelegate, UNUserNotificationCenterDelegate, UIGestureRecognizerDelegate>
+
+@property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, strong) PKPushRegistry *voipRegistry;
+@property (nonatomic, strong) CallManager *callManager;
+
+- (void)registerVoipNotifications;
+
+- (nullable NSString *) getPendingPhoneNumber;
+
+- (void)openCalling;
+
+- (void)openDialpad:(nullable NSString *)remoteNumber;
+
+- (void)showCallFloatingButton;
+
+- (void)hideCallFloatingButton;
+
+@end
+

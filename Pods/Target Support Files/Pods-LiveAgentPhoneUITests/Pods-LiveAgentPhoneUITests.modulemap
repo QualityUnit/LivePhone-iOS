@@ -1,0 +1,6 @@
+framework module Pods_LiveAgentPhoneUITests {
+  umbrella header "Pods-LiveAgentPhoneUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
