@@ -117,7 +117,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sAb-2V-14C">
-                                                    <rect key="frame" x="59" y="15" width="433" height="21"/>
+                                                    <rect key="frame" x="57" y="15" width="434" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -461,7 +461,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Begin typing..." textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="IW1-ED-Hfq">
-                                                    <rect key="frame" x="7" y="0.0" width="485" height="43"/>
+                                                    <rect key="frame" x="4" y="0.0" width="488" height="43"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -512,7 +512,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Type a number" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Qgc-JT-yqC">
-                                                    <rect key="frame" x="7" y="0.0" width="485" height="43"/>
+                                                    <rect key="frame" x="6" y="0.0" width="484" height="43"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -671,7 +671,7 @@
         <!--About-->
         <scene sceneID="aKt-tz-TpD">
             <objects>
-                <viewController id="J6J-zM-C0R" sceneMemberID="viewController">
+                <viewController id="J6J-zM-C0R" customClass="AboutViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="awk-C8-ee6"/>
                         <viewControllerLayoutGuide type="bottom" id="PFc-CV-Aa8"/>
@@ -681,9 +681,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QLj-SY-NQs">
-                                <rect key="frame" x="183" y="240" width="134" height="21"/>
+                                <rect key="frame" x="185.5" y="240" width="129" height="21"/>
                                 <attributedString key="attributedText">
-                                    <fragment content="Live Agent Phone">
+                                    <fragment content="LiveAgent Phone">
                                         <attributes>
                                             <font key="NSFont" size="17" name=".AppleSystemUIFont"/>
                                         </attributes>
@@ -691,20 +691,37 @@
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="version" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gsL-NE-n9M">
+                                <rect key="frame" x="185.5" y="269" width="129" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.36322053108808294" green="0.36322053108808294" blue="0.36322053108808294" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="brandLogo" translatesAutoresizingMaskIntoConstraints="NO" id="WK2-xd-1MI">
+                                <rect key="frame" x="200" y="116" width="100" height="100"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="gsL-NE-n9M" firstAttribute="centerX" secondItem="1Av-Sy-zJZ" secondAttribute="centerX" id="06D-1x-VEn"/>
                             <constraint firstItem="QLj-SY-NQs" firstAttribute="centerY" secondItem="1Av-Sy-zJZ" secondAttribute="centerY" id="4XT-Fl-fyV"/>
+                            <constraint firstItem="QLj-SY-NQs" firstAttribute="top" secondItem="WK2-xd-1MI" secondAttribute="bottom" constant="24" id="A1V-G6-sbo"/>
+                            <constraint firstItem="gsL-NE-n9M" firstAttribute="top" secondItem="QLj-SY-NQs" secondAttribute="bottom" constant="8" id="AIt-B3-MoE"/>
                             <constraint firstItem="QLj-SY-NQs" firstAttribute="centerX" secondItem="1Av-Sy-zJZ" secondAttribute="centerX" id="EaE-KO-G6n"/>
+                            <constraint firstItem="gsL-NE-n9M" firstAttribute="trailing" secondItem="QLj-SY-NQs" secondAttribute="trailing" id="oYP-Q8-3LY"/>
+                            <constraint firstItem="WK2-xd-1MI" firstAttribute="centerX" secondItem="1Av-Sy-zJZ" secondAttribute="centerX" id="s1j-hv-vKN"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="About" id="AjC-0h-pVM"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="500" height="500"/>
+                    <connections>
+                        <outlet property="version" destination="gsL-NE-n9M" id="32q-bC-3Ln"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bDv-8w-Tse" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2664" y="1518"/>
+            <point key="canvasLocation" x="2664" y="1516.6416791604199"/>
         </scene>
         <!--LoginViewController-->
         <scene sceneID="Z65-92-I2v">
@@ -936,6 +953,7 @@
         <image name="DefaultAvatar" width="40" height="40"/>
         <image name="Dialpad" width="24" height="24"/>
         <image name="Settings" width="24" height="24"/>
+        <image name="brandLogo" width="100" height="100"/>
         <image name="microphone_off" width="24" height="24"/>
         <image name="pause" width="24" height="24"/>
         <image name="phoneHangupWhite" width="24" height="24"/>

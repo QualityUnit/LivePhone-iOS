@@ -24,6 +24,7 @@
 		30804F211E096817003B4442 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30804F201E096817003B4442 /* ContactsViewController.m */; };
 		309862BE1E5337EC00321C1E /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 309862BD1E5337EC00321C1E /* CallKit.framework */; };
 		309862C01E571BE300321C1E /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 309862BF1E571BE300321C1E /* PushKit.framework */; };
+		309983D41F697E620010A90B /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 309983D31F697E620010A90B /* AboutViewController.m */; };
 		30AEF1291E5B085D00D92FB1 /* CallManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 30AEF1281E5B085D00D92FB1 /* CallManager.m */; };
 		30AEF1311E61D0AE00D92FB1 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 30AEF1301E61D0AE00D92FB1 /* NSString+MD5.m */; };
 		30B8D8D31EBE3E5600B61EB3 /* DtmfTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D8D21EBE3E5600B61EB3 /* DtmfTableViewController.m */; };
@@ -96,6 +97,8 @@
 		30804F201E096817003B4442 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
 		309862BD1E5337EC00321C1E /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		309862BF1E571BE300321C1E /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
+		309983D21F697E620010A90B /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		309983D31F697E620010A90B /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		30A62F461F52FF610009E1E3 /* UIView_draggable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIView_draggable.framework; path = "Pods/../build/Debug-iphoneos/UIView+draggable/UIView_draggable.framework"; sourceTree = "<group>"; };
 		30AEF1271E5B085D00D92FB1 /* CallManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallManager.h; sourceTree = "<group>"; };
 		30AEF1281E5B085D00D92FB1 /* CallManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallManager.m; sourceTree = "<group>"; };
@@ -239,6 +242,7 @@
 		3031E6E61E0360C600106268 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				309983D11F697E330010A90B /* About */,
 				30080FA31E76EA0A0083EB4E /* Calling */,
 				30080F911E67981C0083EB4E /* Home */,
 				3031E6E81E03612200106268 /* Init */,
@@ -292,6 +296,15 @@
 				30080FA11E76A6060083EB4E /* ContactDetailTableViewController.m */,
 			);
 			name = Contacts;
+			sourceTree = "<group>";
+		};
+		309983D11F697E330010A90B /* About */ = {
+			isa = PBXGroup;
+			children = (
+				309983D21F697E620010A90B /* AboutViewController.h */,
+				309983D31F697E620010A90B /* AboutViewController.m */,
+			);
+			name = About;
 			sourceTree = "<group>";
 		};
 		30AEF1261E5B05E400D92FB1 /* Call */ = {
@@ -700,6 +713,7 @@
 				3032794D1E49C16000455203 /* XCPjsua.m in Sources */,
 				307CD0941E3F402E0073DA3B /* ApiUrlCheck.m in Sources */,
 				30E77D6F1DF82B8F00A40AD1 /* LoginViewController.m in Sources */,
+				309983D41F697E620010A90B /* AboutViewController.m in Sources */,
 				306C67C01E43812D00DC5272 /* Reachability.m in Sources */,
 				30E77D6C1DF82B8F00A40AD1 /* AppDelegate.m in Sources */,
 				30AEF1311E61D0AE00D92FB1 /* NSString+MD5.m in Sources */,
