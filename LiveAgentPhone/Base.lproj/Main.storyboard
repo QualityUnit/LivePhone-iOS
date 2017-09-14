@@ -712,7 +712,13 @@
                             <constraint firstItem="WK2-xd-1MI" firstAttribute="centerX" secondItem="1Av-Sy-zJZ" secondAttribute="centerX" id="s1j-hv-vKN"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="About" id="AjC-0h-pVM"/>
+                    <navigationItem key="navigationItem" title="About" id="AjC-0h-pVM">
+                        <barButtonItem key="rightBarButtonItem" title="Licenses" id="rOj-83-0pd">
+                            <connections>
+                                <segue destination="PdG-Yg-g5F" kind="show" id="XWx-rM-EBw"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="500" height="500"/>
                     <connections>
@@ -722,6 +728,43 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bDv-8w-Tse" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2664" y="1516.6416791604199"/>
+        </scene>
+        <!--Licenses-->
+        <scene sceneID="bUM-QP-fAT">
+            <objects>
+                <viewController id="PdG-Yg-g5F" customClass="LicensesViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2DN-lz-ofm"/>
+                        <viewControllerLayoutGuide type="bottom" id="uAM-hA-t78"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="C99-Ux-TRw">
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="500"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="97Q-hU-gaL">
+                                <rect key="frame" x="0.0" y="0.0" width="500" height="500"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <dataDetectorType key="dataDetectorTypes"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="97Q-hU-gaL" secondAttribute="trailing" constant="-20" id="8AI-dn-5k7"/>
+                            <constraint firstItem="97Q-hU-gaL" firstAttribute="top" secondItem="2DN-lz-ofm" secondAttribute="bottom" constant="-64" id="Hj1-YR-nAA"/>
+                            <constraint firstItem="uAM-hA-t78" firstAttribute="top" secondItem="97Q-hU-gaL" secondAttribute="bottom" constant="-49" id="KVf-G4-Iu4"/>
+                            <constraint firstItem="97Q-hU-gaL" firstAttribute="leading" secondItem="C99-Ux-TRw" secondAttribute="leadingMargin" constant="-20" id="fcN-ap-AkF"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Licenses" id="mbP-67-3gA"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="500" height="500"/>
+                    <connections>
+                        <outlet property="webView" destination="97Q-hU-gaL" id="j5Y-Y3-NSv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AyD-6l-9e8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3809.5999999999999" y="1524.737631184408"/>
         </scene>
         <!--LoginViewController-->
         <scene sceneID="Z65-92-I2v">

@@ -19,6 +19,8 @@
 		3032794D1E49C16000455203 /* XCPjsua.m in Sources */ = {isa = PBXBuildFile; fileRef = 3032794C1E49C16000455203 /* XCPjsua.m */; };
 		305444661EA43685007429FE /* ApiAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 305444651EA43685007429FE /* ApiAuth.m */; };
 		306C67C01E43812D00DC5272 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 306C67BF1E43812D00DC5272 /* Reachability.m */; };
+		3072925A1F6AF3400028A45D /* LicensesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 307292591F6AF3400028A45D /* LicensesViewController.m */; };
+		3072925C1F6AF6D50028A45D /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 3072925B1F6AF6D50028A45D /* licenses.html */; };
 		307CD0941E3F402E0073DA3B /* ApiUrlCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 307CD0931E3F402E0073DA3B /* ApiUrlCheck.m */; };
 		307CD0961E3FF4AE0073DA3B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 307CD0951E3FF4AE0073DA3B /* SystemConfiguration.framework */; };
 		30804F211E096817003B4442 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30804F201E096817003B4442 /* ContactsViewController.m */; };
@@ -90,6 +92,9 @@
 		306C67BE1E43812D00DC5272 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		306C67BF1E43812D00DC5272 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		306DD2CD1E1D491B001E60BC /* LiveAgentPhone.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LiveAgentPhone.entitlements; sourceTree = "<group>"; };
+		307292581F6AF3400028A45D /* LicensesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LicensesViewController.h; sourceTree = "<group>"; };
+		307292591F6AF3400028A45D /* LicensesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LicensesViewController.m; sourceTree = "<group>"; };
+		3072925B1F6AF6D50028A45D /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
 		307CD0921E3F402E0073DA3B /* ApiUrlCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApiUrlCheck.h; sourceTree = "<group>"; };
 		307CD0931E3F402E0073DA3B /* ApiUrlCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApiUrlCheck.m; sourceTree = "<group>"; };
 		307CD0951E3FF4AE0073DA3B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -285,6 +290,16 @@
 			name = Pjsip;
 			sourceTree = "<group>";
 		};
+		307292571F6AF31E0028A45D /* Licenses */ = {
+			isa = PBXGroup;
+			children = (
+				3072925B1F6AF6D50028A45D /* licenses.html */,
+				307292581F6AF3400028A45D /* LicensesViewController.h */,
+				307292591F6AF3400028A45D /* LicensesViewController.m */,
+			);
+			name = Licenses;
+			sourceTree = "<group>";
+		};
 		30804F1E1E0967F2003B4442 /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
@@ -301,6 +316,7 @@
 		309983D11F697E330010A90B /* About */ = {
 			isa = PBXGroup;
 			children = (
+				307292571F6AF31E0028A45D /* Licenses */,
 				309983D21F697E620010A90B /* AboutViewController.h */,
 				309983D31F697E620010A90B /* AboutViewController.m */,
 			);
@@ -544,6 +560,7 @@
 			files = (
 				302FD2B61E1BF02500D7C10B /* Main.storyboard in Resources */,
 				30E77D771DF82B8F00A40AD1 /* LaunchScreen.storyboard in Resources */,
+				3072925C1F6AF6D50028A45D /* licenses.html in Resources */,
 				30E77D741DF82B8F00A40AD1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -709,6 +726,7 @@
 			files = (
 				305444661EA43685007429FE /* ApiAuth.m in Sources */,
 				3031E6FC1E09486E00106268 /* Net.m in Sources */,
+				3072925A1F6AF3400028A45D /* LicensesViewController.m in Sources */,
 				30080F901E6217C30083EB4E /* ContactsTableViewCell.m in Sources */,
 				3032794D1E49C16000455203 /* XCPjsua.m in Sources */,
 				307CD0941E3F402E0073DA3B /* ApiUrlCheck.m in Sources */,
