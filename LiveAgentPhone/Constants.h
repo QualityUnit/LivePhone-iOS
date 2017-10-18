@@ -48,10 +48,14 @@
 #define stringLogout NSLocalizedStringWithDefaultValue(@"contactMenu.logout",@"Localizable",[NSBundle mainBundle],@"Logout",@"Item in menu");
 #define stringBack NSLocalizedStringWithDefaultValue(@"common.back",@"Localizable",[NSBundle mainBundle],@"Back",@"Label in navigation bar");
 #define stringAbout NSLocalizedStringWithDefaultValue(@"contactMenu.about",@"Localizable",[NSBundle mainBundle],@"About",@"Item in menu");
-#define stringUnknown NSLocalizedStringWithDefaultValue(@"calling.unknown",@"Localizable",[NSBundle mainBundle],@"Unknown",@"It it is not possible to get caller number, show this default value");
+#define stringUnknown NSLocalizedStringWithDefaultValue(@"calling.unknown",@"Localizable",[NSBundle mainBundle],@"Unknown",@"If it is not possible to get caller number, show this default value");
+#define stringVisitor NSLocalizedStringWithDefaultValue(@"calling.visitor",@"Localizable",[NSBundle mainBundle],@"Website visitor",@"When website visitor is calling");
 #define stringPermissionDenied NSLocalizedStringWithDefaultValue(@"calling.permissions",@"Localizable",[NSBundle mainBundle],@"Please enable all permissions for app in iOS settings",@"When user disallows some of required permissions");
 #define stringMissedCalls NSLocalizedStringWithDefaultValue(@"calling.missedcall",@"Localizable",[NSBundle mainBundle],@"Missed call",@"Missed call");
 // colors
 #define textGreenOk @"#64DD17"
 #define textRedNok @"F44336"
 #define surfaceCallGreen @"16C855"
+
+//macros
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)

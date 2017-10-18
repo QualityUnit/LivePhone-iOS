@@ -23,7 +23,7 @@
 		3072925C1F6AF6D50028A45D /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 3072925B1F6AF6D50028A45D /* licenses.html */; };
 		307CD0941E3F402E0073DA3B /* ApiUrlCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 307CD0931E3F402E0073DA3B /* ApiUrlCheck.m */; };
 		307CD0961E3FF4AE0073DA3B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 307CD0951E3FF4AE0073DA3B /* SystemConfiguration.framework */; };
-		30804F211E096817003B4442 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30804F201E096817003B4442 /* ContactsViewController.m */; };
+		30804F211E096817003B4442 /* ContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30804F201E096817003B4442 /* ContactListViewController.m */; };
 		309862BE1E5337EC00321C1E /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 309862BD1E5337EC00321C1E /* CallKit.framework */; };
 		309862C01E571BE300321C1E /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 309862BF1E571BE300321C1E /* PushKit.framework */; };
 		309983D41F697E620010A90B /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 309983D31F697E620010A90B /* AboutViewController.m */; };
@@ -38,6 +38,7 @@
 		30E77D771DF82B8F00A40AD1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30E77D751DF82B8F00A40AD1 /* LaunchScreen.storyboard */; };
 		30E77D821DF82B8F00A40AD1 /* LiveAgentPhoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E77D811DF82B8F00A40AD1 /* LiveAgentPhoneTests.m */; };
 		30E77D8D1DF82B8F00A40AD1 /* LiveAgentPhoneUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E77D8C1DF82B8F00A40AD1 /* LiveAgentPhoneUITests.m */; };
+		30E91A6D1F7BE3F4006BFF30 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E91A6C1F7BE3F4006BFF30 /* ContactsViewController.m */; };
 		39E90B396E810E2EB0328D04 /* Pods_LiveAgentPhoneUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 005C1F79064DB777CF0BCA12 /* Pods_LiveAgentPhoneUITests.framework */; };
 		42683EC53062D2FA6CEB64A6 /* Pods_LiveAgentPhone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19069DB922B6DC8F20FFB028 /* Pods_LiveAgentPhone.framework */; };
 		622FB6080D54C2CDBB68A095 /* Pods_LiveAgentPhoneTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23FF3E61350EA7FE579AFD76 /* Pods_LiveAgentPhoneTests.framework */; };
@@ -98,8 +99,8 @@
 		307CD0921E3F402E0073DA3B /* ApiUrlCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApiUrlCheck.h; sourceTree = "<group>"; };
 		307CD0931E3F402E0073DA3B /* ApiUrlCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApiUrlCheck.m; sourceTree = "<group>"; };
 		307CD0951E3FF4AE0073DA3B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		30804F1F1E096817003B4442 /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
-		30804F201E096817003B4442 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
+		30804F1F1E096817003B4442 /* ContactListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactListViewController.h; sourceTree = "<group>"; };
+		30804F201E096817003B4442 /* ContactListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactListViewController.m; sourceTree = "<group>"; };
 		309862BD1E5337EC00321C1E /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		309862BF1E571BE300321C1E /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		309983D21F697E620010A90B /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
@@ -127,6 +128,8 @@
 		30E77D881DF82B8F00A40AD1 /* LiveAgentPhoneUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LiveAgentPhoneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		30E77D8C1DF82B8F00A40AD1 /* LiveAgentPhoneUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveAgentPhoneUITests.m; sourceTree = "<group>"; };
 		30E77D8E1DF82B8F00A40AD1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		30E91A6B1F7BE3F4006BFF30 /* ContactsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
+		30E91A6C1F7BE3F4006BFF30 /* ContactsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
 		90C91685875F1314A361C704 /* Pods-LiveAgentPhone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LiveAgentPhone.release.xcconfig"; path = "Pods/Target Support Files/Pods-LiveAgentPhone/Pods-LiveAgentPhone.release.xcconfig"; sourceTree = "<group>"; };
 		BABB40D9FED3694F05EC748D /* Pods-LiveAgentPhoneUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LiveAgentPhoneUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LiveAgentPhoneUITests/Pods-LiveAgentPhoneUITests.release.xcconfig"; sourceTree = "<group>"; };
 		EC0EDC3A30CBA02EE5822B17 /* Pods-LiveAgentPhone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LiveAgentPhone.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LiveAgentPhone/Pods-LiveAgentPhone.debug.xcconfig"; sourceTree = "<group>"; };
@@ -303,8 +306,10 @@
 		30804F1E1E0967F2003B4442 /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
-				30804F1F1E096817003B4442 /* ContactsViewController.h */,
-				30804F201E096817003B4442 /* ContactsViewController.m */,
+				30E91A6B1F7BE3F4006BFF30 /* ContactsViewController.h */,
+				30E91A6C1F7BE3F4006BFF30 /* ContactsViewController.m */,
+				30804F1F1E096817003B4442 /* ContactListViewController.h */,
+				30804F201E096817003B4442 /* ContactListViewController.m */,
 				30080F8E1E6217C30083EB4E /* ContactsTableViewCell.h */,
 				30080F8F1E6217C30083EB4E /* ContactsTableViewCell.m */,
 				30080FA01E76A6060083EB4E /* ContactDetailTableViewController.h */,
@@ -735,10 +740,11 @@
 				306C67C01E43812D00DC5272 /* Reachability.m in Sources */,
 				30E77D6C1DF82B8F00A40AD1 /* AppDelegate.m in Sources */,
 				30AEF1311E61D0AE00D92FB1 /* NSString+MD5.m in Sources */,
+				30E91A6D1F7BE3F4006BFF30 /* ContactsViewController.m in Sources */,
 				30B8D8D31EBE3E5600B61EB3 /* DtmfTableViewController.m in Sources */,
 				3031E6F11E03FFA500106268 /* Utils.m in Sources */,
 				3031E6EC1E03614E00106268 /* InitViewController.m in Sources */,
-				30804F211E096817003B4442 /* ContactsViewController.m in Sources */,
+				30804F211E096817003B4442 /* ContactListViewController.m in Sources */,
 				30080F9B1E6ED6D00083EB4E /* SettingsTableViewController.m in Sources */,
 				30080F9F1E6EF13D0083EB4E /* DialpadTableViewController.m in Sources */,
 				30E77D691DF82B8F00A40AD1 /* main.m in Sources */,
@@ -903,7 +909,7 @@
 					"$(PROJECT_DIR)/build/Debug-iphoneos/UIView+draggable",
 				);
 				INFOPLIST_FILE = LiveAgentPhone/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qualityunit.ios.LiveAgentPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -927,7 +933,7 @@
 					"$(PROJECT_DIR)/build/Debug-iphoneos/UIView+draggable",
 				);
 				INFOPLIST_FILE = LiveAgentPhone/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qualityunit.ios.LiveAgentPhone;
 				PRODUCT_NAME = "$(TARGET_NAME)";

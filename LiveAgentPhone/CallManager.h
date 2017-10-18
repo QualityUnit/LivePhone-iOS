@@ -16,17 +16,21 @@
 
 - (nonnull id)initCallManager;
 
-- (void)makeCall:(nonnull NSString *)calleeNumber withPrefix:(nonnull NSString *)calleePrefix;
+- (void)makeCall:(nonnull NSString *)remoteNumber withPrefix:(nonnull NSString *)prefix remoteName:(NSString *)remoteName;
 
 - (void)prepareToIncomingCall;
 
-- (void)startRingingWithCallerName:(nonnull NSString *) callerName;
+- (void)startRinging;
 
-- (void)hangUpCurrentCall:(BOOL)isMissedCall callerName:(nullable NSString *)callerName;
+- (void)hangUpCurrentCall:(BOOL)isMissedCall;
 
 - (void)setRemoteNumber:(nullable NSString *)remoteNumber;
 
 - (nullable NSString*) getRemoteNumber;
+
+- (void)setRemoteName:(nullable NSString *)remoteName;
+
+- (nullable NSString*) getRemoteName;
 
 /**
  Toggle mute on or off

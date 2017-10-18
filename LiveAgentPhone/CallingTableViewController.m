@@ -53,7 +53,7 @@
 }
 
 - (IBAction)onClickHangup:(id)sender {
-    [[appDelegate callManager] hangUpCurrentCall:NO callerName:nil];
+    [[appDelegate callManager] hangUpCurrentCall:NO];
 }
 
 - (void)callData:(NSNotification *)notification {
@@ -71,9 +71,13 @@
             [self setTintEnabled:[result intValue] onButton:[self buttonMicOff]];
         }
     } else if ([dataType isEqualToString:CALL_DATA_REMOTE]) {
-        NSString *callingWith = [dict objectForKey:@"callingWith"];
-        if (callingWith != nil && [callingWith length] > 0) {
-            [[self callingWithLabel] setText:callingWith];
+        NSString *remoteNumber = [dict objectForKey:@"remoteNumber"];
+        if (remoteNumber != nil && [remoteNumber length] > 0) {
+            [[self callingWithLabel] setText:remoteNumber];
+        }
+        NSString *remoteName = [dict objectForKey:@"remoteName"];
+        if (remoteName != nil && [remoteName length] > 0) {
+            [[self callingWithLabel] setText:remoteName];
         }
     } else if ([dataType isEqualToString:CALL_DATA_SPEAKER]) {
         NSNumber *result = [dict objectForKey:@"result"];

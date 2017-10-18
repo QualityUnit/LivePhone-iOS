@@ -17,7 +17,6 @@
 #import "LoginViewController.h"
 #import <UserNotifications/UserNotifications.h>
 #import "Utils.h"
-#import "ContactsViewController.h"
 
 @interface InitViewController () {
     @private
@@ -39,6 +38,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[self navigationController] setNavigationBarHidden:YES animated:NO];
     [[self labelError] setHidden:NO];
     localDeviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLocalNotification:) name:localNotificationIntoInit object:nil];
@@ -196,8 +196,13 @@
             }
         } failure:^(NSURLSessionTask *operation, NSError *error) {
             NSString *errorMessage = [error localizedDescription];
-            [self showError:errorMessage];
-            NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
+            NSHTTPURLResponse *response = (NSHTTPURLResponse *) [operation response];
+            if ([response statusCode] == 401) {
+                [self goToLogin];
+            } else {
+                [self showError:errorMessage];
+                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
+            }
         }];
     });
 }

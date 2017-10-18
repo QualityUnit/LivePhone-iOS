@@ -23,7 +23,9 @@
 
 - (void)openCalling;
 
-- (void)openDialpad:(nullable NSString *)remoteNumber;
+- (void)openDialpad:(NSString *)remoteNumber remoteName:(NSString *)remoteName;
+
+- (void)openContactDetail:(NSDictionary *)contactDetail;
 
 - (void)showCallFloatingButton;
 

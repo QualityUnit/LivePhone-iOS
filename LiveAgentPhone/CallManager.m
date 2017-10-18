@@ -23,6 +23,7 @@
     BOOL isSpeaker;
     BOOL isHold;
     NSString *lastRemoteNumber;
+    NSString *lastRemoteName;
     NSString *lastEvent;
     NSString *lastMessage;
     NSString *calleePrefix;
@@ -41,6 +42,7 @@
     CXProviderConfiguration * configuration = [[CXProviderConfiguration alloc] initWithLocalizedName:appName];
     configuration.maximumCallGroups = 1;
     configuration.maximumCallsPerCallGroup = 1;
+    configuration.supportedHandleTypes = [NSSet setWithObjects:[NSNumber numberWithInteger:CXHandleTypeGeneric],[NSNumber numberWithInteger:CXHandleTypePhoneNumber], nil];
     self.callKitProvider = [[CXProvider alloc] initWithConfiguration: configuration];
     [self.callKitProvider setDelegate:self queue:nil];
     self.callKitCallController = [[CXCallController alloc] init];
@@ -48,7 +50,7 @@
     return self;
 }
 
-- (void)makeCall:(nonnull NSString *)calleeNumber withPrefix:(nonnull NSString *)prefix {
+- (void)makeCall:(nonnull NSString *)remoteNumber withPrefix:(nonnull NSString *)prefix remoteName:(NSString *)remoteName {
     if (isOngoingCall()) {
         return;
     }
@@ -56,7 +58,9 @@
     isMute = NO;
     uuid = [NSUUID UUID];
     calleePrefix = prefix;
-    CXHandle *callHandle = [[CXHandle alloc] initWithType:CXHandleTypeGeneric value:calleeNumber];
+    lastRemoteNumber = remoteNumber;
+    lastRemoteName = remoteName;
+    CXHandle *callHandle = [[CXHandle alloc] initWithType:CXHandleTypeGeneric value:lastRemoteNumber];
     CXStartCallAction *startCallAction = [[CXStartCallAction alloc] initWithCallUUID:uuid handle:callHandle];
     CXTransaction *transaction = [[CXTransaction alloc] initWithAction:startCallAction];
     [self.callKitCallController requestTransaction:transaction completion:^(NSError *error) {
@@ -67,6 +71,7 @@
             NSLog(@"StartCallAction transaction request successful");
             CXCallUpdate *callUpdate = [self createDefaultCallupdate];
             [callUpdate setRemoteHandle:callHandle];
+            [callUpdate setLocalizedCallerName:lastRemoteName];
             [self.callKitProvider reportCallWithUUID:uuid updated:callUpdate];
         }
     }];
@@ -84,13 +89,13 @@
     }
 }
 
-- (void)startRingingWithCallerName:(nonnull NSString *) callerName {
+- (void)startRinging {
     isSpeaker = NO;
     isMute = NO;
-    CXHandle *callHandle = [[CXHandle alloc] initWithType:CXHandleTypeGeneric value:callerName];
+    CXHandle *callHandle = [[CXHandle alloc] initWithType:CXHandleTypeGeneric value:lastRemoteNumber];
     CXCallUpdate *callUpdate = [self createDefaultCallupdate];
+    [callUpdate setLocalizedCallerName:[self pickRemoteString]];
     [callUpdate setRemoteHandle:callHandle];
-    lastRemoteNumber = callerName;
     uuid = [NSUUID UUID];
     [self.callKitProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
         if (error) {
@@ -103,12 +108,11 @@
     }];
 }
 
-- (void)hangUpCurrentCall:(BOOL)isMissedCall callerName:(NSString *)callerName {
+- (void)hangUpCurrentCall:(BOOL)isMissedCall  {
     if (uuid == nil) {
         NSLog(@"Nothing to hang up");
         return;
     }
-    __block NSString *remoteName = callerName;
     CXEndCallAction *endCallAction = [[CXEndCallAction alloc] initWithCallUUID:uuid];
     CXTransaction *transaction = [[CXTransaction alloc] initWithAction:endCallAction];
     [self.callKitCallController requestTransaction:transaction completion:^(NSError *error) {
@@ -118,15 +122,19 @@
         }
         if (isMissedCall) {
             // show local notification about missed call
-            if (remoteName == nil || remoteName.length == 0) {
-                remoteName = stringUnknown;
-            }
+            NSString *title = [self pickRemoteString];
             UNMutableNotificationContent *localNotification = [[UNMutableNotificationContent alloc] init];
-            [localNotification setTitle:remoteName];
+            [localNotification setTitle:title];
             NSString *strMissedCall = stringMissedCalls;
             [localNotification setBody:strMissedCall];
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+            if (lastRemoteName != nil) {
+                [dict setObject:lastRemoteName forKey:@"remoteName"];
+            }
+            [dict setObject:lastRemoteNumber forKey:@"remoteNumber"];
+            [localNotification setUserInfo:dict];
             [localNotification setCategoryIdentifier:@"com.qualityunit.ios.liveagentphone.localnotification.missedcall"];
-            UNNotificationRequest *localNotificationRequest = [UNNotificationRequest requestWithIdentifier:callerName
+            UNNotificationRequest *localNotificationRequest = [UNNotificationRequest requestWithIdentifier:title
                                                                                                    content:localNotification
                                                                                                    trigger:[UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO]];
             UNUserNotificationCenter *notificationCenter = [UNUserNotificationCenter currentNotificationCenter];
@@ -137,6 +145,16 @@
             }];
         }
     }];
+}
+
+- (NSString *)pickRemoteString {
+    NSString *title = stringUnknown;
+    if (lastRemoteName != nil && lastRemoteName.length > 0) {
+        title = lastRemoteName;
+    } else if (lastRemoteNumber != nil && lastRemoteNumber.length > 0) {
+        title = lastRemoteNumber;
+    }
+    return title;
 }
 
 - (CXCallUpdate *)createDefaultCallupdate {
@@ -312,20 +330,23 @@
     [self postCallDataNotificationWithData:obj];
 }
 
-- (void)notifyRemoteNumber {
+- (void)notifyRemoteData {
     if (lastRemoteNumber == nil) {
         return;
     }
     NSMutableDictionary *obj = [NSMutableDictionary dictionary];
     [obj setObject:CALL_DATA_REMOTE forKey:CALL_KEY_DATA];
-    [obj setObject:lastRemoteNumber forKey:@"callingWith"];
+    [obj setObject:lastRemoteNumber forKey:@"remoteNumber"];
+    if (lastRemoteName != nil) {
+        [obj setObject:lastRemoteName forKey:@"remoteName"];
+    }
     [self postCallDataNotificationWithData:obj];
 }
 
 - (void)notifyAll {
     [self notifyMute];
     [self notifySpeaker];
-    [self notifyRemoteNumber];
+    [self notifyRemoteData];
     [self notifyHold];
     [self postCallEventNotificationWithKey:lastEvent message:lastMessage];
 }
@@ -353,8 +374,21 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:localNotificationCallEvent object:obj];
 }
 
+- (void)setRemoteName:(nullable NSString *)remoteName {
+    lastRemoteName = remoteName;
+    if ([lastRemoteName isEqualToString:@"V_system00"]) {
+        lastRemoteName = stringVisitor;
+    }
+    [self notifyRemoteData];
+}
+
+- (nullable NSString*) getRemoteName {
+    return lastRemoteName;
+}
+
 - (void)setRemoteNumber:(nullable NSString *)remoteNumber {
     lastRemoteNumber = remoteNumber;
+    [self notifyRemoteData];
 }
 
 - (nullable NSString*) getRemoteNumber {

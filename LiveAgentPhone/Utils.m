@@ -70,4 +70,23 @@
     #endif
 }
 
++ (NSString *)createContactName:(NSDictionary *)dataItem {
+    NSMutableString *stringToView = [[NSMutableString alloc] init];
+    NSString *firstName = [dataItem objectForKey:@"firstname"];
+    if (firstName != nil && [firstName length] > 0) {
+        [stringToView appendFormat:@"%@ ", firstName];
+    }
+    NSString *lastName = [dataItem objectForKey:@"lastname"];
+    if (lastName != nil && [lastName length] > 0) {
+        [stringToView appendString:lastName];
+    }
+    if ([stringToView length] == 0) {
+        NSString *systemName = [dataItem objectForKey:@"system_name"];
+        if (systemName != nil && [systemName length] > 0) {
+            [stringToView appendString:systemName];
+        }
+    }
+    return stringToView;
+}
+
 @end

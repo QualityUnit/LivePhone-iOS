@@ -22,6 +22,7 @@
     NSMutableArray *numberPickerData;
     NSArray *phoneNumbersResponse;
     NSString *calleeNumberFromContacts;
+    NSString *calleeNameFromContacts;
     BOOL isFromOutside;
 }
 @property (weak, nonatomic) IBOutlet UITextField *numberTextField;
@@ -51,6 +52,7 @@
     }
     [self getPhoneNumbers];
     if (isFromOutside) {
+        // when it is from notification
         NSString *strBack = stringBack;
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:strBack style: UIBarButtonItemStylePlain target:self action:@selector(onTapBack)];
         self.navigationItem.leftBarButtonItem = backButton;
@@ -85,7 +87,7 @@
     NSDictionary *selectedItemFromNumberPicker = phoneNumbersResponse[[self.numberPicker selectedRowInComponent:0]];
     int prefixInt = [[selectedItemFromNumberPicker valueForKey:@"dial_out_prefix"] intValue];
     NSString *calleePrefix = [Utils prefixToTwoDigitsWIthPrefixInt:prefixInt];
-    [[appDelegate callManager] makeCall:calleeNumber withPrefix:calleePrefix];
+    [[appDelegate callManager] makeCall:calleeNumber withPrefix:calleePrefix remoteName:calleeNameFromContacts];
 }
 
 - (IBAction)onClickRetry:(id)sender {
@@ -157,8 +159,9 @@
     [self.errorView setHidden:NO];
 }
 
-- (void)setCalleeNumber:(NSString *)remoteNumber fromOutside:(BOOL)fromOutside {
+- (void)setCalleeNumber:(NSString *)remoteNumber calleeName:(NSString *)calleeName fromOutside:(BOOL)fromOutside {
     calleeNumberFromContacts = remoteNumber;
+    calleeNameFromContacts = calleeName;
     isFromOutside = fromOutside;
 }
 

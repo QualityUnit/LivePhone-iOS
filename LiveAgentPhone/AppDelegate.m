@@ -13,6 +13,7 @@
 #import "DialpadTableViewController.h"
 #import <Intents/Intents.h>
 #import "CallingTableViewController.h"
+#import "ContactDetailTableViewController.h"
 #import <HexColors/HexColors.h>
 #import "UIView+draggable.h"
 
@@ -57,9 +58,9 @@
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
-    pendingPhoneNumber = [[[[response notification] request] content] title];
+    pendingPhoneNumber = [[[[[response notification] request] content] userInfo] objectForKey:@"remoteNumber"];
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive && [Utils isAuthenticated]) {
-        [self openDialpad:[self getPendingPhoneNumber]];
+        [self openDialpad:[self getPendingPhoneNumber] remoteName:nil];
     }
     completionHandler();
 }
@@ -74,7 +75,7 @@
         INPersonHandle *personHandle = contact.personHandle;
         pendingPhoneNumber = personHandle.value;
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive && [Utils isAuthenticated]) {
-            [self openDialpad:[self getPendingPhoneNumber]];
+            [self openDialpad:[self getPendingPhoneNumber] remoteName:nil];
         }
     } else {
         NSLog(@"Unknown intent");
@@ -176,26 +177,34 @@
 
 - (void)openCalling {
     [self hideCallFloatingButton];
-    UIViewController *currentController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    while (currentController.presentedViewController) {
-        currentController = currentController.presentedViewController;
-    }
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     CallingTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"CallingTableViewController"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-    [currentController presentViewController:navigationController animated:YES completion:nil];
+    [[self getCurrentViewController] presentViewController:navigationController animated:YES completion:nil];
 }
 
-- (void)openDialpad:(NSString *)remoteNumber {
+- (void)openDialpad:(NSString *)remoteNumber remoteName:(NSString *)remoteName {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    DialpadTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"DialpadTableViewController"];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [viewController setCalleeNumber:remoteNumber calleeName:remoteName fromOutside:YES];
+    [[self getCurrentViewController] presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void)openContactDetail:(NSDictionary *)contactDetail {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    ContactDetailTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"ContactDetailTableViewController"];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [viewController setContactDetail:contactDetail];
+    [[self getCurrentViewController] presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (UIViewController*)getCurrentViewController {
     UIViewController *currentController = [UIApplication sharedApplication].keyWindow.rootViewController;
     while (currentController.presentedViewController) {
         currentController = currentController.presentedViewController;
     }
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    DialpadTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"DialpadTableViewController"];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-    [viewController setCalleeNumber:remoteNumber fromOutside:YES];
-    [currentController presentViewController:navigationController animated:YES completion:nil];
+    return currentController;
 }
 
 @end

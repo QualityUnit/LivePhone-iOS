@@ -18,7 +18,7 @@
 
 static pjsua_acc_id acc_id;
 static pjsua_call_id current_call_id;
-static NSString *sipRemoteUri;
+static NSString *sipRemoteNumber;
 static int call_direction;
 static BOOL waiting_to_call;
 static BOOL hanging_up_call;
@@ -40,7 +40,8 @@ void incomingCall(char* sipHost, char* sipUser, char* sipPassword, CallManager *
 int startCalling(char* destUri);
 int waitForIncomingCall();
 void destroySip();
-NSString* retrieveCalleeNumber(char *remoteUriCharArray);
+NSString* retrieveRemoteNumber(char *remoteUriCharArray);
+NSString* retrieveRemoteName(char *remoteUriCharArray);
 pjsua_call_setting createCallSettings();
 
 int initAndRegister(char* sipHost, char* sipUser, char* sipPassword) {
@@ -175,7 +176,7 @@ static void on_reg_state(pjsua_acc_id acc_id, pjsua_reg_info *reg_info) {
         if (reg_info->cbparam->code / 100 == 2) {
             // success
             if (call_direction == CALL_DIRECTION_OUTGOING) {
-                char *calleeSipUri = (char *)[sipRemoteUri cStringUsingEncoding:[NSString defaultCStringEncoding]];
+                char *calleeSipUri = (char *)[sipRemoteNumber cStringUsingEncoding:[NSString defaultCStringEncoding]];
                 startCalling(calleeSipUri);
             } else if (call_direction == CALL_DIRECTION_INCOMING) {
                 waitForIncomingCall();
@@ -206,10 +207,13 @@ static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_r
     if (waiting_to_call) {
         waiting_to_call = NO;
         char* sip_remote_uri = ci.remote_info.ptr;
-        sipRemoteUri = retrieveCalleeNumber(sip_remote_uri);
+        NSString *remoteNumber = retrieveRemoteNumber(sip_remote_uri);
+        [callManager setRemoteNumber:remoteNumber];
+        NSString *remoteName = retrieveRemoteName(sip_remote_uri);
+        [callManager setRemoteName:remoteName];
         pjsua_call_answer(call_id, PJSIP_SC_RINGING, NULL, NULL);
         current_call_id = call_id;
-        [callManager startRingingWithCallerName:sipRemoteUri];
+        [callManager startRinging];
     } else {
         pjsua_call_answer(call_id, PJSIP_SC_BUSY_HERE, NULL, NULL);
     }
@@ -242,8 +246,7 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e) {
         postLocalNotification(CALL_EVENT_CALL_ESTABLISHED, nil);
     } else if (state == PJSIP_INV_STATE_DISCONNECTED) {
         postLocalNotification(CALL_EVENT_CALL_ENDED, nil);
-        [callManager hangUpCurrentCall:isMissedCall callerName:sipRemoteUri];
-//        destroySip();
+        [callManager hangUpCurrentCall:isMissedCall];
     }
 }
 
@@ -260,7 +263,7 @@ static void on_call_media_state(pjsua_call_id call_id) {
 }
 
 /* retrieve number from sip URI using regex */
-NSString* retrieveCalleeNumber(char *remoteUriCharArray) {
+NSString* retrieveRemoteNumber(char *remoteUriCharArray) {
     NSString *remoteNumber = stringUnknown;
     if (remoteUriCharArray == NULL) {
         return remoteNumber;
@@ -273,6 +276,21 @@ NSString* retrieveCalleeNumber(char *remoteUriCharArray) {
         remoteNumber = [remoteUri substringWithRange:[matches[0] rangeAtIndex:1]];
     }
     return remoteNumber;
+}
+
+/* retrieve name from sip URI using regex */
+NSString* retrieveRemoteName(char *remoteUriCharArray) {
+    if (remoteUriCharArray == NULL) {
+        return nil;
+    }
+    NSString *remoteUri = [NSString stringWithCString:remoteUriCharArray encoding:NSASCIIStringEncoding];
+    NSError  *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\"?([^\"]*)\"?\\s" options:0 error:&error];
+    NSArray *matches = [regex matchesInString:remoteUri options:0 range:NSMakeRange(0, [remoteUri length])];
+    if (error == nil && [matches count] > 0) {
+        return [remoteUri substringWithRange:[matches[0] rangeAtIndex:1]];
+    }
+    return nil;
 }
 
 /* Send local notification about event */
@@ -303,7 +321,7 @@ void reInitVariables() {
     call_direction = 0;
     callManager = nil;
     startCallAction = nil;
-    sipRemoteUri = nil;
+    sipRemoteNumber = nil;
     isMissedCall = NO;
 }
 
@@ -312,7 +330,7 @@ void makeCall(NSString *sipHost, NSString *sipUser, NSString *sipPassword, NSStr
     call_direction = CALL_DIRECTION_OUTGOING;
     callManager = cm;
     startCallAction = sca;
-    sipRemoteUri = sipCalleeUri;
+    sipRemoteNumber = sipCalleeUri;
     // make char arrays...
     char *sipHostCharArray = (char *)[sipHost cStringUsingEncoding:[NSString defaultCStringEncoding]];
     char *sipUserCharArray = (char *)[sipUser cStringUsingEncoding:[NSString defaultCStringEncoding]];

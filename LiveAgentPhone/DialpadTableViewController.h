@@ -10,6 +10,6 @@
 
 @interface DialpadTableViewController : UITableViewController <UIPickerViewDelegate, UIPickerViewDataSource>
 
-- (void)setCalleeNumber:(NSString *)remoteNumber fromOutside:(BOOL)fromOutside;
+- (void)setCalleeNumber:(NSString *)remoteNumber calleeName:(NSString *)calleeName fromOutside:(BOOL)fromOutside;
 
 @end

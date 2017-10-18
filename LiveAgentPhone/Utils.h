@@ -20,5 +20,6 @@
 + (nonnull NSString *)createCalleeUriWithPhoneNumber:(nonnull NSString *)phoneNumber sipHost:(nonnull NSString *)sipHost;
 + (nonnull NSString *)prefixToTwoDigitsWIthPrefixInt:(int)prefixInt;
 + (BOOL) isDebug;
++ (NSString *)createContactName:(NSDictionary *)dataItem;
 
 @end
