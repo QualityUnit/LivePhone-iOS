@@ -150,12 +150,12 @@
     return [data count];
 }
 
-- (IBAction)onRefresh:(id)sender {
-    if ([data count] == 0) {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    }
-    [self getContactsWithPage:DEFAULT_FIRST_PAGE searchTerm:searchTerm];
-}
+//- (IBAction)onRefresh:(id)sender {
+//    if ([data count] == 0) {
+//        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    }
+//    [self getContactsWithPage:DEFAULT_FIRST_PAGE searchTerm:searchTerm];
+//}
 
 -(void)didDismissSearchController:(UISearchController *)searchController {
     [self clearDataAndTable];

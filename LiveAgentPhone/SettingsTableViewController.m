@@ -41,13 +41,7 @@
     NSUserDefaults * defs = [NSUserDefaults standardUserDefaults];
     [defs removeObjectForKey:memoryKeyApikey];
     [defs synchronize];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-        InitViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"InitViewController"];
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        appDelegate.window.rootViewController = viewController;
-        [appDelegate.window makeKeyAndVisible];
-    });
+    [self performSegueWithIdentifier:@"goToInitFromHome" sender:nil];
 }
 
 @end

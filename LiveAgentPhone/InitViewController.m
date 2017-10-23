@@ -13,7 +13,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import "Net.h"
 #import "AppDelegate.h"
-#import "ApiAuth.h"
 #import "LoginViewController.h"
 #import <UserNotifications/UserNotifications.h>
 #import "Utils.h"
@@ -48,7 +47,6 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self startInit];
-    NSLog(@"######## viewDidAppear");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -245,8 +243,6 @@
         [params setObject:[NSNumber numberWithBool:[Utils isDebug]] forKey:@"devMode"];
         NSError *jsonError;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:&jsonError];
-        NSString *strData = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
-        NSLog(@"%@", strData);
         if (!jsonData) {
             NSString *errorMessage = [NSString stringWithFormat:@"Error: %@", [jsonError localizedDescription]];
             NSLog(@"%@", errorMessage);
@@ -273,20 +269,17 @@
 
 - (void)goToHome {
     [self showInitialState];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-        UITabBarController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"MainTabBarViewController"];
-        [appDelegate.window.rootViewController presentViewController:viewController animated:YES completion:nil];
-    });
+    [self performSegueWithIdentifier:@"goToHome" sender:nil];
 }
 
 - (void)goToLogin {
+    phoneId = nil;
+    localDeviceId = nil;
+    remoteDeviceId = nil;
+    remotePushToken = nil;
+    generatedPushToken = nil;
     [self showInitialState];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-        LoginViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-        [appDelegate.window.rootViewController presentViewController:viewController animated:YES completion:nil];
-    });
+    [self performSegueWithIdentifier:@"goToLogin" sender:nil];
 }
 
 - (void)showInitialState {
@@ -312,6 +305,10 @@
 
 - (IBAction)onClickRetry:(id)sender {
     [self startInit];
+}
+
+- (IBAction)unwindToInit:(UIStoryboardSegue *)unwindSegue {
+    
 }
 
 @end

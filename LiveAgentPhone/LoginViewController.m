@@ -13,9 +13,9 @@
 #import "ApiUrlCheck.h"
 #import "Utils.h"
 #import <HexColors/HexColors.h>
-#import "ApiAuth.h"
 #import "AppDelegate.h"
 #import "InitViewController.h"
+#import "Api.h"
 
 @interface LoginViewController () {
     @private
@@ -44,6 +44,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     NSLog(@"Saving text fields...");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:[self.textFieldUrl text] forKey:memoryKeyTypedUrl];
@@ -65,11 +66,8 @@
         [[self labelError] setText:errorMessage];
         return;
     }
-    [ApiAuth loginWithUrl:apiUrl email:email password:password success:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            [appDelegate.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
-        });
+    [Api loginWithUrl:apiUrl email:email password:password success:^{
+        [self goToInit];
     } failure:^(NSString * errorMessage){
         [[self labelError] setText:errorMessage];
     }];
@@ -121,5 +119,8 @@
     [currentApiUrlCheck startWithUrl:[[self textFieldUrl] text]];
 }
 
+- (void)goToInit {
+    [self performSegueWithIdentifier:@"goToInitFromLogin" sender:nil];
+}
 
 @end

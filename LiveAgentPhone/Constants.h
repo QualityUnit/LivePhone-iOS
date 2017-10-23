@@ -9,6 +9,9 @@
 // application
 #define appName @"LiveAgentPhone"
 
+// application state
+#define stateForeground [NSNumber numberWithInt:1]
+
 // network
 #define timeoutSec 15.00
 #define maxIncomingCallPushDelay 5
@@ -31,11 +34,14 @@
 #define memoryKeySipUser @"memoryKeySipUser"
 #define memoryKeySipPassword @"memoryKeySipPassword"
 #define memoryKeyPushToken @"memoryKeyPushToken"
+#define memoryKeyDeviceId @"memoryKeyDeviceId"
+#define memoryKeyAgentId @"memoryKeyAgentId"
 
 // local notification names
 #define localNotificationIntoInit @"localNotificationIntoInit"
 #define localNotificationCallEvent @"localNotificationCallEvent"
 #define localNotificationCallData @"localNotificationCallData"
+#define localNotificationApplicationState @"localNotificationApplicationState"
 
 // common localized strings
 #define errorMsgEmptyField NSLocalizedStringWithDefaultValue(@"login.errMsgEmptyField", @"Localizable", [NSBundle mainBundle], @"Please fill required fields", @"Error message on login screen if some of fields are empty");
@@ -52,10 +58,13 @@
 #define stringVisitor NSLocalizedStringWithDefaultValue(@"calling.visitor",@"Localizable",[NSBundle mainBundle],@"Website visitor",@"When website visitor is calling");
 #define stringPermissionDenied NSLocalizedStringWithDefaultValue(@"calling.permissions",@"Localizable",[NSBundle mainBundle],@"Please enable all permissions for app in iOS settings",@"When user disallows some of required permissions");
 #define stringMissedCalls NSLocalizedStringWithDefaultValue(@"calling.missedcall",@"Localizable",[NSBundle mainBundle],@"Missed call",@"Missed call");
+#define stringAvailable NSLocalizedStringWithDefaultValue(@"status.available",@"Localizable",[NSBundle mainBundle],@"Available",@"Available on calls");
+#define stringUnavailable NSLocalizedStringWithDefaultValue(@"status.unavailable",@"Localizable",[NSBundle mainBundle],@"Unavailable",@"Unavailable on calls");
 // colors
 #define textGreenOk @"#64DD17"
 #define textRedNok @"F44336"
 #define surfaceCallGreen @"16C855"
 
 //macros
-#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define NAVIGATE(s) NSLog([NSString stringWithFormat:@"NAVIGATE: %@", s]); UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil]; UIViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:s]; UIWindow *window = (UIWindow *)[[UIApplication sharedApplication].windows firstObject]; [UIView transitionFromView:window.rootViewController.view toView:viewController.view duration:0.35f options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished){ window.rootViewController = viewController;}];
