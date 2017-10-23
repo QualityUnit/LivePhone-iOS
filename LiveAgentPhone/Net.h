@@ -21,4 +21,8 @@
  */
 + (nonnull AFHTTPSessionManager*) createSessionManager;
 
++ (NSString *)getHost;
+
++ (NSString *)getApikey;
+
 @end

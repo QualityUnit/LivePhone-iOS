@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MainTabBarController.h"
 
 @interface StatusViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+
+- (void)setMainTabBarController:(MainTabBarController *)mainTabBarController;
 
 @end

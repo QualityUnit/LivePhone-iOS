@@ -87,7 +87,6 @@
         NSLog(@"%@", requestDescription);
         AFHTTPSessionManager *manager = [Net createSessionManager];
         [manager GET:@"devices" parameters:requestParameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
-            NSLog(@"SUCCESS '%@'", requestDescription);
             if (responseObject != nil && [responseObject isKindOfClass:[NSArray class]]) {
                 NSArray *response = responseObject;
                 if ([response count] == 0) {
@@ -97,11 +96,7 @@
                     return;
                 }
                 NSDictionary *device = [response firstObject];
-                NSString *deviceId = [device objectForKey:@"id"];
-                [userDefaults setObject:deviceId forKey:memoryKeyDeviceId];
-                [userDefaults setObject:[device objectForKey:@"agent_id"] forKey:memoryKeyAgentId];
-                [userDefaults synchronize];
-                success([[device objectForKey:@"status"] isEqualToString:@"N"]);
+                [self deviceSuccess:requestDescription resp:device success:success failure:failure];
             } else {
                 NSString *errorMessage = errorMsgCannotParseResponse;
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -110,21 +105,84 @@
                 NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
             }
         } failure:^(NSURLSessionTask *operation, NSError *error) {
-            NSString *errorMessage = [error localizedDescription];
-            NSHTTPURLResponse *response = (NSHTTPURLResponse *) [operation response];
-            if ([response statusCode] == 404) {
-                errorMessage = [NSString stringWithFormat:@"Your server API does not support 'status' or 'phoneId=%@' does not exist.", phoneId];
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                failure(errorMessage);
-            });
-            NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
+            NSHTTPURLResponse *resp = (NSHTTPURLResponse *) [operation response];
+            [self deviceFailure:requestDescription error:error httpCode:[resp statusCode] failure:failure];
         }];
     });
 }
 
-+(void)updateDeviceWithStatus:(BOOL)isAvailable {
-    // TODO
++(void)updateDevice:(BOOL)isAvailable success:(void (^)(BOOL isOnline))success failure:(void (^)(NSString *errorMessage))failure {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+    dispatch_async(queue, ^{
+        NSString *flag = @"F";
+        if (isAvailable) {
+            flag = @"N";
+        }
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *deviceId = [userDefaults objectForKey:memoryKeyDeviceId];
+        if (deviceId == nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                failure(@"Variable 'deviceId' not found on this device");
+            });
+            return;
+        }
+        NSString *agentId = [userDefaults objectForKey:memoryKeyAgentId];
+        if (agentId == nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                failure(@"Variable 'agentId' not found on this device");
+            });
+            return;
+        }
+        AFHTTPSessionManager *manager = [Net createSessionManager];
+        NSDictionary *body = @{@"agent_id":agentId, @"service_type":@"P", @"status":flag};
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:0 error:&error];
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        NSMutableURLRequest *req = [[AFJSONRequestSerializer serializer ] requestWithMethod:@"PUT" URLString:[NSString stringWithFormat:@"%@/devices/%@", [manager baseURL], deviceId] parameters:nil error:nil];
+        req.timeoutInterval = timeoutSec;
+        [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [req setValue:[Net getApikey] forHTTPHeaderField:@"apikey"];
+        [req setHTTPBody:[jsonString dataUsingEncoding:NSUTF8StringEncoding]];
+        NSString *requestDescription = [NSString stringWithFormat:@"PUT /devices/%@", deviceId];;
+        NSLog(@"%@", requestDescription);
+        [[manager dataTaskWithRequest:req completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+            if (!error) {
+                [self deviceSuccess:requestDescription resp:responseObject success:success failure:failure];
+            } else {
+                NSHTTPURLResponse *resp = (NSHTTPURLResponse *) response;
+                [self deviceFailure:requestDescription error:error httpCode:[resp statusCode] failure:failure];
+            }
+        }] resume];
+    });
+}
+
++(void)deviceSuccess:(NSString *)requestDescription resp:(id)responseObject success:(void (^)(BOOL isOnline))success failure:(void (^)(NSString *errorMessage))failure{
+    if ([responseObject isKindOfClass:[NSDictionary class]]) {
+        NSLog(@"SUCCESS '%@'", requestDescription);
+        NSString *deviceId = [responseObject objectForKey:@"id"];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:deviceId forKey:memoryKeyDeviceId];
+        [userDefaults setObject:[responseObject objectForKey:@"agent_id"] forKey:memoryKeyAgentId];
+        [userDefaults synchronize];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            success([[responseObject objectForKey:@"status"] isEqualToString:@"N"]);
+        });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            failure(@"Response object is not a JSON");
+        });
+    }
+}
+
++(void)deviceFailure:(NSString *)requestDescription error:(NSError *)error httpCode:(NSInteger)httpCode failure:(void (^)(NSString *errorMessage))failure{
+    NSString *errorMessage = [error localizedDescription];
+    if (httpCode == 404) {
+        errorMessage = [NSString stringWithFormat:@"Your server API does not support 'status' or given 'phoneId' does not exist."];
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        failure(errorMessage);
+    });
+    NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
 }
 
 +(void)getDepartmentStatusList:(void (^)(NSArray *deparmentList))success failure:(void (^)(NSString *errorMessage))failure {
@@ -144,7 +202,9 @@
         [manager GET:[NSString stringWithFormat:@"devices/%@/departments", deviceId] parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
             NSLog(@"SUCCESS '%@'", requestDescription);
             if (responseObject != nil && [responseObject isKindOfClass:[NSArray class]]) {
-                success(responseObject);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    success(responseObject);
+                });
             } else {
                 NSString *errorMessage = errorMsgCannotParseResponse;
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -162,8 +222,47 @@
     });
 }
 
-+(void)updateDepartmentWithStatus:(NSDictionary *)obj {
-    // TODO
++(void)updateDepartment:(NSDictionary *)body success:(void (^)(BOOL isOnline))success failure:(void (^)(NSString *errorMessage))failure {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+    dispatch_async(queue, ^{
+        if (body == nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                failure(@"Object is null");
+            });
+            return;
+        }
+        AFHTTPSessionManager *manager = [Net createSessionManager];
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:0 error:&error];
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        NSString *deviceId = [body objectForKey:@"device_id"];
+        NSString *departmentId = [body objectForKey:@"department_id"];
+        NSMutableURLRequest *req = [[AFJSONRequestSerializer serializer ] requestWithMethod:@"PUT" URLString:[NSString stringWithFormat:@"%@/devices/%@/departments/%@", [manager baseURL], deviceId, departmentId] parameters:nil error:nil];
+        req.timeoutInterval = timeoutSec;
+        [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [req setValue:[Net getApikey] forHTTPHeaderField:@"apikey"];
+        [req setHTTPBody:[jsonString dataUsingEncoding:NSUTF8StringEncoding]];
+        NSString *requestDescription = [NSString stringWithFormat:@"PUT /devices/%@/departments/%@", deviceId, departmentId];;
+        NSLog(@"%@", requestDescription);
+        [[manager dataTaskWithRequest:req completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+            if (!error) {
+                if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                    NSLog(@"SUCCESS '%@'", requestDescription);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        success([[responseObject objectForKey:@"online_status"] isEqualToString:@"N"]);
+                    });
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        failure(@"Response object is not a JSON");
+                    });
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    failure([error localizedDescription]);
+                });
+            }
+        }] resume];
+    });
 }
 
 @end

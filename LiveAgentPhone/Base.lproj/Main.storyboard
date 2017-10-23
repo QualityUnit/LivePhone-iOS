@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -291,6 +292,9 @@
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="INJ-Q9-ewQ">
                                                 <rect key="frame" x="435" y="7" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="activeSwitchChanged:" destination="t6H-jB-JmI" eventType="valueChanged" id="48R-e3-MEu"/>
+                                                </connections>
                                             </switch>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -321,6 +325,9 @@
                                                         </label>
                                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AYA-Ur-9Qn">
                                                             <rect key="frame" x="435" y="6" width="51" height="31"/>
+                                                            <connections>
+                                                                <action selector="listSwitchChanged:" destination="t6H-jB-JmI" eventType="valueChanged" id="a8e-hX-QDV"/>
+                                                            </connections>
                                                         </switch>
                                                     </subviews>
                                                     <constraints>
@@ -377,11 +384,6 @@
                                     <constraint firstItem="ZTA-5L-Mib" firstAttribute="centerX" secondItem="7tK-zt-3LF" secondAttribute="centerX" id="Zfb-dS-eBq"/>
                                     <constraint firstItem="dyw-A1-Qzf" firstAttribute="centerY" secondItem="7tK-zt-3LF" secondAttribute="centerY" id="wGf-MI-kpA"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="subviews">
-                                        <exclude reference="dyw-A1-Qzf"/>
-                                    </mask>
-                                </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -399,21 +401,16 @@
                             <constraint firstItem="7tK-zt-3LF" firstAttribute="top" secondItem="eYJ-7G-CA6" secondAttribute="bottom" id="eyF-FH-jaz"/>
                             <constraint firstItem="7tK-zt-3LF" firstAttribute="leading" secondItem="YWN-0d-RDj" secondAttribute="leading" id="jVd-w6-G0O"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="7tK-zt-3LF"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Availability" id="6HW-CQ-gWo"/>
                     <size key="freeformSize" width="500" height="500"/>
                     <connections>
-                        <outlet property="activeSwitch" destination="INJ-Q9-ewQ" id="h8W-hK-ELl"/>
-                        <outlet property="activityIndicator" destination="ZTA-5L-Mib" id="7jt-ax-MOM"/>
-                        <outlet property="mainView" destination="tZx-S0-hcn" id="9Uz-y8-FT4"/>
-                        <outlet property="messageLabel" destination="dyw-A1-Qzf" id="WHL-bB-I2Q"/>
-                        <outlet property="messageView" destination="7tK-zt-3LF" id="MOh-P4-PTc"/>
-                        <outlet property="tableView" destination="Xia-xy-szG" id="jbD-XM-pGC"/>
+                        <outlet property="activeSwitch" destination="INJ-Q9-ewQ" id="zo9-mO-i8N"/>
+                        <outlet property="activityIndicator" destination="ZTA-5L-Mib" id="J2k-c2-Lgq"/>
+                        <outlet property="mainView" destination="tZx-S0-hcn" id="pSY-So-o3v"/>
+                        <outlet property="messageLabel" destination="dyw-A1-Qzf" id="DrN-V6-4GC"/>
+                        <outlet property="messageView" destination="7tK-zt-3LF" id="yWe-R2-7sf"/>
+                        <outlet property="tableView" destination="Xia-xy-szG" id="vOu-UF-2dB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wqI-uN-zZE" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -10,4 +10,6 @@
 
 @interface MainTabBarController : UITabBarController
 
+-(void)refreshTabItem:(BOOL)isAvailable;
+
 @end

@@ -14,6 +14,7 @@
 @interface StatusViewController () {
     @private
     NSArray *data;
+    MainTabBarController *tabBarController;
 }
 @property (weak, nonatomic) IBOutlet UIView *mainView;
 @property (weak, nonatomic) IBOutlet UISwitch *activeSwitch;
@@ -28,12 +29,54 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self initList];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationState:) name:localNotificationApplicationState object:nil];
+    [self initAvailability];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)onApplicationState:(NSNotification *) notification {
+    NSNumber *applicationState = [notification object];
+    if (applicationState == stateForeground) {
+        [self initAvailability];
+    }
+}
+
+- (void)initAvailability {
+    [[self activeSwitch] setEnabled:NO];
+    [Api getDevice:^(BOOL isOnline) {
+        [self updateAvailabilitySuccess:isOnline];
+        [self initList];
+    } failure:^(NSString *errorMessage) {
+        [self updateAvailabilityFailure:NO errorMessage:errorMessage];
+    }];
+}
+
+- (void)updateAvailability:(BOOL) isAvailable {
+    [[self activeSwitch] setEnabled:NO];
+    [Api updateDevice:isAvailable success:^(BOOL isOnline) {
+        [self updateAvailabilitySuccess:isOnline];
+    } failure:^(NSString *errorMessage) {
+        [self updateAvailabilityFailure:!isAvailable errorMessage:errorMessage];
+    }];
+}
+
+-(void)updateAvailabilitySuccess:(BOOL)isOnline {
+    [[self activeSwitch] setEnabled:YES];
+    [tabBarController refreshTabItem:isOnline];
+    [[self activeSwitch] setOn:isOnline];
+}
+
+-(void)updateAvailabilityFailure:(BOOL)restore errorMessage:(NSString *)errorMessage {
+    [[self activeSwitch] setEnabled:YES];
+    [self showError:errorMessage];
 }
 
 - (void)initList {
@@ -66,6 +109,7 @@
     cell.departmentName.text = departmentName;
     BOOL isActive = [[dataItem objectForKey:@"online_status"] isEqualToString:@"N"];
     [cell.activeSwitch setOn:isActive];
+    cell.activeSwitch.tag = indexPath.row;
     return cell;
 }
 
@@ -100,5 +144,29 @@
     [[self mainView] setHidden:NO];
 }
 
+- (void)setMainTabBarController:(MainTabBarController *)mainTabBarController {
+    tabBarController = mainTabBarController;
+}
+- (IBAction)activeSwitchChanged:(id)sender {
+    UISwitch *s = sender;
+    BOOL isActive = [s isOn];
+    [self updateAvailability:isActive];
+}
+- (IBAction)listSwitchChanged:(id)sender {
+    UISwitch *switchControl = sender;
+    [switchControl setEnabled:NO];
+    NSString *flag = @"F";
+    if ([switchControl isOn]) {
+        flag = @"N";
+    }
+    NSMutableDictionary *obj = [NSMutableDictionary dictionaryWithDictionary:[data objectAtIndex:[switchControl tag]]];
+    [obj setObject:flag forKey:@"online_status"];
+    [Api updateDepartment:obj success:^(BOOL isActive){
+        [switchControl setEnabled:YES];
+    } failure:^(NSString * errorMessage){
+        [switchControl setEnabled:YES];
+        [self showError:errorMessage];
+    }];
+}
 
 @end

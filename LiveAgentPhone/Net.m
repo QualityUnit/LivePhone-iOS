@@ -17,15 +17,24 @@
     [[manager requestSerializer] setTimeoutInterval:timeoutSec];
     if (apikey != nil && apikey.length != 0) {
         [[manager requestSerializer] setValue:apikey forHTTPHeaderField:@"apikey"];
+        [[manager requestSerializer] setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     }
     return manager;
 }
 
 + (AFHTTPSessionManager*) createSessionManager {
     // getting host and apiKey from user preferences
-    NSString *host = [[NSUserDefaults standardUserDefaults] stringForKey:memoryKeyUrl];
-    NSString *apikey = [[NSUserDefaults standardUserDefaults] stringForKey:memoryKeyApikey];
+    NSString *host = [self getHost];
+    NSString *apikey = [self getApikey];
     return [self createSessionManagerWithHost:host apikey:apikey];
+}
+
++ (NSString *)getHost {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:memoryKeyUrl];
+}
+
++ (NSString *)getApikey {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:memoryKeyApikey];
 }
 
 @end
