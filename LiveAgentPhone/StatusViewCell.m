@@ -1,14 +1,14 @@
 //
-//  StatusTableViewCell.m
+//  StatusViewCell.m
 //  LiveAgentPhone
 //
-//  Created by Rastislav Kostrab on 22.10.17.
+//  Created by Rastislav Kostrab on 26.10.17.
 //  Copyright © 2017 Quality Unit. All rights reserved.
 //
 
-#import "StatusTableViewCell.h"
+#import "StatusViewCell.h"
 
-@implementation StatusTableViewCell
+@implementation StatusViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

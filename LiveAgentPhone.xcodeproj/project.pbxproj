@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3007FA2C1F9B95160039F19A /* StatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3007FA2B1F9B95160039F19A /* StatusViewController.m */; };
-		3007FA2F1F9CA5E00039F19A /* StatusTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3007FA2E1F9CA5E00039F19A /* StatusTableViewCell.m */; };
 		30080F901E6217C30083EB4E /* ContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 30080F8F1E6217C30083EB4E /* ContactsTableViewCell.m */; };
 		30080F9B1E6ED6D00083EB4E /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30080F9A1E6ED6D00083EB4E /* SettingsTableViewController.m */; };
 		30080F9F1E6EF13D0083EB4E /* DialpadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30080F9E1E6EF13D0083EB4E /* DialpadTableViewController.m */; };
@@ -26,6 +24,8 @@
 		307CD0941E3F402E0073DA3B /* ApiUrlCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 307CD0931E3F402E0073DA3B /* ApiUrlCheck.m */; };
 		307CD0961E3FF4AE0073DA3B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 307CD0951E3FF4AE0073DA3B /* SystemConfiguration.framework */; };
 		30804F211E096817003B4442 /* ContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30804F201E096817003B4442 /* ContactListViewController.m */; };
+		308C24BB1FA1F79500BA4DFF /* StatusTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 308C24BA1FA1F79500BA4DFF /* StatusTableViewController.m */; };
+		308C24BE1FA200EB00BA4DFF /* StatusViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 308C24BD1FA200EB00BA4DFF /* StatusViewCell.m */; };
 		309862BE1E5337EC00321C1E /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 309862BD1E5337EC00321C1E /* CallKit.framework */; };
 		309862C01E571BE300321C1E /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 309862BF1E571BE300321C1E /* PushKit.framework */; };
 		309983D41F697E620010A90B /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 309983D31F697E620010A90B /* AboutViewController.m */; };
@@ -70,10 +70,6 @@
 		1DCA728A7FE8987FA0327EBB /* Pods-LiveAgentPhoneTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LiveAgentPhoneTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LiveAgentPhoneTests/Pods-LiveAgentPhoneTests.debug.xcconfig"; sourceTree = "<group>"; };
 		23FF3E61350EA7FE579AFD76 /* Pods_LiveAgentPhoneTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LiveAgentPhoneTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B7B340687EC5ECA9F690D5D /* Pods-LiveAgentPhoneUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LiveAgentPhoneUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LiveAgentPhoneUITests/Pods-LiveAgentPhoneUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		3007FA2A1F9B95160039F19A /* StatusViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatusViewController.h; sourceTree = "<group>"; };
-		3007FA2B1F9B95160039F19A /* StatusViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StatusViewController.m; sourceTree = "<group>"; };
-		3007FA2D1F9CA5E00039F19A /* StatusTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatusTableViewCell.h; sourceTree = "<group>"; };
-		3007FA2E1F9CA5E00039F19A /* StatusTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StatusTableViewCell.m; sourceTree = "<group>"; };
 		30080F8E1E6217C30083EB4E /* ContactsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewCell.h; sourceTree = "<group>"; };
 		30080F8F1E6217C30083EB4E /* ContactsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsTableViewCell.m; sourceTree = "<group>"; };
 		30080F991E6ED6D00083EB4E /* SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController.h; sourceTree = "<group>"; };
@@ -113,6 +109,10 @@
 		307CD0951E3FF4AE0073DA3B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		30804F1F1E096817003B4442 /* ContactListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactListViewController.h; sourceTree = "<group>"; };
 		30804F201E096817003B4442 /* ContactListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactListViewController.m; sourceTree = "<group>"; };
+		308C24B91FA1F79500BA4DFF /* StatusTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatusTableViewController.h; sourceTree = "<group>"; };
+		308C24BA1FA1F79500BA4DFF /* StatusTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StatusTableViewController.m; sourceTree = "<group>"; };
+		308C24BC1FA200EB00BA4DFF /* StatusViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatusViewCell.h; sourceTree = "<group>"; };
+		308C24BD1FA200EB00BA4DFF /* StatusViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StatusViewCell.m; sourceTree = "<group>"; };
 		309862BD1E5337EC00321C1E /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		309862BF1E571BE300321C1E /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		309983D21F697E620010A90B /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
@@ -205,10 +205,10 @@
 		3007FA291F9B94E90039F19A /* Status */ = {
 			isa = PBXGroup;
 			children = (
-				3007FA2A1F9B95160039F19A /* StatusViewController.h */,
-				3007FA2B1F9B95160039F19A /* StatusViewController.m */,
-				3007FA2D1F9CA5E00039F19A /* StatusTableViewCell.h */,
-				3007FA2E1F9CA5E00039F19A /* StatusTableViewCell.m */,
+				308C24B91FA1F79500BA4DFF /* StatusTableViewController.h */,
+				308C24BA1FA1F79500BA4DFF /* StatusTableViewController.m */,
+				308C24BC1FA200EB00BA4DFF /* StatusViewCell.h */,
+				308C24BD1FA200EB00BA4DFF /* StatusViewCell.m */,
 			);
 			name = Status;
 			sourceTree = "<group>";
@@ -766,8 +766,6 @@
 				3031E6FC1E09486E00106268 /* Net.m in Sources */,
 				3072925A1F6AF3400028A45D /* LicensesViewController.m in Sources */,
 				30080F901E6217C30083EB4E /* ContactsTableViewCell.m in Sources */,
-				3007FA2F1F9CA5E00039F19A /* StatusTableViewCell.m in Sources */,
-				3007FA2C1F9B95160039F19A /* StatusViewController.m in Sources */,
 				3032794D1E49C16000455203 /* XCPjsua.m in Sources */,
 				307CD0941E3F402E0073DA3B /* ApiUrlCheck.m in Sources */,
 				30E77D6F1DF82B8F00A40AD1 /* LoginViewController.m in Sources */,
@@ -776,6 +774,7 @@
 				30E77D6C1DF82B8F00A40AD1 /* AppDelegate.m in Sources */,
 				309997A91F976222003C035D /* MainTabBarController.m in Sources */,
 				30AEF1311E61D0AE00D92FB1 /* NSString+MD5.m in Sources */,
+				308C24BE1FA200EB00BA4DFF /* StatusViewCell.m in Sources */,
 				30E91A6D1F7BE3F4006BFF30 /* ContactsViewController.m in Sources */,
 				30B8D8D31EBE3E5600B61EB3 /* DtmfTableViewController.m in Sources */,
 				3031E6F11E03FFA500106268 /* Utils.m in Sources */,
@@ -783,6 +782,7 @@
 				30804F211E096817003B4442 /* ContactListViewController.m in Sources */,
 				30080F9B1E6ED6D00083EB4E /* SettingsTableViewController.m in Sources */,
 				30080F9F1E6EF13D0083EB4E /* DialpadTableViewController.m in Sources */,
+				308C24BB1FA1F79500BA4DFF /* StatusTableViewController.m in Sources */,
 				30E77D691DF82B8F00A40AD1 /* main.m in Sources */,
 				30080FA61E76EA1D0083EB4E /* CallingTableViewController.m in Sources */,
 				30AEF1291E5B085D00D92FB1 /* CallManager.m in Sources */,

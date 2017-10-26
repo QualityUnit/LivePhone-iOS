@@ -11,12 +11,12 @@
 #import "MainTabBarController.h"
 #import "Constants.h"
 #import "Api.h"
-#import "StatusViewController.h"
+#import "StatusTableViewController.h"
 
 @interface MainTabBarController () {
     @private
     UITabBarItem *statusBarItem;
-    StatusViewController *statusViewController;
+    StatusTableViewController *statusViewController;
 }
 
 @end
@@ -36,13 +36,15 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
--(void)refreshTabItem:(BOOL)isAvailable {
+-(void)refreshTabItem:(NSString *)generalAvailability {
     NSString *barItemTitle;
     NSString *barItemImageName;
-    if (isAvailable) {
+    if (generalAvailability == nil) {
+        barItemTitle = @"";
+        barItemImageName = nil;
+    } else if ([generalAvailability isEqualToString:@"N"]) {
         barItemTitle = stringAvailable;
         barItemImageName = @"StatusAvailable";
     } else {
