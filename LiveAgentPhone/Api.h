@@ -10,7 +10,7 @@
 
 @interface Api : NSObject
 
-+(void)loginWithUrl:(NSString *)apiUrl email:(NSString *)email password:(NSString *)password success:(void (^)())success failure:(void (^)(NSString *errorMessage))failure;
++(void)loginWithUrl:(NSString *)apiUrl email:(NSString *)email password:(NSString *)password success:(void (^)(void))success failure:(void (^)(NSString *errorMessage))failure;
 +(void)getDevice:(void (^)(BOOL isOnline))success failure:(void (^)(NSString *errorMessage))failure;
 +(void)updateDevice:(BOOL)isAvailable success:(void (^)(BOOL isOnline))success failure:(void (^)(NSString *errorMessage))failure;
 +(void)getDepartmentStatusList:(void (^)(NSArray *deparmentList))success failure:(void (^)(NSString *errorMessage))failure;
