@@ -21,6 +21,8 @@
     @private
     ApiUrlCheck *currentApiUrlCheck;
     NSString *apiUrl;
+    NSTimer *urlCheckTimer;
+    BOOL skipUrlTimerRound;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *textFieldUrl;
@@ -36,16 +38,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
-    NSLog(@"Filling text fields...");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [self.textFieldUrl setText:[userDefaults objectForKey:memoryKeyTypedUrl]];
     [self.textFieldEmail setText:[userDefaults objectForKey:memoryKeyTypedEmail]];
     [self fireUrlCheck];
+    if (!urlCheckTimer) {
+        urlCheckTimer = [NSTimer timerWithTimeInterval:5.0 target:self selector:@selector(onUrlCheckTimer:) userInfo:nil repeats:YES];
+        [[NSRunLoop mainRunLoop] addTimer:urlCheckTimer forMode:NSDefaultRunLoopMode];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    NSLog(@"Saving text fields...");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:[self.textFieldUrl text] forKey:memoryKeyTypedUrl];
     [userDefaults setObject:[self.textFieldEmail text] forKey:memoryKeyTypedEmail];
@@ -56,6 +60,19 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)dealloc {
+    if (urlCheckTimer) {
+        [urlCheckTimer invalidate];
+    }
+}
+
+- (IBAction)onUrlCheckTimer:(id)sender {
+    if (skipUrlTimerRound) {
+        skipUrlTimerRound = NO;
+        return;
+    }
+    [self fireUrlCheck];
+}
 
 - (IBAction)onLoginButtonTap:(id)sender {
     NSString *email = [[self.textFieldEmail text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -86,14 +103,15 @@
 }
 
 - (IBAction)textFieldUrlChanged:(id)sender {
-    [self fireUrlCheck];
-}
-
-- (void)fireUrlCheck {
     [[self buttonLogin] setEnabled:NO];
     apiUrl = nil;
     [[self labelError] setText:@""];
     [[self textFieldUrl] setTextColor:[UIColor blackColor]];
+    skipUrlTimerRound = YES;
+    [self fireUrlCheck];
+}
+
+- (void)fireUrlCheck {
     if (currentApiUrlCheck != nil) {
         [currentApiUrlCheck terminate];
     }
@@ -105,6 +123,7 @@
             if ([code isEqualToNumber:[NSNumber numberWithInteger:urlResultOk]]) {
                 apiUrl = [result objectForKey:@"apiUrl"];
                 [[self buttonLogin] setEnabled:YES];
+                [[self labelError] setText:@""];
                 [[self textFieldUrl] setTextColor:[UIColor hx_colorWithHexRGBAString:textGreenOk]];
             } else {
                 [[self textFieldUrl] setTextColor:[UIColor hx_colorWithHexRGBAString:textRedNok]];
