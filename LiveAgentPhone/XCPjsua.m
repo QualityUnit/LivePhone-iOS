@@ -55,8 +55,13 @@ int initAndRegister(char* sipHost, char* sipUser, char* sipPassword) {
         }
         // Configure and init pjsua
         {
+            // general config
             pjsua_config cfg;
             pjsua_config_default (&cfg);
+            // media config
+            pjsua_media_config media_cfg;
+            pjsua_media_config_default(&media_cfg);
+            // ... set media params here
             // Callbacks
             cfg.cb.on_incoming_call = &on_incoming_call;
             cfg.cb.on_call_media_state = &on_call_media_state;
@@ -67,11 +72,12 @@ int initAndRegister(char* sipHost, char* sipUser, char* sipPassword) {
             pjsua_logging_config_default(&log_cfg);
             log_cfg.console_level = 4;
             // Init pjsua
-            status = pjsua_init(&cfg, &log_cfg, NULL);
+            status = pjsua_init(&cfg, &log_cfg, &media_cfg);
             if (status != PJ_SUCCESS) {
                 postLocalNotification(CALL_EVENT_ERROR, @"Error: 'pjsua_init()'");
                 return 1;
             }
+            
         }
         // Add UDP transport.
         {
@@ -100,7 +106,13 @@ int initAndRegister(char* sipHost, char* sipUser, char* sipPassword) {
             postLocalNotification(CALL_EVENT_ERROR, @"Error: 'pjsua_start()'");
             return 1;
         }
-        NSLog(@"#### Setting no sound device");
+        
+        // deinitialization of unused codecs
+        pjmedia_codec_speex_deinit();
+        pjmedia_codec_ilbc_deinit();
+        pjmedia_codec_gsm_deinit();
+        pjmedia_codec_g722_deinit();
+        
         pjsua_set_no_snd_dev(); // setting no sound devices because we do not want to block it while not calling
     }
     
