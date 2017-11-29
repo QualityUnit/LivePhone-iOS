@@ -27,26 +27,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationState:) name:localNotificationApplicationState object:nil];
-    [self initAvailability];
+    [self refreshAvailability];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)onApplicationState:(NSNotification *) notification {
-    NSNumber *applicationState = [notification object];
-    if (applicationState == stateForeground) {
-        [self initAvailability];
-    }
-}
-
-- (void)initAvailability {
+- (void)refreshAvailability {
     if (generalAvailability == nil && data == nil) {
         [self showLoading:YES];
     }

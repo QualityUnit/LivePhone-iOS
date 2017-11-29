@@ -63,10 +63,6 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (IBAction)onCalleeNumberValueChanged:(id)sender {
     [self.makeCallButton setHidden:NO];
     [self.errorPhoneNumberEmpty setHidden:YES];

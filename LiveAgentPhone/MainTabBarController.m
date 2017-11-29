@@ -34,6 +34,21 @@
     [statusViewController view];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationState:) name:localNotificationApplicationState object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)onApplicationState:(NSNotification *) notification {
+    NSNumber *applicationState = [notification object];
+    if (applicationState == stateForeground && statusViewController != nil) {
+        [statusViewController refreshAvailability];
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

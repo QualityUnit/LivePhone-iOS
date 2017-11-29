@@ -12,5 +12,6 @@
 @interface StatusTableViewController : UITableViewController
 
 - (void)setMainTabBarController:(MainTabBarController *)mainTabBarController;
+- (void)refreshAvailability;
 
 @end

@@ -42,6 +42,10 @@
     [self.textFieldUrl setText:[userDefaults objectForKey:memoryKeyTypedUrl]];
     [self.textFieldEmail setText:[userDefaults objectForKey:memoryKeyTypedEmail]];
     [self fireUrlCheck];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     if (!urlCheckTimer) {
         urlCheckTimer = [NSTimer timerWithTimeInterval:5.0 target:self selector:@selector(onUrlCheckTimer:) userInfo:nil repeats:YES];
         [[NSRunLoop mainRunLoop] addTimer:urlCheckTimer forMode:NSDefaultRunLoopMode];
@@ -54,6 +58,8 @@
     [userDefaults setObject:[self.textFieldUrl text] forKey:memoryKeyTypedUrl];
     [userDefaults setObject:[self.textFieldEmail text] forKey:memoryKeyTypedEmail];
     [userDefaults synchronize];
+    [urlCheckTimer invalidate];
+    urlCheckTimer = nil;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -64,6 +70,7 @@
     if (urlCheckTimer) {
         [urlCheckTimer invalidate];
     }
+    NSLog(@"#### login dealloc");
 }
 
 - (IBAction)onUrlCheckTimer:(id)sender {

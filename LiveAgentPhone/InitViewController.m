@@ -15,7 +15,7 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import <UserNotifications/UserNotifications.h>
-#import "Utils.h"
+#import "Api.h"
 
 @interface InitViewController () {
     @private
@@ -116,93 +116,77 @@
         [self putPhoneParams];
         return;
     }
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
-    dispatch_async(queue, ^{
-        NSString *requestDescription = @"GET /phones/_app_";
-        NSLog(@"%@", requestDescription);
-        AFHTTPSessionManager *manager = [Net createSessionManager];
-        [manager GET:@"phones/_app_" parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
-            NSLog(@"SUCCESS '%@'", requestDescription);
-            if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]]) {
-                NSDictionary *response = responseObject;
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                NSString *requiredKey;
-                NSString *requiredValue;
-                // SIP id
-                requiredKey = @"id";
-                requiredValue = [response objectForKey:requiredKey];
-                if (requiredValue != nil && [requiredValue length] > 0) {
-                    phoneId = requiredValue;
-                    [userDefaults setObject:requiredValue forKey:memoryKeySipId];
-                } else {
-                    [self showError:[NSString stringWithFormat:@"Missing PHONE value: '%@'", requiredKey]];
-                    return;
-                }
-                // SIP number
-                requiredKey = @"number";
-                requiredValue = [response objectForKey:requiredKey];
-                if (requiredValue != nil && [requiredValue length] > 0) {
-                    [userDefaults setObject:requiredValue forKey:memoryKeySipNumber];
-                } else {
-                    [self showError:[NSString stringWithFormat:@"Missing SIP value: '%@'", requiredKey]];
-                    return;
-                }
-                // SIP host
-                requiredKey = @"connection_host";
-                requiredValue = [response objectForKey:requiredKey];
-                if (requiredValue != nil && [requiredValue length] > 0) {
-                    [userDefaults setObject:requiredValue forKey:memoryKeySipHost];
-                } else {
-                    [self showError:[NSString stringWithFormat:@"Missing SIP value: '%@'", requiredKey]];
-                    return;
-                }
-                // SIP user
-                requiredKey = @"connection_user";
-                requiredValue = [response objectForKey:requiredKey];
-                if (requiredValue != nil && [requiredValue length] > 0) {
-                    [userDefaults setObject:requiredValue forKey:memoryKeySipUser];
-                } else {
-                    [self showError:[NSString stringWithFormat:@"Missing SIP value: '%@'", requiredKey]];
-                    return;
-                }
-                // SIP password
-                requiredKey = @"connection_pass";
-                requiredValue = [response objectForKey:requiredKey];
-                if (requiredValue != nil && [requiredValue length] > 0) {
-                    [userDefaults setObject:requiredValue forKey:memoryKeySipPassword];
-                } else {
-                    [self showError:[NSString stringWithFormat:@"Missing SIP value: '%@'", requiredKey]];
-                    return;
-                }
-                [userDefaults synchronize];
-                // parse 'params' object from response
-                NSString *paramsString = [response objectForKey:@"params"];
-                if (paramsString != nil && [paramsString length] > 0) {
-                    NSData *objectData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
-                    NSDictionary *params = [NSJSONSerialization JSONObjectWithData:objectData options:NSJSONReadingMutableContainers error:nil];
-                    if (params != nil && [params count] > 0) {
-                        remoteDeviceId = [params objectForKey:@"deviceId"];
-                        remotePushToken = [params objectForKey:@"pushToken"];
-                    }
-                }
-                // to check if remote pushtoken exists and is equal to pushtoken of this device then we must invoke voip push registration
-                [self putPhoneParams];
-            } else {
-                NSString *errorMessage = errorMsgCannotParseResponse;
-                [self showError:errorMessage];
-                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
+    [Api getPhone:^(NSDictionary* responseObject) {
+        NSDictionary *response = responseObject;
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *requiredKey;
+        NSString *requiredValue;
+        // SIP id
+        requiredKey = @"id";
+        requiredValue = [response objectForKey:requiredKey];
+        if (requiredValue != nil && [requiredValue length] > 0) {
+            phoneId = requiredValue;
+            [userDefaults setObject:requiredValue forKey:memoryKeySipId];
+        } else {
+            [self showError:[NSString stringWithFormat:@"Missing PHONE value: '%@'", requiredKey]];
+            return;
+        }
+        // SIP number
+        requiredKey = @"number";
+        requiredValue = [response objectForKey:requiredKey];
+        if (requiredValue != nil && [requiredValue length] > 0) {
+            [userDefaults setObject:requiredValue forKey:memoryKeySipNumber];
+        } else {
+            [self showError:[NSString stringWithFormat:@"Missing SIP value: '%@'", requiredKey]];
+            return;
+        }
+        // SIP host
+        requiredKey = @"connection_host";
+        requiredValue = [response objectForKey:requiredKey];
+        if (requiredValue != nil && [requiredValue length] > 0) {
+            [userDefaults setObject:requiredValue forKey:memoryKeySipHost];
+        } else {
+            [self showError:[NSString stringWithFormat:@"Missing SIP value: '%@'", requiredKey]];
+            return;
+        }
+        // SIP user
+        requiredKey = @"connection_user";
+        requiredValue = [response objectForKey:requiredKey];
+        if (requiredValue != nil && [requiredValue length] > 0) {
+            [userDefaults setObject:requiredValue forKey:memoryKeySipUser];
+        } else {
+            [self showError:[NSString stringWithFormat:@"Missing SIP value: '%@'", requiredKey]];
+            return;
+        }
+        // SIP password
+        requiredKey = @"connection_pass";
+        requiredValue = [response objectForKey:requiredKey];
+        if (requiredValue != nil && [requiredValue length] > 0) {
+            [userDefaults setObject:requiredValue forKey:memoryKeySipPassword];
+        } else {
+            [self showError:[NSString stringWithFormat:@"Missing SIP value: '%@'", requiredKey]];
+            return;
+        }
+        [userDefaults synchronize];
+        // parse 'params' object from response
+        NSString *paramsString = [response objectForKey:@"params"];
+        if (paramsString != nil && [paramsString length] > 0) {
+            NSData *objectData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *params = [NSJSONSerialization JSONObjectWithData:objectData options:NSJSONReadingMutableContainers error:nil];
+            if (params != nil && [params count] > 0) {
+                remoteDeviceId = [params objectForKey:@"deviceId"];
+                remotePushToken = [params objectForKey:@"pushToken"];
             }
-        } failure:^(NSURLSessionTask *operation, NSError *error) {
-            NSString *errorMessage = [error localizedDescription];
-            NSHTTPURLResponse *response = (NSHTTPURLResponse *) [operation response];
-            if ([response statusCode] == 401) {
-                [self goToLogin];
-            } else {
-                [self showError:errorMessage];
-                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
-            }
-        }];
-    });
+        }
+        // to check if remote pushtoken exists and is equal to pushtoken of this device then we must invoke voip push registration
+        [self putPhoneParams];
+    } failure:^(NSString *errorMessage, BOOL unauthorized) {
+        if (unauthorized) {
+            [self goToLogin];
+        } else {
+            [self showError:errorMessage];
+        }
+    }];
 }
 
 - (void)putPhoneParams {
@@ -212,58 +196,29 @@
 }
 
 - (void)onLocalNotification:(NSNotification *)notification {
-    NSDictionary *dict = [notification object];
-    if (dict == nil) {
-        [self showError:@"Error: notification object is NULL"];
-        return;
-    }
-    NSString *error = [dict objectForKey:@"error"];
-    if (error != nil) {
-        [self showError:[NSString stringWithFormat:@"Error: %@", error]];
-        return;
-    }
-    generatedPushToken = [dict objectForKey:@"pushToken"];
-//    NSLog(@"Push token is: '%@'", pushToken);
-    if (remotePushToken != nil && [remotePushToken isEqualToString:generatedPushToken]) {
-        NSLog(@"Push token of this device has been already registered!");
-        [self goToHome];
-        return;
-    }
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
-    dispatch_async(queue, ^{
-        NSMutableDictionary *requestParameters = [[NSMutableDictionary alloc] init];
-        NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-        if (localDeviceId == nil || [localDeviceId length] == 0) {
-            [self showError:@"Error: Cannot get local device ID"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *dict = [notification object];
+        if (dict == nil) {
+            [self showError:@"Error: notification object is NULL"];
             return;
         }
-        [params setObject:localDeviceId forKey:@"deviceId"];
-        [params setObject:@"ios" forKey:@"platform"];
-        [params setObject:generatedPushToken forKey:@"pushToken"];
-        [params setObject:[NSNumber numberWithBool:[Utils isDebug]] forKey:@"devMode"];
-        NSError *jsonError;
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:&jsonError];
-        if (!jsonData) {
-            NSString *errorMessage = [NSString stringWithFormat:@"Error: %@", [jsonError localizedDescription]];
-            NSLog(@"%@", errorMessage);
+        NSString *error = [dict objectForKey:@"error"];
+        if (error != nil) {
+            [self showError:[NSString stringWithFormat:@"Error: %@", error]];
+            return;
+        }
+        generatedPushToken = [dict objectForKey:@"pushToken"];
+        //    NSLog(@"Push token is: '%@'", pushToken);
+        if (remotePushToken != nil && [remotePushToken isEqualToString:generatedPushToken]) {
+            NSLog(@"Push token of this device has been already registered!");
+            [self goToHome];
+            return;
+        }
+        [Api updatePhoneParams:phoneId pushToken:generatedPushToken deviceId:localDeviceId success:^() {
+            [self goToHome];
+        } failure:^(NSString *errorMessage) {
             [self showError:errorMessage];
-            return;
-        } else {
-            NSString *requestDescription = [NSString stringWithFormat:@"PUT /phones/%@/_updateParams", phoneId];
-            NSLog(@"%@", requestDescription);
-            AFHTTPSessionManager *manager = [Net createSessionManager];
-            NSString *paramsJsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-            [requestParameters setObject:paramsJsonString forKey:@"params"];
-            [manager PUT:[NSString stringWithFormat:@"phones/%@/_updateParams", phoneId] parameters:requestParameters success:^(NSURLSessionTask *task, id responseObject) {
-                NSLog(@"SUCCESS '%@'", requestDescription);
-                [self goToHome];
-            } failure:^(NSURLSessionTask *operation, NSError *error) {
-                NSString *errorMessage = [error localizedDescription];
-                [self showError:errorMessage];
-                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
-            }];
-        }
-        
+        }];
     });
 }
 

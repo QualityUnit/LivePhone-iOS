@@ -39,10 +39,16 @@
 }
 
 -(void)onClickLogout {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults objectForKey:memoryKeyDeviceId] == nil) {
+        [userDefaults removeObjectForKey:memoryKeyApikey];
+        [userDefaults synchronize];
+        [self performSegueWithIdentifier:@"goToInitFromHome" sender:nil];
+        return;
+    }
     [Api updateDevice:NO success:^(BOOL isOnline){
-        NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-        [defs removeObjectForKey:memoryKeyApikey];
-        [defs synchronize];
+        [userDefaults removeObjectForKey:memoryKeyApikey];
+        [userDefaults synchronize];
         [self performSegueWithIdentifier:@"goToInitFromHome" sender:nil];
     } failure:^(NSString * errorMessage){
         NSString *strError = stringErrorTitle;

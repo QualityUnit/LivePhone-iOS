@@ -10,6 +10,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "Net.h"
 #import "Constants.h"
+#import "Utils.h"
 
 @implementation Api
 
@@ -99,10 +100,10 @@
                 [self deviceSuccess:requestDescription resp:device success:success failure:failure];
             } else {
                 NSString *errorMessage = errorMsgCannotParseResponse;
+                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
                 dispatch_async(dispatch_get_main_queue(), ^{
                     failure(errorMessage);
                 });
-                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
             }
         } failure:^(NSURLSessionTask *operation, NSError *error) {
             NSHTTPURLResponse *resp = (NSHTTPURLResponse *) [operation response];
@@ -168,8 +169,10 @@
             success([[responseObject objectForKey:@"status"] isEqualToString:@"N"]);
         });
     } else {
+        NSString *errorMessage = errorMsgCannotParseResponse;
+        NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
         dispatch_async(dispatch_get_main_queue(), ^{
-            failure(@"Response object is not a JSON");
+            failure(errorMessage);
         });
     }
 }
@@ -179,10 +182,10 @@
     if (httpCode == 404) {
         errorMessage = [NSString stringWithFormat:@"Your server API does not support 'status' or given 'phoneId' does not exist."];
     }
+    NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
     dispatch_async(dispatch_get_main_queue(), ^{
         failure(errorMessage);
     });
-    NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
 }
 
 +(void)getDepartmentStatusList:(void (^)(NSArray *deparmentList))success failure:(void (^)(NSString *errorMessage))failure {
@@ -207,17 +210,17 @@
                 });
             } else {
                 NSString *errorMessage = errorMsgCannotParseResponse;
+                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
                 dispatch_async(dispatch_get_main_queue(), ^{
                     failure(errorMessage);
                 });
-                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
             }
         } failure:^(NSURLSessionTask *operation, NSError *error) {
             NSString *errorMessage = [error localizedDescription];
+            NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
             dispatch_async(dispatch_get_main_queue(), ^{
                 failure(errorMessage);
             });
-            NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
         }];
     });
 }
@@ -252,16 +255,98 @@
                         success([[responseObject objectForKey:@"online_status"] isEqualToString:@"N"]);
                     });
                 } else {
+                    NSString *errorMessage = errorMsgCannotParseResponse;
+                    NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        failure(@"Response object is not a JSON");
+                        failure(errorMessage);
                     });
                 }
             } else {
+                NSString *errorMessage = [error localizedDescription];
+                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    failure([error localizedDescription]);
+                    failure(errorMessage);
                 });
             }
         }] resume];
+    });
+}
+
++(void)getPhone:(void (^)(NSDictionary* responseObject))success failure:(void (^)(NSString *errorMessage, BOOL unauthorized))failure {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+    dispatch_async(queue, ^{
+        NSString *requestDescription = @"GET /phones/_app_";
+        NSLog(@"%@", requestDescription);
+        AFHTTPSessionManager *manager = [Net createSessionManager];
+        [manager GET:@"phones/_app_" parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+            if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]]) {
+                NSLog(@"SUCCESS '%@'", requestDescription);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    success(responseObject);
+                });
+            } else {
+                NSString *errorMessage = errorMsgCannotParseResponse;
+                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    failure(errorMessage, NO);
+                });
+            }
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            NSHTTPURLResponse *response = (NSHTTPURLResponse *) [operation response];
+            NSString *errorMessage = [error localizedDescription];
+            NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                failure(errorMessage, [response statusCode] == 401);
+            });
+        }];
+    });
+}
+
++(void)updatePhoneParams:(NSString *)phoneId pushToken:(NSString *)pushToken deviceId:(NSString *)deviceId success:(void (^)(void))success failure:(void (^)(NSString *errorMessage))failure {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+    dispatch_async(queue, ^{
+        NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+        if (deviceId == nil || [deviceId length] == 0) {
+            NSString *errorMessage = @"Error: Cannot get local device ID";
+            NSLog(@"%@", errorMessage);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                failure(errorMessage);
+            });
+            return;
+        }
+        [params setObject:deviceId forKey:@"deviceId"];
+        [params setObject:@"ios" forKey:@"platform"];
+        [params setObject:pushToken forKey:@"pushToken"];
+        [params setObject:[NSNumber numberWithBool:[Utils isDebug]] forKey:@"devMode"];
+        NSError *jsonError;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:&jsonError];
+        if (!jsonData) {
+            NSString *errorMessage = [NSString stringWithFormat:@"Error: %@", [jsonError localizedDescription]];
+            NSLog(@"%@", errorMessage);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                failure(errorMessage);
+            });
+            return;
+        } else {
+            NSString *requestDescription = [NSString stringWithFormat:@"PUT /phones/%@/_updateParams", phoneId];
+            NSLog(@"%@", requestDescription);
+            AFHTTPSessionManager *manager = [Net createSessionManager];
+            NSString *paramsJsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            NSString *encodedParams = [paramsJsonString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+            [manager PUT:[NSString stringWithFormat:@"phones/%@/_updateParams?params=%@", phoneId, encodedParams] parameters:nil success:^(NSURLSessionTask *task, id responseObject) {
+                NSLog(@"SUCCESS '%@'", requestDescription);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    success();
+                });
+            } failure:^(NSURLSessionTask *operation, NSError *error) {
+                NSString *errorMessage = [error localizedDescription];
+                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    failure(errorMessage);
+                });
+            }];
+        }
+        
     });
 }
 
