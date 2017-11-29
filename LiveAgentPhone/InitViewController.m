@@ -19,8 +19,6 @@
 
 @interface InitViewController () {
     @private
-    NSString *localDeviceId;
-    NSString *remoteDeviceId;
     NSString *phoneId;
     NSString *remotePushToken;
     NSString *generatedPushToken;
@@ -39,7 +37,6 @@
     [super viewDidLoad];
     [[self navigationController] setNavigationBarHidden:YES animated:NO];
     [[self labelError] setHidden:NO];
-    localDeviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLocalNotification:) name:localNotificationIntoInit object:nil];
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
@@ -174,7 +171,6 @@
             NSData *objectData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
             NSDictionary *params = [NSJSONSerialization JSONObjectWithData:objectData options:NSJSONReadingMutableContainers error:nil];
             if (params != nil && [params count] > 0) {
-                remoteDeviceId = [params objectForKey:@"deviceId"];
                 remotePushToken = [params objectForKey:@"pushToken"];
             }
         }
@@ -214,7 +210,8 @@
             [self goToHome];
             return;
         }
-        [Api updatePhoneParams:phoneId pushToken:generatedPushToken deviceId:localDeviceId success:^() {
+        NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [Api updatePhoneParams:phoneId pushToken:generatedPushToken deviceId:deviceId success:^() {
             [self goToHome];
         } failure:^(NSString *errorMessage) {
             [self showError:errorMessage];
@@ -229,8 +226,6 @@
 
 - (void)goToLogin {
     phoneId = nil;
-    localDeviceId = nil;
-    remoteDeviceId = nil;
     remotePushToken = nil;
     generatedPushToken = nil;
     [self showInitialState];
