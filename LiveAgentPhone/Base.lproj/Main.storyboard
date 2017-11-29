@@ -210,7 +210,7 @@
                             </tableViewSection>
                             <tableViewSection id="K6D-FP-pax">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="lfn-j3-9EL" style="IBUITableViewCellStyleDefault" id="xXd-dd-dqj">
+                                    <tableViewCell hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="lfn-j3-9EL" style="IBUITableViewCellStyleDefault" id="xXd-dd-dqj">
                                         <rect key="frame" x="0.0" y="115" width="500" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xXd-dd-dqj" id="QiW-P6-Wak">
