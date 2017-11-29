@@ -965,7 +965,6 @@
                     <connections>
                         <segue destination="Idk-iX-KG6" kind="relationship" relationship="viewControllers" id="ooE-B4-3d7"/>
                         <segue destination="zN8-he-ON9" kind="relationship" relationship="viewControllers" id="VPS-ch-xWo"/>
-                        <segue destination="Jig-cS-C9g" kind="relationship" relationship="viewControllers" id="vde-jn-iJz"/>
                         <segue destination="SLj-Jb-5mw" kind="relationship" relationship="viewControllers" id="vyP-uV-97p"/>
                     </connections>
                 </tabBarController>
