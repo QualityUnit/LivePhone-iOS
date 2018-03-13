@@ -89,21 +89,41 @@
     if ([type isEqualToString:PKPushTypeVoIP]) {
         NSDictionary *payloadDictionary = payload.dictionaryPayload;
         NSString *type = [payloadDictionary objectForKey:@"type"];
-        if (type == nil || [type length] == 0 || ![type isEqualToString:@"I"]) {
-            NSLog(@"Error in push notification... Type 'I' not found");
+        // check if type is set
+        if (type == nil || [type length] == 0) {
+            NSLog(@"Error in push notification: type not set");
             return;
         }
-        NSString *dateString = [payloadDictionary objectForKey:@"time"];
-        NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
-        NSDate *datePush = [formatter dateFromString:dateString];
-        NSLog(@"Date raw: %@", dateString);
-        NSDate *dateSystem = [NSDate date];
-        NSTimeInterval dateDelta = [dateSystem timeIntervalSinceDate:datePush];
-        NSLog(@"Date push: %@", datePush);
-        NSLog(@"Date system: %@", dateSystem);
-        NSLog(@"Delta dates: %f", dateDelta);
-        if (dateDelta <= maxIncomingCallPushDelay) { // get rid of all old push notifications
-            [self.callManager prepareToIncomingCall];
+        // check if notification is not older than 'maxPushNotificationDelay' seconds
+//        NSString *dateString = [payloadDictionary objectForKey:@"time"];
+//        if (![dateString isKindOfClass:[NSString class]]) {
+//            NSLog(@"ERROR: Incompatible 'time' type. It should be string.");
+//            return;
+//        }
+//        NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
+//        NSDate *datePush = [formatter dateFromString:dateString];
+//        if (datePush == nil) {
+//            NSLog(@"ERROR: Unknown format of 'time' value: '%@'", dateString);
+//            return;
+//        }
+//        NSLog(@"Date raw: %@", dateString);
+//        NSDate *dateSystem = [NSDate date];
+//        NSTimeInterval dateDelta = [dateSystem timeIntervalSinceDate:datePush];
+//        NSLog(@"Date push: %@", datePush);
+//        NSLog(@"Date system: %@", dateSystem);
+//        NSLog(@"Delta dates: %f", dateDelta);
+//        if (dateDelta > maxPushNotificationDelay) { // get rid of all old push notifications
+//            return;
+//        }
+        // swich it
+        if ([type isEqualToString:@"I"]) {
+            [self processIncomingCall:payloadDictionary];
+        } else if ([type isEqualToString:@"O"]) {
+            [self processOutgoingCall:payloadDictionary];
+        } else if ([type isEqualToString:@"OC"]) {
+            [self processCancelOutgoingCall:payloadDictionary];
+        } else {
+            NSLog(@"Error: Unknown 'type' %@", type);
         }
     } else {
         NSLog(@"Error: Unknown PKPushType");
@@ -206,6 +226,45 @@
         currentController = currentController.presentedViewController;
     }
     return currentController;
+}
+
+- (void)processIncomingCall:(NSDictionary *) payloadDictionary {
+    [self.callManager prepareToIncomingCall];
+}
+
+- (void)processOutgoingCall:(NSDictionary *) payloadDictionary {
+    // show local notification which triggers making call
+    UNMutableNotificationContent *localNotification = [[UNMutableNotificationContent alloc] init];
+    NSString *title = stringStartOutgoing;
+    NSString *body = [payloadDictionary objectForKey:@"number"];
+    NSString *dialString = [payloadDictionary objectForKey:@"dialString"];
+    if (body == nil || [body length] == 0) {
+        body = @"Undefined number";
+    }
+    if (dialString == nil) {
+        NSLog(@"Error: Missing 'dialString' value");
+        return;
+    }
+    [localNotification setTitle:title];
+    [localNotification setBody:body];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:body forKey:@"remoteName"];
+    [dict setObject:dialString forKey:@"remoteNumber"];
+    [localNotification setUserInfo:dict];
+    [localNotification setCategoryIdentifier:@"com.qualityunit.ios.liveagentphone.localnotification.outgoingcall"];
+    UNNotificationRequest *localNotificationRequest = [UNNotificationRequest requestWithIdentifier:title
+                                                                                           content:localNotification
+                                                                                           trigger:[UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO]];
+    UNUserNotificationCenter *notificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+    [notificationCenter addNotificationRequest:localNotificationRequest withCompletionHandler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"Error: Add notificationRequest failed");
+        }
+    }];
+}
+
+- (void)processCancelOutgoingCall:(NSDictionary *) payloadDictionary {
+    // TODO
 }
 
 @end

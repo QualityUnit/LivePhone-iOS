@@ -14,7 +14,7 @@
 
 // network
 #define timeoutSec 15.00
-#define maxIncomingCallPushDelay 5
+#define maxPushNotificationDelay 5
 #define pathBase @"/api/v3"
 #define urlResultOk 0
 #define urlResultUrlEmpty 1
@@ -60,6 +60,7 @@
 #define stringMissedCalls NSLocalizedStringWithDefaultValue(@"calling.missedcall",@"Localizable",[NSBundle mainBundle],@"Missed call",@"Missed call");
 #define stringAvailable NSLocalizedStringWithDefaultValue(@"status.available",@"Localizable",[NSBundle mainBundle],@"Available",@"Available on calls");
 #define stringUnavailable NSLocalizedStringWithDefaultValue(@"status.unavailable",@"Localizable",[NSBundle mainBundle],@"Unavailable",@"Unavailable on calls");
+#define stringStartOutgoing NSLocalizedStringWithDefaultValue(@"calling.startOutgoing",@"Localizable",[NSBundle mainBundle],@"Start outgoing call",@"Outgoing call starter from system notification");
 // colors
 #define textGreenOk @"#64DD17"
 #define textRedNok @"F44336"
