@@ -1066,6 +1066,81 @@
             </objects>
             <point key="canvasLocation" x="-611" y="1321"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="HBr-wW-gao">
+            <objects>
+                <navigationController id="y4W-UT-hwj" sceneMemberID="viewController">
+                    <size key="freeformSize" width="500" height="500"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OYB-V4-h2n">
+                        <rect key="frame" x="0.0" y="20" width="500" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="tDG-xc-KeV" kind="relationship" relationship="rootViewController" id="Rmu-of-rg6"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wiN-LL-UGC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-611" y="1930"/>
+        </scene>
+        <!--Init Call View Controller-->
+        <scene sceneID="8il-Sw-aup">
+            <objects>
+                <viewController storyboardIdentifier="InitCallViewController" id="tDG-xc-KeV" customClass="InitCallViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="WSE-Ue-517"/>
+                        <viewControllerLayoutGuide type="bottom" id="ozw-rD-jAV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cEH-xl-WVU">
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="500"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G3v-hL-ct6">
+                                <rect key="frame" x="20" y="250" width="460" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Zc-qF-b49">
+                                <rect key="frame" x="20" y="250" width="460" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g9V-VJ-0uP">
+                                <rect key="frame" x="20" y="270" width="460" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="onClickStartCall:" destination="tDG-xc-KeV" eventType="touchUpInside" id="cc3-Mp-Zdw"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="G3v-hL-ct6" firstAttribute="leading" secondItem="cEH-xl-WVU" secondAttribute="leadingMargin" id="49v-au-YT4"/>
+                            <constraint firstItem="G3v-hL-ct6" firstAttribute="centerY" secondItem="cEH-xl-WVU" secondAttribute="centerY" id="5ro-nu-BKw"/>
+                            <constraint firstItem="g9V-VJ-0uP" firstAttribute="top" secondItem="G3v-hL-ct6" secondAttribute="bottom" constant="20" id="OyF-8c-khg"/>
+                            <constraint firstItem="g9V-VJ-0uP" firstAttribute="centerX" secondItem="cEH-xl-WVU" secondAttribute="centerX" id="P0p-UZ-Ox9"/>
+                            <constraint firstItem="0Zc-qF-b49" firstAttribute="leading" secondItem="cEH-xl-WVU" secondAttribute="leadingMargin" id="PVU-6e-xpl"/>
+                            <constraint firstItem="G3v-hL-ct6" firstAttribute="top" secondItem="0Zc-qF-b49" secondAttribute="bottom" id="S4i-AK-P0Y"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="G3v-hL-ct6" secondAttribute="trailing" id="Sib-4Y-p9R"/>
+                            <constraint firstItem="g9V-VJ-0uP" firstAttribute="leading" secondItem="cEH-xl-WVU" secondAttribute="leadingMargin" id="iPm-2y-myP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0Zc-qF-b49" secondAttribute="trailing" id="kwz-Bq-U9H"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="g9V-VJ-0uP" secondAttribute="trailing" id="qoy-Ye-pQX"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="hcm-lI-mgQ"/>
+                    <size key="freeformSize" width="500" height="500"/>
+                    <connections>
+                        <outlet property="contactNameLabel" destination="0Zc-qF-b49" id="v4d-i0-jdh"/>
+                        <outlet property="numberLabel" destination="G3v-hL-ct6" id="W3A-lk-iPV"/>
+                        <outlet property="startCallButton" destination="g9V-VJ-0uP" id="8TE-jy-qkM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5sO-1h-sjX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="416" y="1930"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Contacts" width="24" height="24"/>

@@ -16,6 +16,7 @@
 #import "ContactDetailTableViewController.h"
 #import <HexColors/HexColors.h>
 #import "UIView+draggable.h"
+#import "InitCallViewController.h"
 
 @interface AppDelegate () {
     @private
@@ -58,10 +59,22 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
-    pendingPhoneNumber = [[[[[response notification] request] content] userInfo] objectForKey:@"remoteNumber"];
-    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive && [Utils isAuthenticated]) {
-        [self openDialpad:[self getPendingPhoneNumber] remoteName:nil];
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+    NSString *categoryIdentifier = [[[[response notification] request] content] categoryIdentifier];
+    if (categoryIdentifier == nil || [categoryIdentifier length] == 0) {
+        NSLog(@"missing category identifier");
+        completionHandler();
+        return;
+    }
+    if ([categoryIdentifier isEqualToString:CATEGORY_IDENTIFIER_MISSED_CALL]) {
+        pendingPhoneNumber = [[[[[response notification] request] content] userInfo] objectForKey:@"remoteNumber"];
+        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive && [Utils isAuthenticated]) {
+            [self openDialpad:[self getPendingPhoneNumber] remoteName:nil];
+        }
+        
+    } else if ([categoryIdentifier isEqualToString:CATEGORY_IDENTIFIER_INIT_CALL]) {
+        NSDictionary *userInfo = [[[[response notification] request] content] userInfo];
+        [self openInitCall:userInfo];
     }
     completionHandler();
 }
@@ -95,33 +108,33 @@
             return;
         }
         // check if notification is not older than 'maxPushNotificationDelay' seconds
-//        NSString *dateString = [payloadDictionary objectForKey:@"time"];
-//        if (![dateString isKindOfClass:[NSString class]]) {
-//            NSLog(@"ERROR: Incompatible 'time' type. It should be string.");
-//            return;
-//        }
-//        NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
-//        NSDate *datePush = [formatter dateFromString:dateString];
-//        if (datePush == nil) {
-//            NSLog(@"ERROR: Unknown format of 'time' value: '%@'", dateString);
-//            return;
-//        }
-//        NSLog(@"Date raw: %@", dateString);
-//        NSDate *dateSystem = [NSDate date];
-//        NSTimeInterval dateDelta = [dateSystem timeIntervalSinceDate:datePush];
-//        NSLog(@"Date push: %@", datePush);
-//        NSLog(@"Date system: %@", dateSystem);
-//        NSLog(@"Delta dates: %f", dateDelta);
-//        if (dateDelta > maxPushNotificationDelay) { // get rid of all old push notifications
-//            return;
-//        }
+        NSString *dateString = [payloadDictionary objectForKey:@"time"];
+        if (![dateString isKindOfClass:[NSString class]]) {
+            NSLog(@"ERROR: Incompatible 'time' type. It should be string.");
+            return;
+        }
+        NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
+        NSDate *datePush = [formatter dateFromString:dateString];
+        if (datePush == nil) {
+            NSLog(@"ERROR: Unknown format of 'time' value: '%@'", dateString);
+            return;
+        }
+        NSLog(@"Date raw: %@", dateString);
+        NSDate *dateSystem = [NSDate date];
+        NSTimeInterval dateDelta = [dateSystem timeIntervalSinceDate:datePush];
+        NSLog(@"Date push: %@", datePush);
+        NSLog(@"Date system: %@", dateSystem);
+        NSLog(@"Delta dates: %f", dateDelta);
+        if (dateDelta > maxPushNotificationDelay) { // get rid of all old push notifications
+            return;
+        }
         // swich it
         if ([type isEqualToString:@"I"]) {
             [self processIncomingCall:payloadDictionary];
         } else if ([type isEqualToString:@"O"]) {
-            [self processOutgoingCall:payloadDictionary];
+            [self processInitCall:payloadDictionary];
         } else if ([type isEqualToString:@"OC"]) {
-            [self processCancelOutgoingCall:payloadDictionary];
+            [self processCancelInitCall:payloadDictionary];
         } else {
             NSLog(@"Error: Unknown 'type' %@", type);
         }
@@ -135,7 +148,7 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     if ([type isEqualToString:PKPushTypeVoIP]) {
         NSString * pushToken = [Utils retrievePushToken:[credentials.token description]];
-//        NSLog(@"pushToken=%@", pushToken);
+        NSLog(@"pushToken=%@", pushToken);
         if (pushToken == nil || [pushToken length] == 0) {
             [dict setObject:@"Cannot get push token." forKey:@"error"];
         } else {
@@ -220,6 +233,14 @@
     [[self getCurrentViewController] presentViewController:navigationController animated:YES completion:nil];
 }
 
+- (void)openInitCall:(NSDictionary *) payloadDictionary {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    InitCallViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"InitCallViewController"];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [viewController setData:payloadDictionary];
+    [[self getCurrentViewController] presentViewController:navigationController animated:YES completion:nil];
+}
+
 - (UIViewController*)getCurrentViewController {
     UIViewController *currentController = [UIApplication sharedApplication].keyWindow.rootViewController;
     while (currentController.presentedViewController) {
@@ -232,27 +253,29 @@
     [self.callManager prepareToIncomingCall];
 }
 
-- (void)processOutgoingCall:(NSDictionary *) payloadDictionary {
-    // show local notification which triggers making call
-    UNMutableNotificationContent *localNotification = [[UNMutableNotificationContent alloc] init];
+- (void)processInitCall:(NSDictionary *) payloadDictionary {
     NSString *title = stringStartOutgoing;
-    NSString *body = [payloadDictionary objectForKey:@"number"];
-    NSString *dialString = [payloadDictionary objectForKey:@"dialString"];
-    if (body == nil || [body length] == 0) {
-        body = @"Undefined number";
+    NSString *number = [payloadDictionary objectForKey:@"number"]; // readable number
+    NSString *callId = [payloadDictionary objectForKey:@"callId"]; // identification of push notification
+    if (number == nil || [number length] == 0) {
+        number = @"(No number)";
     }
-    if (dialString == nil) {
-        NSLog(@"Error: Missing 'dialString' value");
+    if (callId == nil || [callId length] == 0) {
+        NSLog(@"Error: Missing 'callId' value");
         return;
     }
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+        // APP IN FOREGROUND: show screen to make an outgoing call
+        [self openInitCall:payloadDictionary];
+        return;
+    }
+    // APP IN BACKGROUND: show local notification which triggers making call
+    UNMutableNotificationContent *localNotification = [[UNMutableNotificationContent alloc] init];
     [localNotification setTitle:title];
-    [localNotification setBody:body];
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:body forKey:@"remoteName"];
-    [dict setObject:dialString forKey:@"remoteNumber"];
-    [localNotification setUserInfo:dict];
-    [localNotification setCategoryIdentifier:@"com.qualityunit.ios.liveagentphone.localnotification.outgoingcall"];
-    UNNotificationRequest *localNotificationRequest = [UNNotificationRequest requestWithIdentifier:title
+    [localNotification setBody:number];
+    [localNotification setUserInfo:payloadDictionary];
+    [localNotification setCategoryIdentifier:CATEGORY_IDENTIFIER_INIT_CALL];
+    UNNotificationRequest *localNotificationRequest = [UNNotificationRequest requestWithIdentifier:callId
                                                                                            content:localNotification
                                                                                            trigger:[UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO]];
     UNUserNotificationCenter *notificationCenter = [UNUserNotificationCenter currentNotificationCenter];
@@ -263,8 +286,15 @@
     }];
 }
 
-- (void)processCancelOutgoingCall:(NSDictionary *) payloadDictionary {
-    // TODO
+- (void)processCancelInitCall:(NSDictionary *) payloadDictionary {
+    NSString *callId = [payloadDictionary objectForKey:@"callId"]; // identification of push notification
+    if (callId == nil || [callId length] == 0) {
+        NSLog(@"Error: Missing 'callId' value");
+        return;
+    }
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    NSArray *array = [NSArray arrayWithObjects:callId, nil];
+    [center removeDeliveredNotificationsWithIdentifiers:array];
 }
 
 @end

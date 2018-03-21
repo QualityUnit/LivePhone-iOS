@@ -34,6 +34,7 @@
 		30AEF1311E61D0AE00D92FB1 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 30AEF1301E61D0AE00D92FB1 /* NSString+MD5.m */; };
 		30B8D8D31EBE3E5600B61EB3 /* DtmfTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D8D21EBE3E5600B61EB3 /* DtmfTableViewController.m */; };
 		30BDC0D01F505CA600596FF8 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30BDC0CF1F505CA600596FF8 /* Intents.framework */; };
+		30DE2DD7206255D400F8F0C7 /* InitCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30DE2DD6206255D400F8F0C7 /* InitCallViewController.m */; };
 		30E77D691DF82B8F00A40AD1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E77D681DF82B8F00A40AD1 /* main.m */; };
 		30E77D6C1DF82B8F00A40AD1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E77D6B1DF82B8F00A40AD1 /* AppDelegate.m */; };
 		30E77D6F1DF82B8F00A40AD1 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30E77D6E1DF82B8F00A40AD1 /* LoginViewController.m */; };
@@ -127,6 +128,8 @@
 		30B8D8D11EBE3E5600B61EB3 /* DtmfTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DtmfTableViewController.h; sourceTree = "<group>"; };
 		30B8D8D21EBE3E5600B61EB3 /* DtmfTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DtmfTableViewController.m; sourceTree = "<group>"; };
 		30BDC0CF1F505CA600596FF8 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
+		30DE2DD5206255D400F8F0C7 /* InitCallViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InitCallViewController.h; sourceTree = "<group>"; };
+		30DE2DD6206255D400F8F0C7 /* InitCallViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InitCallViewController.m; sourceTree = "<group>"; };
 		30E77D641DF82B8F00A40AD1 /* LiveAgentPhone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiveAgentPhone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30E77D681DF82B8F00A40AD1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		30E77D6A1DF82B8F00A40AD1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -251,6 +254,8 @@
 				30080FA51E76EA1C0083EB4E /* CallingTableViewController.m */,
 				30B8D8D11EBE3E5600B61EB3 /* DtmfTableViewController.h */,
 				30B8D8D21EBE3E5600B61EB3 /* DtmfTableViewController.m */,
+				30DE2DD5206255D400F8F0C7 /* InitCallViewController.h */,
+				30DE2DD6206255D400F8F0C7 /* InitCallViewController.m */,
 			);
 			name = Calling;
 			sourceTree = "<group>";
@@ -768,6 +773,7 @@
 				30080F901E6217C30083EB4E /* ContactsTableViewCell.m in Sources */,
 				3032794D1E49C16000455203 /* XCPjsua.m in Sources */,
 				307CD0941E3F402E0073DA3B /* ApiUrlCheck.m in Sources */,
+				30DE2DD7206255D400F8F0C7 /* InitCallViewController.m in Sources */,
 				30E77D6F1DF82B8F00A40AD1 /* LoginViewController.m in Sources */,
 				309983D41F697E620010A90B /* AboutViewController.m in Sources */,
 				306C67C01E43812D00DC5272 /* Reachability.m in Sources */,

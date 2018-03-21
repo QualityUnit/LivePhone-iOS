@@ -43,6 +43,10 @@
 #define localNotificationCallData @"localNotificationCallData"
 #define localNotificationApplicationState @"localNotificationApplicationState"
 
+// local notification categories
+#define CATEGORY_IDENTIFIER_MISSED_CALL @"com.qualityunit.ios.liveagentphone.localnotification.missedcall"
+#define CATEGORY_IDENTIFIER_INIT_CALL @"com.qualityunit.ios.liveagentphone.localnotification.initcall"
+
 // common localized strings
 #define errorMsgEmptyField NSLocalizedStringWithDefaultValue(@"login.errMsgEmptyField", @"Localizable", [NSBundle mainBundle], @"Please fill required fields", @"Error message on login screen if some of fields are empty");
 #define errorMsgCannotParseResponse NSLocalizedStringWithDefaultValue(@"common.errMsgCannotParseResponse",@"Localizable",[NSBundle mainBundle],@"Cannot parse response",@"Error message on login screen if we cannot parse response from server");

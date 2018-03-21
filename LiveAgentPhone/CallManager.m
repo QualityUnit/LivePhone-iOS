@@ -133,7 +133,7 @@
             }
             [dict setObject:lastRemoteNumber forKey:@"remoteNumber"];
             [localNotification setUserInfo:dict];
-            [localNotification setCategoryIdentifier:@"com.qualityunit.ios.liveagentphone.localnotification.missedcall"];
+            [localNotification setCategoryIdentifier:CATEGORY_IDENTIFIER_MISSED_CALL];
             UNNotificationRequest *localNotificationRequest = [UNNotificationRequest requestWithIdentifier:title
                                                                                                    content:localNotification
                                                                                                    trigger:[UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO]];
