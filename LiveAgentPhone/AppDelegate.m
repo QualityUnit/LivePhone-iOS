@@ -157,7 +157,6 @@
             [userDefaults synchronize];
             [dict setObject:pushToken forKey:@"pushToken"];
         }
-        
     } else {
         [dict setObject:@"Unknow PKPushType." forKey:@"error"];
     }
@@ -165,9 +164,21 @@
 }
 
 - (void)registerVoipNotifications {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:memoryKeyPushToken];
     self.voipRegistry = [[PKPushRegistry alloc] initWithQueue:dispatch_get_main_queue()];
     [self.voipRegistry setDelegate:self];
     [self.voipRegistry setDesiredPushTypes:[NSSet setWithObject:PKPushTypeVoIP]];
+    [self performSelector:@selector(checkPushNotifications) withObject:self afterDelay:3.0];
+}
+
+- (void)checkPushNotifications {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults objectForKey:memoryKeyPushToken] == nil) {
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [dict setObject:@"Your device does not support push notifications." forKey:@"error"];
+        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:localNotificationIntoInit object:dict]];
+    }
 }
 
 - (NSString *)getPendingPhoneNumber {

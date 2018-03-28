@@ -70,20 +70,9 @@
     [self showInitialState]; // hide error message and show activity indicator
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         if (granted) {
-            UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-            [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert)
-                                  completionHandler:^(BOOL granted, NSError * _Nullable error) {
-                                      if (error) {
-                                          NSLog(@"Error: Request authorization failed!");
-                                          return;
-                                      }
-                                      if (granted) {
-                                          // all permissions granted
-                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                              [self permissionsGranted];
-                                          });
-                                      }
-                                  }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self permissionsGranted];
+            });
         } else {
             [self showPermissionsError];
         }
