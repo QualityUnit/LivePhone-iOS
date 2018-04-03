@@ -6,17 +6,20 @@
 //  Copyright © 2017 Quality Unit. All rights reserved.
 //
 
+#define CONTACTS_TAB_INDEX 0
 #define STATUS_TAB_INDEX 2
 
 #import "MainTabBarController.h"
 #import "Constants.h"
 #import "Api.h"
 #import "StatusTableViewController.h"
+#import "ContactsViewController.h"
 
 @interface MainTabBarController () {
     @private
     UITabBarItem *statusBarItem;
     StatusTableViewController *statusViewController;
+    ContactsViewController *contactViewController;
 }
 
 @end
@@ -25,28 +28,32 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    statusBarItem = [[[self tabBar] items] objectAtIndex:STATUS_TAB_INDEX];
-//    // preload all tabs
-//    NSArray *vcArray = [self viewControllers];
-//    UINavigationController *navViewController = [vcArray objectAtIndex:STATUS_TAB_INDEX];
-//    statusViewController = [[navViewController viewControllers] firstObject];
-//    [statusViewController setMainTabBarController:self];
-//    [statusViewController view];
+    statusBarItem = [[[self tabBar] items] objectAtIndex:STATUS_TAB_INDEX];
+    // preload all tabs
+    NSArray *vcArray = [self viewControllers];
+    
+    UINavigationController *navViewControllerContacts = [vcArray objectAtIndex:CONTACTS_TAB_INDEX];
+    contactViewController = [[navViewControllerContacts viewControllers] firstObject];
+    
+    UINavigationController *navViewControllerStatus = [vcArray objectAtIndex:STATUS_TAB_INDEX];
+    statusViewController = [[navViewControllerStatus viewControllers] firstObject];
+    [statusViewController setMainTabBarController:self];
+    [statusViewController view];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationState:) name:localNotificationApplicationState object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationState:) name:localNotificationApplicationState object:nil];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
-//    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)onApplicationState:(NSNotification *) notification {
-//    NSNumber *applicationState = [notification object];
-//    if (applicationState == stateForeground && statusViewController != nil) {
-//        [statusViewController refreshAvailability];
-//    }
+    NSNumber *applicationState = [notification object];
+    if (applicationState == stateForeground && statusViewController != nil) {
+        [statusViewController refreshAvailability];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -54,22 +61,28 @@
 }
 
 -(void)refreshTabItem:(NSString *)generalAvailability {
-//    NSString *barItemTitle;
-//    NSString *barItemImageName;
-//    if (generalAvailability == nil) {
-//        barItemTitle = @"";
-//        barItemImageName = nil;
-//    } else if ([generalAvailability isEqualToString:@"N"]) {
-//        barItemTitle = stringAvailable;
-//        barItemImageName = @"StatusAvailable";
-//    } else {
-//        barItemTitle = stringUnavailable;
-//        barItemImageName = @"StatusUnavailable";
-//    }
-//    [statusBarItem setTitle:barItemTitle];
-//    UIImage *image = [UIImage imageNamed:barItemImageName];
-//    [statusBarItem setImage:image];
-//    [statusBarItem setSelectedImage:image];
+    NSString *barItemTitle;
+    NSString *barItemImageName;
+    NSString *watermarkImageName;
+    if (generalAvailability == nil) {
+        barItemTitle = @"";
+        barItemImageName = nil;
+        watermarkImageName = nil;
+    } else if ([generalAvailability isEqualToString:@"N"]) {
+        barItemTitle = stringAvailable;
+        barItemImageName = @"StatusAvailable";
+        watermarkImageName = @"StatusAvailableWatermark";
+    } else {
+        barItemTitle = stringUnavailable;
+        barItemImageName = @"StatusUnavailable";
+        watermarkImageName = @"StatusUnavailableWatermark";
+    }
+    [statusBarItem setTitle:barItemTitle];
+    UIImage *barImage = [UIImage imageNamed:barItemImageName];
+    [statusBarItem setImage:barImage];
+    [statusBarItem setSelectedImage:barImage];
+    UIImage *watermarkImage = [UIImage imageNamed:watermarkImageName];
+    [[contactViewController availabilityImage] setImage:watermarkImage];
 }
 
 @end
