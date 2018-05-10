@@ -10,4 +10,6 @@
 
 @interface ContactsViewController : UIViewController <UISearchControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet UIImageView *availabilityImage;
+
 @end
