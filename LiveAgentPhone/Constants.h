@@ -64,11 +64,14 @@
 #define stringMissedCalls NSLocalizedStringWithDefaultValue(@"calling.missedcall",@"Localizable",[NSBundle mainBundle],@"Missed call",@"Missed call");
 #define stringAvailable NSLocalizedStringWithDefaultValue(@"status.available",@"Localizable",[NSBundle mainBundle],@"Available",@"Available on calls");
 #define stringUnavailable NSLocalizedStringWithDefaultValue(@"status.unavailable",@"Localizable",[NSBundle mainBundle],@"Unavailable",@"Unavailable on calls");
-#define stringStartOutgoing NSLocalizedStringWithDefaultValue(@"calling.startOutgoing",@"Localizable",[NSBundle mainBundle],@"Start outgoing call",@"Outgoing call starter from system notification");
+#define stringStartOutgoing NSLocalizedStringWithDefaultValue(@"calling.startOutgoing",@"Localizable",[NSBundle mainBundle],@"Make call",@"Outgoing call starter from system notification");
 // colors
 #define textGreenOk @"#64DD17"
-#define textRedNok @"F44336"
-#define surfaceCallGreen @"16C855"
+#define textRedNok @"#F44336"
+#define surfaceCallGreen @"#16C855"
+#define statusEnabled @"#909091"
+#define statusActive @"#75c220"
+#define statusDisabled @"#A91900"
 
 //macros
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)

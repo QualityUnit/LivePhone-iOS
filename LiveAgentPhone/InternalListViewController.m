@@ -1,34 +1,26 @@
 //
-//  ContactListViewController
+//  InternalListViewController.m
 //  LiveAgentPhone
 //
-//  Created by Rastislav Kostrab on 20.12.16.
-//  Copyright © 2016 Quality Unit. All rights reserved.
+//  Created by Rastislav Kostrab on 15.5.18.
+//  Copyright © 2018 Quality Unit. All rights reserved.
 //
 
 #define DEFAULT_FIRST_PAGE 1
-#define DEFAULT_PER_PAGE 50
-#define DEFAULT_SORT_DIR @"ASC"
-#define DEFAULT_SORT_FIELD @"lastname"
+#define DEFAULT_PER_PAGE 100
 #define PARAM_KEY_FILTERS @"_filters"
 #define PARAM_KEY_PAGE @"_page"
 #define PARAM_KEY_PER_PAGE @"_perPage"
-#define PARAM_KEY_SORT_DIR @"_sortDir"
-#define PARAM_KEY_SORT_FIELD @"_sortField"
 
-#import "ContactListViewController.h"
-#import "Constants.h"
-#import <AFNetworking/AFNetworking.h>
-#import "Net.h"
-#import "NSString+MD5.h"
-#import "ContactsTableViewCell.h"
+#import "InternalListViewController.h"
 #import "AppDelegate.h"
-#import "CallingTableViewController.h"
-#import "ContactDetailTableViewController.h"
-#import "DialpadTableViewController.h"
+#import "InternalTableViewCell.h"
 #import "Utils.h"
+#import "Constants.h"
+#import "Net.h"
+#import <HexColors/HexColors.h>
 
-@interface ContactListViewController () {
+@interface InternalListViewController () {
     @private
     NSMutableArray *data;
     int currentPage;
@@ -37,30 +29,33 @@
     NSString *searchTerm;
     NSURLSessionDataTask *lastTask;
     AppDelegate *appDelegate;
-    UIStoryboard *storyboard;
+    UISearchController *searchController;
 }
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topConstraint;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
 @end
 
-@implementation ContactListViewController
+@implementation InternalListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     data = [[NSMutableArray alloc] init];
     isLoading = NO;
     isLastPage = NO;
-    NSString *numberToShowInDialpad = [appDelegate getPendingPhoneNumber];
-    if (numberToShowInDialpad != nil) {
-        [appDelegate openDialpad:numberToShowInDialpad remoteName:nil];
-    }
-    if (SYSTEM_VERSION_LESS_THAN(@"11.0")) {
-        [[self topConstraint] setConstant:44]; // HACK (because it is under the navigationbar)
-    }
-    [self clearDataAndTable];
+    [self getExtensionsWithPage:DEFAULT_FIRST_PAGE searchTerm:nil];
+    searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    [searchController.searchBar setDelegate:self];
+    [searchController setHidesNavigationBarDuringPresentation:NO];
+    [searchController setObscuresBackgroundDuringPresentation:NO];
+    [searchController setSearchResultsUpdater:self];
+    [searchController setDelegate:self];
+    [searchController.searchBar sizeToFit];
+    [searchController.searchBar setSearchBarStyle:UISearchBarStyleMinimal];
+    [searchController.searchBar setReturnKeyType:UIReturnKeyDone];
+    self.navigationBar.titleView = searchController.searchBar;
+    self.definesPresentationContext = YES;
 }
+
 
 -(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
     [viewController viewWillAppear:YES];
@@ -71,36 +66,63 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *contactsTableViewCell = @"ContactsTableViewCell";
-    ContactsTableViewCell *cell = (ContactsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:contactsTableViewCell];
+    static NSString *internalTableViewCell = @"InternalTableViewCell";
+    InternalTableViewCell *cell = (InternalTableViewCell *)[tableView dequeueReusableCellWithIdentifier:internalTableViewCell];
     NSDictionary *dataItem = [data objectAtIndex:indexPath.row];
-    NSString *contactName = [Utils createContactName: dataItem];
-    NSArray *emails = [dataItem objectForKey:@"emails"];
-    NSString *avatarUrl = [dataItem objectForKey:@"avatar_url"];
-    cell.avatarImageView.image = [UIImage imageNamed:@"DefaultAvatar"];
-    if (emails != nil && [emails count] > 0) {
-        NSString *firstEmail = emails[0];
-        NSString *emailMd5Hash = [firstEmail MD5String];
-        NSURL *gravatarUrl = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.gravatar.com/avatar/%@?d=404", emailMd5Hash]];
-        [self avatarAsyncTaskWithUrl:gravatarUrl forTableView:tableView withIndexPath:indexPath onFailure:^{
+    NSDictionary *agent = [dataItem objectForKey:@"agent"];
+    NSDictionary *department = [dataItem objectForKey:@"department"];
+    cell.statusView.backgroundColor = [self resolveStatusColor:[dataItem objectForKey:@"status"]];
+    if (agent == nil || agent.count == 0) {
+        // department
+        cell.primaryLabelHeight.constant = 40;
+        cell.secondaryLabel.hidden = YES;
+        cell.avatarImageView.image = [UIImage imageNamed:@"DefaultDepartmentAvatar"];
+        if (department != nil) {
+            cell.primaryLabel.text = [department objectForKey:@"name"];
+        }
+    } else {
+        // agent
+        cell.primaryLabelHeight.constant = 25;
+        cell.secondaryLabel.hidden = NO;
+        cell.avatarImageView.image = [UIImage imageNamed:@"DefaultAvatar"];
+        cell.primaryLabel.text = [agent objectForKey:@"name"];
+        if (department != nil) {
+            cell.secondaryLabel.text = [department objectForKey:@"name"];
+        }
+        NSString *avatarUrl = [agent objectForKey:@"avatar_url"];
+        if ([avatarUrl containsString:@"www.gravatar.com"]) {
+            // gravatar
+            if ([avatarUrl hasPrefix:@"//"]) {
+                avatarUrl = [@"https:" stringByAppendingString:avatarUrl];
+            }
+            NSURL *gravatarUrl = [NSURL URLWithString:avatarUrl];
+            [self avatarAsyncTaskWithUrl:gravatarUrl forTableView:tableView withIndexPath:indexPath onFailure:nil];
+        } else {
+            // server avatar resource
             [self loadServerAvatarWithAvatarUrl:avatarUrl forTableView:tableView withIndexPath:indexPath];
-        }];
-    } else if (avatarUrl != nil && [avatarUrl length] > 0) {
-        [self loadServerAvatarWithAvatarUrl:avatarUrl forTableView:tableView withIndexPath:indexPath];
+        }
     }
-    cell.avatarImageView.frame = CGRectMake( 5, 5, 40, 40 );
     cell.avatarImageView.layer.cornerRadius = 20;
     cell.avatarImageView.layer.masksToBounds = YES;
-    cell.nameLabel.text = contactName;
-    NSArray *phones = [dataItem objectForKey:@"phones"];
-    if (phones != nil && [phones count] > 0) {
-        NSString *secondaryText = phones[0];
-        for (int i = 1; i < phones.count; i++) {
-            secondaryText = [secondaryText stringByAppendingString:[NSString stringWithFormat:@", %@", phones[i]]];
-        }
-        cell.secondaryLabel.text = secondaryText;
-    }
+    cell.statusBackgroundView.layer.cornerRadius = 10;
+    cell.statusBackgroundView.layer.masksToBounds = YES;
+    cell.statusView.layer.cornerRadius = 7.5;
+    cell.statusView.layer.masksToBounds = YES;
     return cell;
+}
+
+- (HXColor *)resolveStatusColor:(NSString *)status {
+    const NSString *STATUS_ACTIVE = @"A";
+    const NSString *STATUS_ENABLED = @"E";
+    const NSString *STATUS_DISABLED = @"D";
+    if ([STATUS_ACTIVE isEqualToString:status]) {
+        return [UIColor hx_colorWithHexRGBAString:statusActive];
+    } else if ([STATUS_ENABLED isEqualToString:status]) {
+        return [UIColor hx_colorWithHexRGBAString:statusEnabled];
+    } else if ([STATUS_DISABLED isEqualToString:status]) {
+        return [UIColor hx_colorWithHexRGBAString:statusDisabled];
+    }
+    return [UIColor whiteColor];
 }
 
 - (void)showMessage:(NSString *)message {
@@ -118,17 +140,13 @@
 }
 
 - (void)loadServerAvatarWithAvatarUrl:(NSString *)avatarUrl forTableView:(UITableView *)tableView withIndexPath:(NSIndexPath *)indexPath {
-    if (avatarUrl != nil && [avatarUrl length] > 0) {
-        NSURL *url;
-        if ([avatarUrl containsString:@"__BASE_URL__"]) {
-            avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"__BASE_URL__" withString:@"/"];
-            NSString *basePath = [[NSUserDefaults standardUserDefaults] objectForKey:memoryKeyUrl];
-            url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", basePath, avatarUrl]];
-        } else {
-            url = [NSURL URLWithString:avatarUrl];
-        }
-        [self avatarAsyncTaskWithUrl:url forTableView:tableView withIndexPath:indexPath onFailure:nil];
+    if (avatarUrl == nil || [avatarUrl length] == 0) {
+        return;
     }
+    NSString *basePath = [[NSUserDefaults standardUserDefaults] objectForKey:memoryKeyUrl];
+    avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"__BASE_URL__" withString:@"/"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", basePath, avatarUrl]];
+    [self avatarAsyncTaskWithUrl:url forTableView:tableView withIndexPath:indexPath onFailure:nil];
 }
 
 - (void)avatarAsyncTaskWithUrl:(NSURL *)url forTableView:(UITableView *)tableView withIndexPath:(NSIndexPath *)indexPath onFailure:(void (^)(void))onFailure{
@@ -137,7 +155,7 @@
             UIImage *image = [UIImage imageWithData:avatarData];
             if (image) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    ContactsTableViewCell *updateCell = (id)[tableView cellForRowAtIndexPath:indexPath];
+                    InternalTableViewCell *updateCell = (id)[tableView cellForRowAtIndexPath:indexPath];
                     if (updateCell)
                         updateCell.avatarImageView.image = image;
                 });
@@ -155,15 +173,14 @@
     return [data count];
 }
 
-//- (IBAction)onRefresh:(id)sender {
-//    if ([data count] == 0) {
-//        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    }
-//    [self getContactsWithPage:DEFAULT_FIRST_PAGE searchTerm:searchTerm];
-//}
+- (IBAction)onRefresh:(id)sender {
+    [lastTask cancel]; // cancel last call if is still loading
+    [self getExtensionsWithPage:DEFAULT_FIRST_PAGE searchTerm:searchTerm];
+}
 
 -(void)didDismissSearchController:(UISearchController *)searchController {
     [self clearDataAndTable];
+    [self getExtensionsWithPage:DEFAULT_FIRST_PAGE searchTerm:nil];
     searchTerm = nil;
 }
 
@@ -172,7 +189,6 @@
     if (newSearchTerm == nil || [newSearchTerm length] < 1) {
         // first time showing the search bar
         [lastTask cancel]; // cancel last call if is still loading
-        [self clearDataAndTable];
         [self showMessage:nil];
         return;
     }
@@ -183,17 +199,17 @@
     searchTerm = searchBar.text;
     [lastTask cancel]; // cancel last call if is still loading
     [self clearDataAndTable];
-    [self getContactsWithPage:DEFAULT_FIRST_PAGE searchTerm:searchTerm];
+    [self getExtensionsWithPage:DEFAULT_FIRST_PAGE searchTerm:searchTerm];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     float offset = (scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height));
     if (offset >= 0 && offset <= 25 && !isLoading && !isLastPage){
-        [self getContactsWithPage:currentPage + 1 searchTerm:searchTerm];
+        [self getExtensionsWithPage:currentPage + 1 searchTerm:searchTerm];
     }
 }
 
-- (void)getContactsWithPage:(int)page searchTerm:(nullable NSString *)term {
+- (void)getExtensionsWithPage:(int)page searchTerm:(nullable NSString *)term {
     isLoading = YES;
     [lastTask cancel]; // cancel last call if is still loading
     [self showMessage:nil];
@@ -205,8 +221,7 @@
     dispatch_async(queue, ^{
         NSMutableDictionary *filters = [[NSMutableDictionary alloc] init];
         // put filters here
-        [filters setObject:@"V" forKey:@"type"]; // this flag means 'V'isitors
-        [filters setObject:@"Y" forKey:@"hasPhone"]; // this flag means that contact contains at least one phone number
+        [filters setObject:@"A,E" forKey:@"computed_status"];
         if (term != nil && [term length] > 0) {
             [filters setObject:term forKey:@"q"];
         }
@@ -221,11 +236,10 @@
             [requestParameters setObject:paramJsonStringFilters forKey:PARAM_KEY_FILTERS];
             [requestParameters setObject:pageString forKey:PARAM_KEY_PAGE];
             [requestParameters setObject:perPageString forKey:PARAM_KEY_PER_PAGE];
-            [requestParameters setObject:DEFAULT_SORT_DIR forKey:PARAM_KEY_SORT_DIR];
-            [requestParameters setObject:DEFAULT_SORT_FIELD forKey:PARAM_KEY_SORT_FIELD];
-            NSString *requestDescription = [NSString stringWithFormat:@"GET /contacts?%@=%@&%@=%@&%@=%@&%@=%@&%@=%@", PARAM_KEY_FILTERS, paramJsonStringFilters, PARAM_KEY_PAGE, pageString, PARAM_KEY_PER_PAGE, perPageString, PARAM_KEY_SORT_DIR, DEFAULT_SORT_DIR, PARAM_KEY_SORT_FIELD, DEFAULT_SORT_FIELD];
+            NSString *requestDescription = [NSString stringWithFormat:@"GET /extensions?%@=%@&%@=%@&%@=%@", PARAM_KEY_FILTERS, paramJsonStringFilters, PARAM_KEY_PAGE, pageString, PARAM_KEY_PER_PAGE, perPageString];
             NSLog(@"%@", requestDescription);
-            lastTask = [manager GET:[NSString stringWithFormat:@"contacts"] parameters:requestParameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+            lastTask = [manager GET:[NSString stringWithFormat:@"extensions"] parameters:requestParameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+                [[self refreshControl] endRefreshing];
                 NSLog(@"SUCCESS '%@'", requestDescription);
                 if (page == DEFAULT_FIRST_PAGE) {
                     isLastPage = NO;
@@ -258,6 +272,7 @@
                     [self showMessage:emptyText];
                 }
             } failure:^(NSURLSessionTask *operation, NSError *error) {
+                [[self refreshControl] endRefreshing];
                 if ([error code] == NSURLErrorCancelled) {
                     return; // and keep UI in refreshing state because cancelled request are only in case when another request cancels previous
                 }
@@ -289,11 +304,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         NSDictionary *itemData = [data objectAtIndex:indexPath.row];
-        NSArray *phones = [itemData objectForKey:@"phones"];
-        if ([phones count] == 1) {
-            [self goToDialpad:[phones objectAtIndex:0] calleeName:[Utils createContactName:itemData]];
-        } else if ([phones count] > 1) {
-            [self goToContactDetail:itemData];
+        NSString *number = [itemData objectForKey:@"number"];
+        if (number != nil && number.length > 0) {
+            NSMutableDictionary *payload = [[NSMutableDictionary alloc] init];
+            [payload setObject:number forKey:@"number"];
+            [payload setObject:number forKey:@"dialString"];
+            NSDictionary *agent = [itemData objectForKey:@"agent"];
+            NSDictionary *department = [itemData objectForKey:@"department"];
+            if (agent == nil || agent.count == 0) {
+                [payload setObject:[department objectForKey:@"name"] forKey:@"contactName"];
+            } else if (department != nil) {
+                [payload setObject:[agent objectForKey:@"name"] forKey:@"contactName"];
+            }
+            [appDelegate openInitCall:payload];
         }
         [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
     }
@@ -314,18 +337,6 @@
                                }];
     [alert addAction:actionOk];
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)goToContactDetail:(NSDictionary *)contactDetail {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [appDelegate openContactDetail:contactDetail];
-    });
-}
-
-- (void)goToDialpad:(NSString *)calleeNumber calleeName:(NSString *)calleeName{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [appDelegate openDialpad:calleeNumber remoteName:calleeName];
-    });
 }
 
 @end

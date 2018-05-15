@@ -27,6 +27,8 @@
 
 - (void)openContactDetail:(NSDictionary *)contactDetail;
 
+- (void)openInitCall:(NSDictionary *) payloadDictionary;
+
 - (void)showCallFloatingButton;
 
 - (void)hideCallFloatingButton;

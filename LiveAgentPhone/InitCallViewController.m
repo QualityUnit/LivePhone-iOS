@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *startCallButton;
 @property (weak, nonatomic) IBOutlet UILabel *contactNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *numberLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 
 @end
 
@@ -36,6 +37,8 @@
     self.navigationItem.leftBarButtonItem = backButton;
     [[self numberLabel] setText:numberToShow];
     [[self contactNameLabel] setText:contactName];
+    self.avatarImageView.layer.cornerRadius = 20;
+    self.avatarImageView.layer.masksToBounds = YES;
 }
 
 - (void)didReceiveMemoryWarning {

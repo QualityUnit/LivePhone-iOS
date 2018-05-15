@@ -7,7 +7,7 @@
 //
 
 #define CONTACTS_TAB_INDEX 0
-#define STATUS_TAB_INDEX 2
+#define STATUS_TAB_INDEX 3
 
 #import "MainTabBarController.h"
 #import "Constants.h"

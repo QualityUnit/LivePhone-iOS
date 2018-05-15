@@ -12,6 +12,8 @@
 		30080F9F1E6EF13D0083EB4E /* DialpadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30080F9E1E6EF13D0083EB4E /* DialpadTableViewController.m */; };
 		30080FA21E76A6060083EB4E /* ContactDetailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30080FA11E76A6060083EB4E /* ContactDetailTableViewController.m */; };
 		30080FA61E76EA1D0083EB4E /* CallingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30080FA51E76EA1C0083EB4E /* CallingTableViewController.m */; };
+		30265F5720AAEC9D00F0E7FD /* InternalListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30265F5620AAEC9D00F0E7FD /* InternalListViewController.m */; };
+		30265F5D20AAF88900F0E7FD /* InternalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 30265F5C20AAF88900F0E7FD /* InternalTableViewCell.m */; };
 		302FD2B61E1BF02500D7C10B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 302FD2B51E1BF02500D7C10B /* Main.storyboard */; };
 		3031E6EC1E03614E00106268 /* InitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3031E6EB1E03614E00106268 /* InitViewController.m */; };
 		3031E6F11E03FFA500106268 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3031E6F01E03FFA500106268 /* Utils.m */; };
@@ -86,6 +88,10 @@
 		3010DB121F9E91CA00CAAD7B /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3010DB131F9E91CA00CAAD7B /* HexColors.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = HexColors.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3010DB141F9E91CA00CAAD7B /* UIView_draggable.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UIView_draggable.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		30265F5520AAEC9D00F0E7FD /* InternalListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InternalListViewController.h; sourceTree = "<group>"; };
+		30265F5620AAEC9D00F0E7FD /* InternalListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InternalListViewController.m; sourceTree = "<group>"; };
+		30265F5B20AAF88900F0E7FD /* InternalTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InternalTableViewCell.h; sourceTree = "<group>"; };
+		30265F5C20AAF88900F0E7FD /* InternalTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InternalTableViewCell.m; sourceTree = "<group>"; };
 		302FD2B51E1BF02500D7C10B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3031E6EA1E03614E00106268 /* InitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InitViewController.h; sourceTree = "<group>"; };
 		3031E6EB1E03614E00106268 /* InitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InitViewController.m; sourceTree = "<group>"; };
@@ -219,6 +225,7 @@
 		30080F911E67981C0083EB4E /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				30265F4E20AAE95A00F0E7FD /* Internal */,
 				3007FA291F9B94E90039F19A /* Status */,
 				30080F9C1E6EF1260083EB4E /* Dialpad */,
 				30080F981E6ED68F0083EB4E /* Settings */,
@@ -258,6 +265,17 @@
 				30DE2DD6206255D400F8F0C7 /* InitCallViewController.m */,
 			);
 			name = Calling;
+			sourceTree = "<group>";
+		};
+		30265F4E20AAE95A00F0E7FD /* Internal */ = {
+			isa = PBXGroup;
+			children = (
+				30265F5520AAEC9D00F0E7FD /* InternalListViewController.h */,
+				30265F5620AAEC9D00F0E7FD /* InternalListViewController.m */,
+				30265F5B20AAF88900F0E7FD /* InternalTableViewCell.h */,
+				30265F5C20AAF88900F0E7FD /* InternalTableViewCell.m */,
+			);
+			name = Internal;
 			sourceTree = "<group>";
 		};
 		3031E6E31E03609600106268 /* Application */ = {
@@ -768,6 +786,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				305444661EA43685007429FE /* Api.m in Sources */,
+				30265F5720AAEC9D00F0E7FD /* InternalListViewController.m in Sources */,
 				3031E6FC1E09486E00106268 /* Net.m in Sources */,
 				3072925A1F6AF3400028A45D /* LicensesViewController.m in Sources */,
 				30080F901E6217C30083EB4E /* ContactsTableViewCell.m in Sources */,
@@ -783,6 +802,7 @@
 				308C24BE1FA200EB00BA4DFF /* StatusViewCell.m in Sources */,
 				30E91A6D1F7BE3F4006BFF30 /* ContactsViewController.m in Sources */,
 				30B8D8D31EBE3E5600B61EB3 /* DtmfTableViewController.m in Sources */,
+				30265F5D20AAF88900F0E7FD /* InternalTableViewCell.m in Sources */,
 				3031E6F11E03FFA500106268 /* Utils.m in Sources */,
 				3031E6EC1E03614E00106268 /* InitViewController.m in Sources */,
 				30804F211E096817003B4442 /* ContactListViewController.m in Sources */,
