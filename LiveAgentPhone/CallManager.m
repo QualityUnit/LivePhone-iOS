@@ -121,28 +121,31 @@
             [endCallAction fail];
         }
         if (isMissedCall) {
-            // show local notification about missed call
-            NSString *title = [self pickRemoteString];
-            UNMutableNotificationContent *localNotification = [[UNMutableNotificationContent alloc] init];
-            [localNotification setTitle:title];
-            NSString *strMissedCall = stringMissedCalls;
-            [localNotification setBody:strMissedCall];
-            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-            if (lastRemoteName != nil) {
-                [dict setObject:lastRemoteName forKey:@"remoteName"];
-            }
-            [dict setObject:lastRemoteNumber forKey:@"remoteNumber"];
-            [localNotification setUserInfo:dict];
-            [localNotification setCategoryIdentifier:CATEGORY_IDENTIFIER_MISSED_CALL];
-            UNNotificationRequest *localNotificationRequest = [UNNotificationRequest requestWithIdentifier:title
-                                                                                                   content:localNotification
-                                                                                                   trigger:[UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO]];
-            UNUserNotificationCenter *notificationCenter = [UNUserNotificationCenter currentNotificationCenter];
-            [notificationCenter addNotificationRequest:localNotificationRequest withCompletionHandler:^(NSError * _Nullable error) {
-                if (error) {
-                    NSLog(@"Error: Add notificationRequest failed");
-                }
-            }];
+//            [self showMissedCall];
+        }
+    }];
+}
+
+- (void)showMissedCall {
+    NSString *title = [self pickRemoteString];
+    UNMutableNotificationContent *localNotification = [[UNMutableNotificationContent alloc] init];
+    [localNotification setTitle:title];
+    NSString *strMissedCall = stringMissedCalls;
+    [localNotification setBody:strMissedCall];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    if (lastRemoteName != nil) {
+        [dict setObject:lastRemoteName forKey:@"remoteName"];
+    }
+    [dict setObject:lastRemoteNumber forKey:@"remoteNumber"];
+    [localNotification setUserInfo:dict];
+    [localNotification setCategoryIdentifier:CATEGORY_IDENTIFIER_MISSED_CALL];
+    UNNotificationRequest *localNotificationRequest = [UNNotificationRequest requestWithIdentifier:title
+                                                                                           content:localNotification
+                                                                                           trigger:[UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO]];
+    UNUserNotificationCenter *notificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+    [notificationCenter addNotificationRequest:localNotificationRequest withCompletionHandler:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"Error: Add notificationRequest failed");
         }
     }];
 }
