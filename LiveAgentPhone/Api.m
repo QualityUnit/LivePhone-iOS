@@ -70,7 +70,7 @@
             });
             return;
         }
-        [filters setObject:phoneId forKey:@"phoneId"];
+        [filters setObject:phoneId forKey:@"phone_id"];
         [filters setObject:@"P" forKey:@"service_type"];
         NSError *jsonError;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:filters options:0 error:&jsonError];
@@ -202,7 +202,7 @@
         NSString *requestDescription = [NSString stringWithFormat:@"GET /devices/%@/departments", deviceId];;
         NSLog(@"%@", requestDescription);
         AFHTTPSessionManager *manager = [Net createSessionManager];
-        [manager GET:[NSString stringWithFormat:@"devices/%@/departments", deviceId] parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+        [manager GET:[NSString stringWithFormat:@"devices/%@/departments?_page=0&_perPage=9999", deviceId] parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
             NSLog(@"SUCCESS '%@'", requestDescription);
             if (responseObject != nil && [responseObject isKindOfClass:[NSArray class]]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
