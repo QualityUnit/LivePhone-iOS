@@ -44,7 +44,15 @@
         NSString *status = [browserDevice objectForKey:@"status"];
         if (status != nil && [status length] > 0) {
             browserPhoneAvailable = [status isEqualToString:@"N"];
-            [[self messageHeight] setConstant: browserPhoneAvailable ? 70 : 0];
+            if (browserPhoneAvailable) {
+                if (![[[self stackView] arrangedSubviews] containsObject:[self messageView]]) {
+                    [[self stackView] insertArrangedSubview:[self messageView] atIndex:1];
+                    [[self messageView] setHidden:NO];
+                }
+            } else {
+                [[self stackView] removeArrangedSubview:[self messageView]];
+                [[self messageView] setHidden:YES];
+            }
         }
     }
     BOOL mobilePhoneAvailable = NO;
@@ -55,12 +63,15 @@
         NSString *status = [mobileDevice objectForKey:@"status"];
         if (status != nil && [status length] > 0) {
             mobilePhoneAvailable = [status isEqualToString:@"N"];
+            [[self mainSwitch] setOn:mobilePhoneAvailable];
         }
     }
     generalAvailability = browserPhoneAvailable || mobilePhoneAvailable ? @"N" : @"F";
     [mainTabBarController refreshTabItem:generalAvailability];
     if (mobilePhoneAvailable) {
         [self initDepartments:deviceId]; // need to be called here because 'GET /device' returns also required 'deviceId'
+    } else {
+        [self reloadTable:nil];
     }
 }
 
@@ -75,7 +86,6 @@
         }
         [self notifyCallbacks];
     } failure:^(NSString *errorMessage) {
-        [self showLoading:NO];
         [self updateAvailabilityFailure:NO errorMessage:errorMessage];
     }];
 }
@@ -85,8 +95,7 @@
     [mobileDevice setObject:isOnline ? @"N" : @"F" forKey:@"status"];
     if (!isOnline) {
         // clear list after main switch is turned off
-        data = nil;
-        [[self tableView] reloadData];
+        [self reloadTable:nil];
     }
     [Api updateDevice:mobileDevice success:^(NSDictionary *deviceResponse) {
         [devices setObject:deviceResponse forKey:[deviceResponse objectForKey:@"type"]];
@@ -94,6 +103,21 @@
     } failure:^(NSString *errorMessage) {
         [self updateAvailabilityFailure:!isOnline errorMessage:errorMessage];
     }];
+}
+
+- (void)reloadTable:(NSArray *)dataArray {
+    data = dataArray;
+    [self showLoading:NO];
+    [self showMessage:nil];
+    if (data == nil) {
+        [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    } else if ([data count] == 0) {
+        NSString *empty = stringEmpty;
+        [self showMessage:empty];
+    } else {
+        [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    }
+    [[self tableView] reloadData];
 }
 
 - (void)updateDepartment:(BOOL)isOnline index:(NSInteger)index {
@@ -108,14 +132,14 @@
 }
 
 -(void)updateAvailabilityFailure:(BOOL)restore errorMessage:(NSString *)errorMessage {
+    [self showLoading:NO];
     [self showMessage:errorMessage];
 }
 
 - (void)initDepartments:(NSString*)deviceId {
+    [self showLoading:YES];
     [Api getDepartmentStatusList:deviceId success:^(NSArray *responseObject){
-        data = responseObject;
-        [self showLoading:NO];
-        [[self tableView] reloadData];
+        [self reloadTable:responseObject];
     } failure:^(NSString *errorMessage){
         [self showLoading:NO];
         [self showMessage:errorMessage];
@@ -131,19 +155,20 @@
         UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         [activityIndicator startAnimating];
         [[self tableView] setBackgroundView:activityIndicator];
+        [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     } else {
         [[self tableView] setBackgroundView:nil];
+        [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     }
 }
 
 -(void)showMessage:(NSString *)message {
-    generalAvailability = nil;
-    data = nil;
-    [[self tableView] reloadData];
     UILabel *messageView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
     [messageView setText:message];
     [messageView setTextAlignment:NSTextAlignmentCenter];
     [messageView setNumberOfLines:3];
+    [messageView setTextColor:[UIColor grayColor]];
+    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[self tableView] setBackgroundView:messageView];
 }
 

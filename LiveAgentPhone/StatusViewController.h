@@ -11,8 +11,10 @@
 
 @interface StatusViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *messageHeight;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIStackView *stackView;
+@property (weak, nonatomic) IBOutlet UIView *messageView;
+@property (weak, nonatomic) IBOutlet UISwitch *mainSwitch;
 
 - (void)setMainTabBarController:(MainTabBarController *)mainTabBarController;
 - (void)refreshAvailability;
