@@ -12,13 +12,13 @@
 #import "MainTabBarController.h"
 #import "Constants.h"
 #import "Api.h"
-#import "StatusTableViewController.h"
 #import "ContactsViewController.h"
+#import "StatusViewController.h"
 
 @interface MainTabBarController () {
     @private
     UITabBarItem *statusBarItem;
-    StatusTableViewController *statusViewController;
+    StatusViewController *statusViewController;
     ContactsViewController *contactViewController;
 }
 
@@ -37,8 +37,8 @@
     
     UINavigationController *navViewControllerStatus = [vcArray objectAtIndex:STATUS_TAB_INDEX];
     statusViewController = [[navViewControllerStatus viewControllers] firstObject];
-    [statusViewController setMainTabBarController:self];
     [statusViewController view];
+    [statusViewController setMainTabBarController:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

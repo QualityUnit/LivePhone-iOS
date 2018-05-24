@@ -57,7 +57,7 @@
     });
 }
 
-+ (void)getDevice:(void (^)(BOOL isOnline))success failure:(void (^)(NSString *errorMessage))failure {
++ (void)getDevices:(void (^)(NSArray *devices))success failure:(void (^)(NSString *errorMessage))failure {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
         NSMutableDictionary *requestParameters = [[NSMutableDictionary alloc] init];
@@ -92,12 +92,14 @@
                 NSArray *response = responseObject;
                 if ([response count] == 0) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        failure(@"Call service on your LiveAgent not found.");
+                        failure(@"No phone services found.");
                     });
                     return;
                 }
-                NSDictionary *device = [response firstObject];
-                [self deviceSuccess:requestDescription resp:device success:success failure:failure];
+                NSLog(@"SUCCESS '%@'", requestDescription);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    success(responseObject);
+                });
             } else {
                 NSString *errorMessage = errorMsgCannotParseResponse;
                 NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
@@ -112,30 +114,11 @@
     });
 }
 
-+(void)updateDevice:(BOOL)isAvailable success:(void (^)(BOOL isOnline))success failure:(void (^)(NSString *errorMessage))failure {
++(void)updateDevice:(NSDictionary*)body success:(void (^)(NSDictionary *device))success failure:(void (^)(NSString *errorMessage))failure {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
-        NSString *flag = @"F";
-        if (isAvailable) {
-            flag = @"N";
-        }
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *deviceId = [userDefaults objectForKey:memoryKeyDeviceId];
-        if (deviceId == nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                failure(@"Variable 'deviceId' not found on this device");
-            });
-            return;
-        }
-        NSString *agentId = [userDefaults objectForKey:memoryKeyAgentId];
-        if (agentId == nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                failure(@"Variable 'agentId' not found on this device");
-            });
-            return;
-        }
+        NSString *deviceId = [body objectForKey:@"id"];
         AFHTTPSessionManager *manager = [Net createSessionManager];
-        NSDictionary *body = @{@"agent_id":agentId, @"service_type":@"P", @"status":flag};
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:0 error:&error];
         NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
@@ -148,33 +131,21 @@
         NSLog(@"%@", requestDescription);
         [[manager dataTaskWithRequest:req completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
             if (!error) {
-                [self deviceSuccess:requestDescription resp:responseObject success:success failure:failure];
+                if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]]) {
+                    NSLog(@"SUCCESS '%@'", requestDescription);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        success(responseObject);
+                    });
+                } else {
+                    NSHTTPURLResponse *resp = (NSHTTPURLResponse *) response;
+                    [self deviceFailure:requestDescription error:error httpCode:[resp statusCode] failure:failure];
+                }
             } else {
                 NSHTTPURLResponse *resp = (NSHTTPURLResponse *) response;
                 [self deviceFailure:requestDescription error:error httpCode:[resp statusCode] failure:failure];
             }
         }] resume];
     });
-}
-
-+(void)deviceSuccess:(NSString *)requestDescription resp:(id)responseObject success:(void (^)(BOOL isOnline))success failure:(void (^)(NSString *errorMessage))failure{
-    if ([responseObject isKindOfClass:[NSDictionary class]]) {
-        NSLog(@"SUCCESS '%@'", requestDescription);
-        NSString *deviceId = [responseObject objectForKey:@"id"];
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:deviceId forKey:memoryKeyDeviceId];
-        [userDefaults setObject:[responseObject objectForKey:@"agent_id"] forKey:memoryKeyAgentId];
-        [userDefaults synchronize];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            success([[responseObject objectForKey:@"status"] isEqualToString:@"N"]);
-        });
-    } else {
-        NSString *errorMessage = errorMsgCannotParseResponse;
-        NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            failure(errorMessage);
-        });
-    }
 }
 
 +(void)deviceFailure:(NSString *)requestDescription error:(NSError *)error httpCode:(NSInteger)httpCode failure:(void (^)(NSString *errorMessage))failure{
@@ -188,14 +159,12 @@
     });
 }
 
-+(void)getDepartmentStatusList:(void (^)(NSArray *deparmentList))success failure:(void (^)(NSString *errorMessage))failure {
++(void)getDepartmentStatusList:(NSString *)deviceId success:(void (^)(NSArray *deparmentList))success failure:(void (^)(NSString *errorMessage))failure {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *deviceId = [userDefaults objectForKey:memoryKeyDeviceId];
         if (deviceId == nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                failure(@"Variable 'deviceId' not found on this device");
+                failure(@"Variable 'deviceId' not defined");
             });
             return;
         }
@@ -225,7 +194,7 @@
     });
 }
 
-+(void)updateDepartment:(NSDictionary *)body success:(void (^)(BOOL isOnline))success failure:(void (^)(NSString *errorMessage))failure {
++(void)updateDepartment:(NSDictionary *)body success:(void (^)(NSDictionary *deviceResponse))success failure:(void (^)(NSString *errorMessage))failure {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
         if (body == nil) {
@@ -249,10 +218,10 @@
         NSLog(@"%@", requestDescription);
         [[manager dataTaskWithRequest:req completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
             if (!error) {
-                if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]]) {
                     NSLog(@"SUCCESS '%@'", requestDescription);
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        success([[responseObject objectForKey:@"online_status"] isEqualToString:@"N"]);
+                        success(responseObject);
                     });
                 } else {
                     NSString *errorMessage = errorMsgCannotParseResponse;

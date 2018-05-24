@@ -20,13 +20,13 @@
 		3031E6FC1E09486E00106268 /* Net.m in Sources */ = {isa = PBXBuildFile; fileRef = 3031E6FB1E09486E00106268 /* Net.m */; };
 		3032794D1E49C16000455203 /* XCPjsua.m in Sources */ = {isa = PBXBuildFile; fileRef = 3032794C1E49C16000455203 /* XCPjsua.m */; };
 		305444661EA43685007429FE /* Api.m in Sources */ = {isa = PBXBuildFile; fileRef = 305444651EA43685007429FE /* Api.m */; };
+		3058D5C220B4BDB30021A54C /* StatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3058D5C120B4BDB30021A54C /* StatusViewController.m */; };
 		306C67C01E43812D00DC5272 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 306C67BF1E43812D00DC5272 /* Reachability.m */; };
 		3072925A1F6AF3400028A45D /* LicensesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 307292591F6AF3400028A45D /* LicensesViewController.m */; };
 		3072925C1F6AF6D50028A45D /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 3072925B1F6AF6D50028A45D /* licenses.html */; };
 		307CD0941E3F402E0073DA3B /* ApiUrlCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 307CD0931E3F402E0073DA3B /* ApiUrlCheck.m */; };
 		307CD0961E3FF4AE0073DA3B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 307CD0951E3FF4AE0073DA3B /* SystemConfiguration.framework */; };
 		30804F211E096817003B4442 /* ContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30804F201E096817003B4442 /* ContactListViewController.m */; };
-		308C24BB1FA1F79500BA4DFF /* StatusTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 308C24BA1FA1F79500BA4DFF /* StatusTableViewController.m */; };
 		308C24BE1FA200EB00BA4DFF /* StatusViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 308C24BD1FA200EB00BA4DFF /* StatusViewCell.m */; };
 		309862BE1E5337EC00321C1E /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 309862BD1E5337EC00321C1E /* CallKit.framework */; };
 		309862C01E571BE300321C1E /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 309862BF1E571BE300321C1E /* PushKit.framework */; };
@@ -105,6 +105,8 @@
 		3032794C1E49C16000455203 /* XCPjsua.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCPjsua.m; sourceTree = "<group>"; };
 		305444641EA43685007429FE /* Api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Api.h; sourceTree = "<group>"; };
 		305444651EA43685007429FE /* Api.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Api.m; sourceTree = "<group>"; };
+		3058D5C020B4BDB30021A54C /* StatusViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatusViewController.h; sourceTree = "<group>"; };
+		3058D5C120B4BDB30021A54C /* StatusViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StatusViewController.m; sourceTree = "<group>"; };
 		306C67BE1E43812D00DC5272 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		306C67BF1E43812D00DC5272 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		306DD2CD1E1D491B001E60BC /* LiveAgentPhone.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LiveAgentPhone.entitlements; sourceTree = "<group>"; };
@@ -116,8 +118,6 @@
 		307CD0951E3FF4AE0073DA3B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		30804F1F1E096817003B4442 /* ContactListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactListViewController.h; sourceTree = "<group>"; };
 		30804F201E096817003B4442 /* ContactListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactListViewController.m; sourceTree = "<group>"; };
-		308C24B91FA1F79500BA4DFF /* StatusTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatusTableViewController.h; sourceTree = "<group>"; };
-		308C24BA1FA1F79500BA4DFF /* StatusTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StatusTableViewController.m; sourceTree = "<group>"; };
 		308C24BC1FA200EB00BA4DFF /* StatusViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatusViewCell.h; sourceTree = "<group>"; };
 		308C24BD1FA200EB00BA4DFF /* StatusViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StatusViewCell.m; sourceTree = "<group>"; };
 		309862BD1E5337EC00321C1E /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
@@ -214,10 +214,10 @@
 		3007FA291F9B94E90039F19A /* Status */ = {
 			isa = PBXGroup;
 			children = (
-				308C24B91FA1F79500BA4DFF /* StatusTableViewController.h */,
-				308C24BA1FA1F79500BA4DFF /* StatusTableViewController.m */,
 				308C24BC1FA200EB00BA4DFF /* StatusViewCell.h */,
 				308C24BD1FA200EB00BA4DFF /* StatusViewCell.m */,
+				3058D5C020B4BDB30021A54C /* StatusViewController.h */,
+				3058D5C120B4BDB30021A54C /* StatusViewController.m */,
 			);
 			name = Status;
 			sourceTree = "<group>";
@@ -789,6 +789,7 @@
 				30265F5720AAEC9D00F0E7FD /* InternalListViewController.m in Sources */,
 				3031E6FC1E09486E00106268 /* Net.m in Sources */,
 				3072925A1F6AF3400028A45D /* LicensesViewController.m in Sources */,
+				3058D5C220B4BDB30021A54C /* StatusViewController.m in Sources */,
 				30080F901E6217C30083EB4E /* ContactsTableViewCell.m in Sources */,
 				3032794D1E49C16000455203 /* XCPjsua.m in Sources */,
 				307CD0941E3F402E0073DA3B /* ApiUrlCheck.m in Sources */,
@@ -808,7 +809,6 @@
 				30804F211E096817003B4442 /* ContactListViewController.m in Sources */,
 				30080F9B1E6ED6D00083EB4E /* SettingsTableViewController.m in Sources */,
 				30080F9F1E6EF13D0083EB4E /* DialpadTableViewController.m in Sources */,
-				308C24BB1FA1F79500BA4DFF /* StatusTableViewController.m in Sources */,
 				30E77D691DF82B8F00A40AD1 /* main.m in Sources */,
 				30080FA61E76EA1D0083EB4E /* CallingTableViewController.m in Sources */,
 				30AEF1291E5B085D00D92FB1 /* CallManager.m in Sources */,

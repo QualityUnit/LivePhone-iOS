@@ -107,7 +107,7 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *requiredKey;
         NSString *requiredValue;
-        // SIP id
+        // phone ID
         requiredKey = @"id";
         requiredValue = [response objectForKey:requiredKey];
         if (requiredValue != nil && [requiredValue length] > 0) {
@@ -151,6 +151,15 @@
             [userDefaults setObject:requiredValue forKey:memoryKeySipPassword];
         } else {
             [self showError:[NSString stringWithFormat:@"Missing SIP value: '%@'", requiredKey]];
+            return;
+        }
+        // agent ID
+        requiredKey = @"agent_id";
+        requiredValue = [response objectForKey:requiredKey];
+        if (requiredValue != nil && [requiredValue length] > 0) {
+            [userDefaults setObject:requiredValue forKey:memoryKeyAgentId];
+        } else {
+            [self showError:[NSString stringWithFormat:@"Missing agent ID: '%@'", requiredKey]];
             return;
         }
         [userDefaults synchronize];
