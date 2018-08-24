@@ -33,6 +33,30 @@
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES]; // show activity indicator in status bar automatically
     [self setCallManager:[[CallManager alloc] initCallManager]];
     [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+    application.applicationIconBadgeNumber = 0;
+    if( SYSTEM_VERSION_LESS_THAN( @"10.0" ) ) {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound |    UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+        
+    } else {
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        center.delegate = self;
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error)
+         {
+             if( !error )
+             {
+                 [[UIApplication sharedApplication] registerForRemoteNotifications];
+                 NSLog( @"Push registration success." );
+             }
+             else
+             {
+                 NSLog( @"Push registration FAILED" );
+                 NSLog( @"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription );
+                 NSLog( @"SUGGESTIONS: %@ - %@", error.localizedRecoveryOptions, error.localizedRecoverySuggestion );
+             }
+         }];
+    }
+    
     return YES;
 }
 
@@ -288,7 +312,7 @@
     [localNotification setCategoryIdentifier:CATEGORY_IDENTIFIER_INIT_CALL];
     UNNotificationRequest *localNotificationRequest = [UNNotificationRequest requestWithIdentifier:callId
                                                                                            content:localNotification
-                                                                                           trigger:[UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO]];
+                                                                                           trigger:[UNTimeIntervalNotificationTrigger triggerWithTimeInterval:5 repeats:NO]];
     UNUserNotificationCenter *notificationCenter = [UNUserNotificationCenter currentNotificationCenter];
     [notificationCenter addNotificationRequest:localNotificationRequest withCompletionHandler:^(NSError * _Nullable error) {
         if (error) {
