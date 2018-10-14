@@ -35,6 +35,7 @@
 #define memoryKeySipPassword @"memoryKeySipPassword"
 #define memoryKeyPushToken @"memoryKeyPushToken"
 #define memoryKeyAgentId @"memoryKeyAgentId"
+#define memoryKeyInstallId @"memoryKeyInstallId"
 
 // local notification names
 #define localNotificationIntoInit @"localNotificationIntoInit"
