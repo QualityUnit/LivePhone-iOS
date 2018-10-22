@@ -18,42 +18,73 @@
     // make a call GET /token in background
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
-        NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
-        [params setObject:email forKey:@"username"];
-        [params setObject:password forKey:@"password"];
-        NSString *requestDescription = @"GET /token";
-        NSLog(@"%@", requestDescription);
+        // build body
+        NSMutableDictionary *body = [[NSMutableDictionary alloc] init];
+        [body setObject:email forKey:@"login"];
+        [body setObject:password forKey:@"password"];
+        [body setObject:@"P" forKey:@"type"];
+        NSCalendar *cal = [NSCalendar currentCalendar];
+        NSDate *validToDate = [cal dateByAddingUnit:NSCalendarUnitMonth value:3 toDate:[NSDate date] options:0];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+        [dateFormatter setTimeZone:timeZone];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.sssZZZZZ"];
+        NSString *validToDateString = [dateFormatter stringFromDate:validToDate];
+        [body setObject:validToDateString forKey:@"valid_to_date"];
+        [body setObject:[[UIDevice currentDevice] name] forKey:@"name"];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *installId = [userDefaults objectForKey:memoryKeyInstallId];
+        if (installId == nil) {
+            NSUUID *uuid = [NSUUID UUID];
+            installId = [uuid UUIDString];
+            [userDefaults setObject:installId forKey:memoryKeyInstallId];
+            [userDefaults synchronize];
+        }
+        [body setObject:installId forKey:@"installid"];
+        // build request
         AFHTTPSessionManager *manager = [Net createSessionManagerWithHost:apiUrl apikey:nil];
-        [manager GET:@"token" parameters:params progress:nil success:^(NSURLSessionTask *task, id responseObject) {
-            if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]]) {
-                NSLog(@"SUCCESS '%@'", requestDescription);
-                NSDictionary *response = responseObject;
-                NSString *apikey = [response objectForKey:@"key"];
-                if (apikey != nil && apikey.length > 0) {
-                    // response is ok because we've got a token, let's save URL, email and token
-                    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                    [userDefaults setObject:apiUrl forKey:memoryKeyUrl];
-                    [userDefaults setObject:email forKey:memoryKeyEmail];
-                    [userDefaults setObject:apikey forKey:memoryKeyApikey];
-                    [userDefaults synchronize];
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:0 error:&error];
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/apikeys/_login", [manager baseURL]]] cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:timeoutSec];
+        [request setHTTPMethod:@"POST"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [request setHTTPBody:[jsonString dataUsingEncoding:NSUTF8StringEncoding]];
+        NSString *requestDescription = @"POST /apikeys/_login";
+        NSLog(@"%@", requestDescription);
+        [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+            if (!error) {
+                if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]]) {
+                    NSLog(@"SUCCESS '%@'", requestDescription);
+                    NSDictionary *response = responseObject;
+                    NSString *apikey = [response objectForKey:@"key"];
+                    if (apikey != nil && apikey.length > 0) {
+                        // response is ok because we've got a token, let's save URL, email and token
+                        [userDefaults setObject:apiUrl forKey:memoryKeyUrl];
+                        [userDefaults setObject:email forKey:memoryKeyEmail];
+                        [userDefaults setObject:apikey forKey:memoryKeyApikey];
+                        [userDefaults synchronize];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            success();
+                        });
+                    }
+                } else {
+                    NSString *errorMessage = errorMsgCannotParseResponse;
+                    NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        success();
+                        failure(errorMessage);
                     });
                 }
             } else {
-                NSString *errorMessage = errorMsgCannotParseResponse;
+//                NSHTTPURLResponse *resp = (NSHTTPURLResponse *) response;
+//                [self deviceFailure:requestDescription error:error httpCode:[resp statusCode] failure:failure];
+                NSString *errorMessage = [error localizedDescription];
                 NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
                 dispatch_async(dispatch_get_main_queue(), ^{
                     failure(errorMessage);
                 });
             }
-        } failure:^(NSURLSessionTask *operation, NSError *error) {
-            NSString *errorMessage = [error localizedDescription];
-            NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                failure(errorMessage);
-            });
-        }];
+        }] resume];
     });
 }
 
