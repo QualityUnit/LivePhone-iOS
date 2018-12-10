@@ -170,7 +170,8 @@
         [body setObject:agentId forKey:@"agent_id"];
         [body setObject:@"A" forKey:@"type"];
         [body setObject:@"P" forKey:@"service_type"];
-        [body setObject:@"N" forKey:@"status"];
+        [body setObject:@"N" forKey:@"preset_status"];
+        [body setObject:@"N" forKey:@"online_status"];
         // build request
         AFHTTPSessionManager *manager = [Net createSessionManager];
         NSError *error;

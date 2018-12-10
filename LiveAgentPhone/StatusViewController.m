@@ -41,7 +41,7 @@
     BOOL browserPhoneAvailable = NO;
     NSDictionary *browserDevice = [devices objectForKey:@"W"];
     if (browserDevice != nil) {
-        NSString *status = [browserDevice objectForKey:@"status"];
+        NSString *status = [browserDevice objectForKey:@"online_status"];
         if (status != nil && [status length] > 0) {
             browserPhoneAvailable = [status isEqualToString:@"N"];
             if (browserPhoneAvailable) {
@@ -60,7 +60,7 @@
     NSDictionary *mobileDevice = [devices objectForKey:@"A"];
     if (mobileDevice != nil) {
         deviceId = [mobileDevice objectForKey:@"id"];
-        NSString *status = [mobileDevice objectForKey:@"status"];
+        NSString *status = [mobileDevice objectForKey:@"preset_status"];
         if (status != nil && [status length] > 0) {
             mobilePhoneAvailable = [status isEqualToString:@"N"];
             [[self mainSwitch] setOn:mobilePhoneAvailable];
@@ -92,7 +92,8 @@
 
 - (void)updateAvailability:(BOOL) isOnline {
     NSMutableDictionary *mobileDevice = [[devices objectForKey:@"A"] mutableCopy];
-    [mobileDevice setObject:isOnline ? @"N" : @"F" forKey:@"status"];
+    [mobileDevice setObject:isOnline ? @"N" : @"F" forKey:@"preset_status"];
+    [mobileDevice setObject:isOnline ? @"N" : @"F" forKey:@"online_status"];
     if (!isOnline) {
         // clear list after main switch is turned off
         [self reloadTable:nil];
