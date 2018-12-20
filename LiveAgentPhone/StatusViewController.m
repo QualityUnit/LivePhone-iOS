@@ -54,6 +54,9 @@
                 [[self messageView] setHidden:YES];
             }
         }
+    } else {
+        [[self stackView] removeArrangedSubview:[self messageView]];
+        [[self messageView] setHidden:YES];
     }
     BOOL mobilePhoneAvailable = NO;
     NSString *deviceId;
