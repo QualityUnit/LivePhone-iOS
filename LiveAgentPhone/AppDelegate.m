@@ -188,6 +188,15 @@
 }
 
 - (void)registerVoipNotifications {
+    // SCREENSHOOT MODE START
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+//    NSString * pushToken = @"XXXXXXXXXXXXXXXXXXXXXXXXXXX";
+//    [userDefaults setObject:pushToken forKey:memoryKeyPushToken];
+//    [userDefaults synchronize];
+//    [dict setObject:pushToken forKey:@"pushToken"];
+//    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:localNotificationIntoInit object:dict]];
+    // SCREENSHOOT MODE END
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:memoryKeyPushToken];
     self.voipRegistry = [[PKPushRegistry alloc] initWithQueue:dispatch_get_main_queue()];
