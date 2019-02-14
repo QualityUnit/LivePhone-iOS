@@ -65,6 +65,11 @@
 #define stringAvailable NSLocalizedStringWithDefaultValue(@"status.available",@"Localizable",[NSBundle mainBundle],@"Available",@"Available on calls");
 #define stringUnavailable NSLocalizedStringWithDefaultValue(@"status.unavailable",@"Localizable",[NSBundle mainBundle],@"Unavailable",@"Unavailable on calls");
 #define stringStartOutgoing NSLocalizedStringWithDefaultValue(@"calling.startOutgoing",@"Localizable",[NSBundle mainBundle],@"Make call",@"Outgoing call starter from system notification");
+#define stringTwoFactorTitle NSLocalizedStringWithDefaultValue(@"twofactor.title",@"Localizable",[NSBundle mainBundle],@"Verification Code",@"Verification code request title");
+#define stringTwoFactorMessage NSLocalizedStringWithDefaultValue(@"twofactor.message",@"Localizable",[NSBundle mainBundle],@"Enter 6-digit number from Google Authenticator application.",@"Verification code request message");
+#define stringInvalidCredentials NSLocalizedStringWithDefaultValue(@"login.invalidCredentials",@"Localizable",[NSBundle mainBundle],@"Invalid email or password",@"Invalid email or password");
+#define stringInvalidVerificationCode NSLocalizedStringWithDefaultValue(@"login.invalidVerificationCode",@"Localizable",[NSBundle mainBundle],@"Invalid verification code",@"Invalid verification code of two-factor authentication");
+#define stringTooManyLogins NSLocalizedStringWithDefaultValue(@"login.tooManyLogins",@"Localizable",[NSBundle mainBundle],@"Login declined. Wait few minutes before retrying.",@"Login declined because of too many attempts");
 // colors
 #define textGreenOk @"#64DD17"
 #define textRedNok @"#F44336"

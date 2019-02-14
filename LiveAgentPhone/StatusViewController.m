@@ -128,6 +128,7 @@
     NSString *flag = isOnline ? @"N" : @"F";
     NSMutableDictionary *obj = [NSMutableDictionary dictionaryWithDictionary:[data objectAtIndex:index]];
     [obj setObject:flag forKey:@"online_status"];
+    [obj setObject:flag forKey:@"preset_status"];
     [Api updateDepartment:obj success:^(NSDictionary *response) {
         // do nothing
     } failure:^(NSString * errorMessage){
@@ -190,9 +191,15 @@
     StatusViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"StatusViewCell" forIndexPath:indexPath];
     NSDictionary *dataItem = [data objectAtIndex:indexPath.row];
     [[cell label] setText:[dataItem objectForKey:@"department_name"]];
-    [[cell switchControl] setTag:indexPath.row];
-    [[cell switchControl] setOn:[[dataItem objectForKey:@"online_status"] isEqualToString:@"N"]];
-    [[cell switchControl] addTarget:self action:@selector(onDeptSwitchValueChanged:) forControlEvents:UIControlEventValueChanged];
+    NSString *status = [dataItem objectForKey:@"online_status"];
+    if (status != nil && status.length > 0) {
+        [[cell switchControl] setTag:indexPath.row];
+        [[cell switchControl] setOn:[status isEqualToString:@"N"]];
+        [[cell switchControl] addTarget:self action:@selector(onDeptSwitchValueChanged:) forControlEvents:UIControlEventValueChanged];
+        [[cell switchControl] setHidden:NO];
+    } else {
+        [[cell switchControl] setHidden:YES];
+    }
     return cell;
 }
 

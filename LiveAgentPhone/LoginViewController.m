@@ -38,8 +38,7 @@
 @implementation LoginViewController
 
 // Call this method somewhere in your view controller setup code.
-- (void)registerForKeyboardNotifications
-{
+- (void)registerForKeyboardNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardDidShowNotification object:nil];
@@ -49,8 +48,7 @@
 }
 
 // Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
+- (void)keyboardWasShown:(NSNotification*)aNotification {
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
@@ -68,8 +66,7 @@
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     [self scrollView].contentInset = contentInsets;
     [self scrollView].scrollIndicatorInsets = contentInsets;
@@ -115,7 +112,6 @@
     if (urlCheckTimer) {
         [urlCheckTimer invalidate];
     }
-    NSLog(@"#### login dealloc");
 }
 
 - (IBAction)onUrlCheckTimer:(id)sender {
@@ -135,11 +131,50 @@
         [[self labelError] setText:errorMessage];
         return;
     }
-    [Api loginWithUrl:apiUrl email:email password:password success:^{
+    [self loginWithUrl:apiUrl email:email password:password verificationCode:nil];
+}
+
+- (void)loginWithUrl:(NSString *)apiUrl email:(NSString *)email password:(NSString *)password verificationCode:(NSString *)verificationCode {
+    [[self buttonLogin] setEnabled:NO];
+    [Api loginWithUrl:apiUrl email:email password:password verificationCode:verificationCode success:^{
         [self goToInit];
     } failure:^(NSString * errorMessage){
         [[self labelError] setText:errorMessage];
+        [[self buttonLogin] setEnabled:YES];
+    } invalidPassword:^{
+        NSString *errorMessage = stringInvalidCredentials;
+        [[self labelError] setText:errorMessage];
+        [[self buttonLogin] setEnabled:YES];
+    } verificationCodeRequired:^{
+        [self verificationCodeRequiredWithUrl:apiUrl email:email password:password];
+        [[self buttonLogin] setEnabled:YES];
+    } verificationCodeFailure:^{
+        NSString *errorMessage = stringInvalidVerificationCode;
+        [[self labelError] setText:errorMessage];
+        [[self buttonLogin] setEnabled:YES];
+    } tooManyLogins:^{
+        NSString *errorMessage = stringTooManyLogins;
+        [[self labelError] setText:errorMessage];
+        [[self buttonLogin] setEnabled:YES];
     }];
+}
+
+- (void)verificationCodeRequiredWithUrl:(NSString *)apiUrl email:(NSString *)email password:(NSString *)password {
+    NSString *alertTitle = stringTwoFactorTitle;
+    NSString *alertMessage = stringTwoFactorMessage;
+    NSString *alertOk = stringOk;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:alertTitle message:alertMessage preferredStyle:UIAlertControllerStyleAlert];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        // optionally configure the text field
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:alertOk style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UITextField *textField = [alert.textFields firstObject];
+        NSString *code = [textField text];
+        [self loginWithUrl:apiUrl email:email password:password verificationCode:code];
+    }];
+    [alert addAction:okAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (IBAction)urlDidEndOnExit:(id)sender {

@@ -14,7 +14,7 @@
 
 @implementation Api
 
-+ (void)loginWithUrl:(NSString *)apiUrl email:(NSString *)email password:(NSString *)password success:(void (^)(void))success failure:(void (^)(NSString *errorMessage))failure {
++ (void)loginWithUrl:(NSString *)apiUrl email:(NSString *)email password:(NSString *)password verificationCode:(NSString * _Nullable)verificationCode  success:(void (^)(void))success failure:(void (^)(NSString *errorMessage))failure invalidPassword:(void (^)(void))invalidPassword verificationCodeRequired:(void (^)(void))verificationCodeRequired verificationCodeFailure:(void (^)(void))verificationCodeFailure tooManyLogins:(void (^)(void))tooManyLogins {
     // make a call GET /token in background
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
@@ -41,6 +41,9 @@
             [userDefaults synchronize];
         }
         [body setObject:installId forKey:@"installid"];
+        if (verificationCode != nil && verificationCode.length > 0) {
+            [body setObject:verificationCode forKey:@"two_factor_token"];
+        }
         // build request
         AFHTTPSessionManager *manager = [Net createSessionManagerWithHost:apiUrl apikey:nil];
         NSError *error;
@@ -53,37 +56,62 @@
         NSString *requestDescription = @"POST /apikeys/_login";
         NSLog(@"%@", requestDescription);
         [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-            if (!error) {
-                if (responseObject != nil && [responseObject isKindOfClass:[NSDictionary class]]) {
-                    NSLog(@"SUCCESS '%@'", requestDescription);
-                    NSDictionary *response = responseObject;
-                    NSString *apikey = [response objectForKey:@"key"];
-                    if (apikey != nil && apikey.length > 0) {
-                        // response is ok because we've got a token, let's save URL, email and token
-                        [userDefaults setObject:apiUrl forKey:memoryKeyUrl];
-                        [userDefaults setObject:email forKey:memoryKeyEmail];
-                        [userDefaults setObject:apikey forKey:memoryKeyApikey];
-                        [userDefaults synchronize];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            success();
-                        });
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (error != nil) {
+                    NSHTTPURLResponse *resp = (NSHTTPURLResponse *) response;
+                    NSInteger code = [resp statusCode];
+                    switch (code) {
+                        case 401:
+                        case 403:
+                            invalidPassword();
+                            return;
+                        case 424:
+                            verificationCodeRequired();
+                            return;
+                        case 425:
+                            verificationCodeFailure();
+                            return;
+                        case 429:
+                            tooManyLogins();
+                            return;
+                        default:
+                            failure(error.localizedDescription);
+                            return;
                     }
-                } else {
+                }
+                if (responseObject == nil || ![responseObject isKindOfClass:[NSDictionary class]]) {
                     NSString *errorMessage = errorMsgCannotParseResponse;
                     NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        failure(errorMessage);
-                    });
-                }
-            } else {
-//                NSHTTPURLResponse *resp = (NSHTTPURLResponse *) response;
-//                [self deviceFailure:requestDescription error:error httpCode:[resp statusCode] failure:failure];
-                NSString *errorMessage = [error localizedDescription];
-                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
-                dispatch_async(dispatch_get_main_queue(), ^{
                     failure(errorMessage);
-                });
-            }
+                    return;
+                }
+                NSLog(@"SUCCESS '%@'", requestDescription);
+                NSDictionary *body = responseObject;
+                // Bad server implementation - temporary FIX
+                NSString *message = [body objectForKey:@"message"];
+                if (message != nil && message.length > 0) {
+                    if ([message isEqualToString:@"Two-factor authentication required."]) {
+                        verificationCodeRequired();
+                    } else if ([message isEqualToString:@"Invalid two-factor verification code."]) {
+                        verificationCodeFailure();
+                    } else {
+                        failure(message);
+                    }
+                    return;
+                }
+                // success
+                NSString *apikey = [body objectForKey:@"key"];
+                if (apikey == nil || apikey.length < 1) {
+                    failure(@"Error: API token not found in login response");
+                    return;
+                }
+                // response is ok because we've got a token, let's save URL, email and token
+                [userDefaults setObject:apiUrl forKey:memoryKeyUrl];
+                [userDefaults setObject:email forKey:memoryKeyEmail];
+                [userDefaults setObject:apikey forKey:memoryKeyApikey];
+                [userDefaults synchronize];
+                success();
+            });
         }] resume];
     });
 }
