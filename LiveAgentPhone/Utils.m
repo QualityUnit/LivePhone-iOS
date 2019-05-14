@@ -54,14 +54,6 @@
     return [self createCalleeUriWithPhoneNumber:phoneNumber phonePrefix:nil sipHost:sipHost];
 }
 
-+ (nonnull NSString *)prefixToTwoDigitsWIthPrefixInt:(int)prefixInt {
-    NSString *prefixString = [NSString stringWithFormat:@"%i", prefixInt];
-    if ([prefixString length] == 1) {
-        prefixString = [NSString stringWithFormat:@"0%@", prefixString];
-    }
-    return prefixString;
-}
-
 + (BOOL) isDebug {
     #ifdef DEBUG
         return true;

@@ -188,7 +188,7 @@
 }
 
 - (void)registerVoipNotifications {
-    // SCREENSHOOT MODE START
+    // SCREENSHOOT MODE START (simulator)
 //    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 //    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 //    NSString * pushToken = @"XXXXXXXXXXXXXXXXXXXXXXXXXXX";

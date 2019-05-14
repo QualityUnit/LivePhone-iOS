@@ -81,8 +81,8 @@
         return;
     }
     NSDictionary *selectedItemFromNumberPicker = phoneNumbersResponse[[self.numberPicker selectedRowInComponent:0]];
-    int prefixInt = [[selectedItemFromNumberPicker valueForKey:@"dial_out_prefix"] intValue];
-    NSString *calleePrefix = [Utils prefixToTwoDigitsWIthPrefixInt:prefixInt];
+    NSString *calleePrefix = [selectedItemFromNumberPicker objectForKey:@"dial_out_prefix_formatted"];
+    if (calleePrefix == nil) [selectedItemFromNumberPicker objectForKey:@"dial_out_prefix"]; // TODO remove later
     [[appDelegate callManager] makeCall:calleeNumber withPrefix:calleePrefix remoteName:calleeNameFromContacts];
 }
 
