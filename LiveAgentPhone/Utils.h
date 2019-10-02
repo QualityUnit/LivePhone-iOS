@@ -14,7 +14,7 @@
 
 + (BOOL)isConnected;
 + (BOOL)isUrlValid:(nonnull NSString *) url;
-+ (nullable NSString *)retrievePushToken:(nullable NSString *) token;
++ (NSString *)stringFromDeviceToken:(NSData *)deviceToken;
 + (BOOL)isAuthenticated;
 + (nonnull NSString *)createCalleeUriWithPhoneNumber:(nonnull NSString *)phoneNumber phonePrefix:(nullable NSString *)phonePrefix sipHost:(nonnull NSString *)sipHost;
 + (nonnull NSString *)createCalleeUriWithPhoneNumber:(nonnull NSString *)phoneNumber sipHost:(nonnull NSString *)sipHost;

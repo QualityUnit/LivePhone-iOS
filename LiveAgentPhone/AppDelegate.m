@@ -171,7 +171,7 @@
     NSLog(@"didUpdatePushCredentials()");
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     if ([type isEqualToString:PKPushTypeVoIP]) {
-        NSString * pushToken = [Utils retrievePushToken:[credentials.token description]];
+        NSString * pushToken = [Utils stringFromDeviceToken:[credentials token]];
         NSLog(@"pushToken=%@", pushToken);
         if (pushToken == nil || [pushToken length] == 0) {
             [dict setObject:@"Cannot get push token." forKey:@"error"];
@@ -188,8 +188,8 @@
 }
 
 - (void)registerVoipNotifications {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     // SCREENSHOOT MODE START (simulator)
-//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 //    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 //    NSString * pushToken = @"XXXXXXXXXXXXXXXXXXXXXXXXXXX";
 //    [userDefaults setObject:pushToken forKey:memoryKeyPushToken];
@@ -197,7 +197,6 @@
 //    [dict setObject:pushToken forKey:@"pushToken"];
 //    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:localNotificationIntoInit object:dict]];
     // SCREENSHOOT MODE END
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:memoryKeyPushToken];
     self.voipRegistry = [[PKPushRegistry alloc] initWithQueue:dispatch_get_main_queue()];
     [self.voipRegistry setDelegate:self];
