@@ -257,6 +257,7 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     CallingTableViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"CallingTableViewController"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [navigationController setModalPresentationStyle:UIModalPresentationFullScreen];
     [[self getCurrentViewController] presentViewController:navigationController animated:YES completion:nil];
 }
 
