@@ -27,6 +27,8 @@
     NSString *lastEvent;
     NSString *lastMessage;
     NSString *calleePrefix;
+    CXAnswerCallAction *answerCallAction;
+    BOOL isSipRinging;
 }
 
 @end
@@ -84,14 +86,17 @@
         char *sipUserCharArray = (char *)[[defaults objectForKey:memoryKeySipUser] cStringUsingEncoding:[NSString defaultCStringEncoding]];
         char *sipPasswordCharArray = (char *)[[defaults objectForKey:memoryKeySipPassword] cStringUsingEncoding:[NSString defaultCStringEncoding]];
         incomingCall(sipHostCharArray, sipUserCharArray, sipPasswordCharArray, self);
+        [self initiateRinging];
     } else {
         NSLog(@"There is ongoing call right now");
     }
 }
 
-- (void)startRinging {
+// when VoIP notification come then this is called to create "fake ringing" (ios 13)
+- (void)initiateRinging {
     isSpeaker = NO;
     isMute = NO;
+    lastRemoteNumber = stringUnknown;
     CXHandle *callHandle = [[CXHandle alloc] initWithType:CXHandleTypeGeneric value:lastRemoteNumber];
     CXCallUpdate *callUpdate = [self createDefaultCallupdate];
     [callUpdate setLocalizedCallerName:[self pickRemoteString]];
@@ -100,12 +105,21 @@
     [self.callKitProvider reportNewIncomingCallWithUUID:uuid update:callUpdate completion:^(NSError * _Nullable error) {
         if (error) {
             if ([error code] == CXErrorCodeCallDirectoryManagerErrorEntriesOutOfOrder) {
-                // DND mode is activated so let's show missed call local notification
+                // e.g. DND mode is activated
             } else {
                 NSLog(@"Error: %@", error);
             }
         }
     }];
+}
+
+// when there is a real ringing call from SIP
+- (void)onSipStartRinging {
+    isSipRinging = YES;
+    if (answerCallAction != nil) {
+        // if the user is particularly fast at tapping the accept call button then fulfill pending answerCallAction
+        [self answerCall];
+    }
 }
 
 - (void)hangUpCurrentCall:(BOOL)isMissedCall  {
@@ -171,13 +185,22 @@
 }
 
 - (void)provider:(CXProvider *)provider performAnswerCallAction:(CXAnswerCallAction *)action {
-    if (answerCall() == 0) {
-        [action fulfillWithDateConnected:[NSDate date]];
-    } else {
-        [action fail];
-        return;
+    answerCallAction = action;
+    // TODO wait until SIP registration is done and SIP call come...
+    if (isSipRinging) {
+        [self answerCall];
     }
-    [self goToCalling];
+}
+
+-(void)answerCall {
+    if (answerCall() == 0) {
+        [answerCallAction fulfillWithDateConnected:[NSDate date]];
+        answerCallAction = nil;
+        [self goToCalling];
+    } else {
+        [answerCallAction fail];
+    }
+    isSipRinging = NO;
 }
 
 -(void)provider:(CXProvider *)provider performEndCallAction:(CXEndCallAction *)action {

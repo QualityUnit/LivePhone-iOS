@@ -220,12 +220,16 @@ static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_r
         waiting_to_call = NO;
         char* sip_remote_uri = ci.remote_info.ptr;
         NSString *remoteNumber = retrieveRemoteNumber(sip_remote_uri);
-        [callManager setRemoteNumber:remoteNumber];
         NSString *remoteName = retrieveRemoteName(sip_remote_uri);
-        [callManager setRemoteName:remoteName];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [callManager setRemoteNumber:remoteNumber];
+            [callManager setRemoteName:remoteName];
+        });
         pjsua_call_answer(call_id, PJSIP_SC_RINGING, NULL, NULL);
         current_call_id = call_id;
-        [callManager startRinging];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [callManager onSipStartRinging];
+        });
     } else {
         pjsua_call_answer(call_id, PJSIP_SC_BUSY_HERE, NULL, NULL);
     }
@@ -258,7 +262,9 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e) {
         postLocalNotification(CALL_EVENT_CALL_ESTABLISHED, nil);
     } else if (state == PJSIP_INV_STATE_DISCONNECTED) {
         postLocalNotification(CALL_EVENT_CALL_ENDED, nil);
-        [callManager hangUpCurrentCall:isMissedCall];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [callManager hangUpCurrentCall:isMissedCall];
+        });
     }
 }
 

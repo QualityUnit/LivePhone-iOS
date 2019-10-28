@@ -20,7 +20,11 @@
 
 - (void)prepareToIncomingCall;
 
-- (void)startRinging;
+- (void)initiateRinging;
+
+- (void)onSipStartRinging;
+
+- (void)answerCall;
 
 - (void)hangUpCurrentCall:(BOOL)isMissedCall;
 
