@@ -32,31 +32,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES]; // show activity indicator in status bar automatically
     [self setCallManager:[[CallManager alloc] initCallManager]];
-    [UNUserNotificationCenter currentNotificationCenter].delegate = self;
     application.applicationIconBadgeNumber = 0;
-    if( SYSTEM_VERSION_LESS_THAN( @"10.0" ) ) {
-        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound |    UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-        
-    } else {
-        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-        center.delegate = self;
-        [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error)
-         {
-             if( !error )
-             {
-                 [[UIApplication sharedApplication] registerForRemoteNotifications];
-                 NSLog( @"Push registration success." );
-             }
-             else
-             {
-                 NSLog( @"Push registration FAILED" );
-                 NSLog( @"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription );
-                 NSLog( @"SUGGESTIONS: %@ - %@", error.localizedRecoveryOptions, error.localizedRecoverySuggestion );
-             }
-         }];
-    }
-    
     return YES;
 }
 
@@ -103,8 +79,7 @@
     completionHandler();
 }
 
-
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler {
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
     NSString *activityType = [userActivity activityType];
     if ([activityType isEqualToString:@"INStartAudioCallIntent"]) {
         INInteraction *interaction = userActivity.interaction;
@@ -122,93 +97,139 @@
 }
 
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type {
-    NSLog(@"didReceiveIncomingPushWithPayload()");
     if ([type isEqualToString:PKPushTypeVoIP]) {
         NSDictionary *payloadDictionary = payload.dictionaryPayload;
-        NSString *type = [payloadDictionary objectForKey:@"type"];
-        // check if type is set
-        if (type == nil || [type length] == 0) {
-            NSLog(@"Error in push notification: type not set");
-            return;
-        }
-        // check if notification is not older than 'maxPushNotificationDelay' seconds
-        NSString *dateString = [payloadDictionary objectForKey:@"time"];
-        if (![dateString isKindOfClass:[NSString class]]) {
-            NSLog(@"ERROR: Incompatible 'time' type. It should be string.");
-            return;
-        }
-        NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
-        NSDate *datePush = [formatter dateFromString:dateString];
-        if (datePush == nil) {
-            NSLog(@"ERROR: Unknown format of 'time' value: '%@'", dateString);
-            return;
-        }
-        NSLog(@"Date raw: %@", dateString);
-        NSDate *dateSystem = [NSDate date];
-        NSTimeInterval dateDelta = [dateSystem timeIntervalSinceDate:datePush];
-        NSLog(@"Date push: %@", datePush);
-        NSLog(@"Date system: %@", dateSystem);
-        NSLog(@"Delta dates: %f", dateDelta);
-        if (dateDelta > maxPushNotificationDelay) { // get rid of all old push notifications
-            return;
-        }
-        // swich it
-        if ([type isEqualToString:@"I"]) {
-            [self processIncomingCall:payloadDictionary];
-        } else if ([type isEqualToString:@"O"]) {
-            [self processInitCall:payloadDictionary];
-        } else if ([type isEqualToString:@"OC"]) {
-            [self processCancelInitCall:payloadDictionary];
-        } else {
-            NSLog(@"Error: Unknown 'type' %@", type);
-        }
+        [self processPushNotificationPayload:payloadDictionary];
     } else {
         NSLog(@"Error: Unknown PKPushType");
     }
 }
 
 - (void)pushRegistry:(PKPushRegistry *)registry didUpdatePushCredentials:(PKPushCredentials *)credentials forType:(PKPushType)type {
-    NSLog(@"didUpdatePushCredentials()");
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     if ([type isEqualToString:PKPushTypeVoIP]) {
         NSString * pushToken = [Utils stringFromDeviceToken:[credentials token]];
-        NSLog(@"pushToken=%@", pushToken);
+//        NSLog(@"VoIP pushToken = %@", pushToken);
         if (pushToken == nil || [pushToken length] == 0) {
             [dict setObject:@"Cannot get push token." forKey:@"error"];
-        } else {
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:pushToken forKey:memoryKeyPushToken];
-            [userDefaults synchronize];
-            [dict setObject:pushToken forKey:@"pushToken"];
+            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:localNotificationIntoInit object:dict]];
+            return;
         }
-    } else {
-        [dict setObject:@"Unknow PKPushType." forKey:@"error"];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:pushToken forKey:memoryKeyVoipPushToken];
+        [userDefaults synchronize];
+        [dict setObject:pushToken forKey:@"pushToken"];
+        // register APNs notifications
+        [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        center.delegate = self;
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(!error) {
+//                    NSLog(@"APNs granted: %@", granted ? @"Yes" : @"No");
+                    if (granted) {
+                        [[UIApplication sharedApplication] registerForRemoteNotifications];
+                    } else {
+                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:localNotificationIntoInit object:dict]];
+                    }
+                } else {
+                    NSLog(@"APNs failed");
+                    [dict setObject:[NSString stringWithFormat:@"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription] forKey:@"error"];
+                    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:localNotificationIntoInit object:dict]];
+                }
+            });
+         }];
+        return;
     }
+    [dict setObject:@"Unknow PKPushType." forKey:@"error"];
     [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:localNotificationIntoInit object:dict]];
 }
 
-- (void)registerVoipNotifications {
+- (void)processPushNotificationPayload:(NSDictionary *) payloadDictionary {
+    NSString *type = [payloadDictionary objectForKey:@"type"];
+    // check if type is set
+    if (type == nil || [type length] == 0) {
+        NSLog(@"Error in push notification: type not set");
+        return;
+    }
+    // check if notification is not older than 'maxPushNotificationDelay' seconds
+    NSString *dateString = [payloadDictionary objectForKey:@"time"];
+    if (![dateString isKindOfClass:[NSString class]]) {
+        NSLog(@"ERROR: Incompatible 'time' type. It should be string.");
+        return;
+    }
+    NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
+    NSDate *datePush = [formatter dateFromString:dateString];
+    if (datePush == nil) {
+        NSLog(@"ERROR: Unknown format of 'time' value: '%@'", dateString);
+        return;
+    }
+    NSLog(@"Date raw: %@", dateString);
+    NSDate *dateSystem = [NSDate date];
+    NSTimeInterval dateDelta = [dateSystem timeIntervalSinceDate:datePush];
+    NSLog(@"Date push: %@", datePush);
+    NSLog(@"Date system: %@", dateSystem);
+    NSLog(@"Delta dates: %f", dateDelta);
+    if (dateDelta > maxPushNotificationDelay) { // get rid of all old push notifications
+        return;
+    }
+    // swich it
+    if ([type isEqualToString:@"I"]) {
+        [self processIncomingCall:payloadDictionary];
+    } else if ([type isEqualToString:@"O"]) {
+        [self processInitCall:payloadDictionary];
+    } else if ([type isEqualToString:@"OC"]) {
+        [self processCancelInitCall:payloadDictionary];
+    } else {
+        NSLog(@"Error: Unknown 'type' %@", type);
+    }
+}
+
+- (void)registerPushNotifications {
+    // register VoIP notificaions
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     // SCREENSHOOT MODE START (simulator)
 //    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 //    NSString * pushToken = @"XXXXXXXXXXXXXXXXXXXXXXXXXXX";
-//    [userDefaults setObject:pushToken forKey:memoryKeyPushToken];
+//    [userDefaults setObject:pushToken forKey:memoryKeyVoipPushToken];
 //    [userDefaults synchronize];
 //    [dict setObject:pushToken forKey:@"pushToken"];
 //    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:localNotificationIntoInit object:dict]];
     // SCREENSHOOT MODE END
-    [userDefaults removeObjectForKey:memoryKeyPushToken];
+    [userDefaults removeObjectForKey:memoryKeyVoipPushToken];
     self.voipRegistry = [[PKPushRegistry alloc] initWithQueue:dispatch_get_main_queue()];
     [self.voipRegistry setDelegate:self];
     [self.voipRegistry setDesiredPushTypes:[NSSet setWithObject:PKPushTypeVoIP]];
-    [self performSelector:@selector(checkPushNotifications) withObject:self afterDelay:3.0];
+    [self performSelector:@selector(checkVoipPushToken) withObject:self afterDelay:3.0];
+    NSLog( @"VoIP push registration sent..." );
 }
 
-- (void)checkPushNotifications {
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSString *apnsPushToken = [Utils stringFromDeviceToken:deviceToken];
+//    NSLog(@"APNs pushToken = %@", apnsPushToken);
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if ([userDefaults objectForKey:memoryKeyPushToken] == nil) {
+    NSString *pushToken = [userDefaults objectForKey:memoryKeyVoipPushToken];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:pushToken forKey:@"pushToken"];
+    [dict setObject:apnsPushToken forKey:@"apnsToken"];
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:localNotificationIntoInit object:dict]];
+}
+ 
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:@"Remote notification support is unavailable due to error: %@" forKey:@"error"];
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:localNotificationIntoInit object:dict]];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    [self processPushNotificationPayload:userInfo];
+}
+
+- (void)checkVoipPushToken {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults objectForKey:memoryKeyVoipPushToken] == nil) {
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        [dict setObject:@"Your device does not support push notifications." forKey:@"error"];
+        [dict setObject:@"Your device does not support VoIP push notifications." forKey:@"error"];
         [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:localNotificationIntoInit object:dict]];
     }
 }

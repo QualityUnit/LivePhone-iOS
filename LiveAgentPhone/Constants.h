@@ -33,7 +33,7 @@
 #define memoryKeySipHost @"memoryKeySipHost"
 #define memoryKeySipUser @"memoryKeySipUser"
 #define memoryKeySipPassword @"memoryKeySipPassword"
-#define memoryKeyPushToken @"memoryKeyPushToken"
+#define memoryKeyVoipPushToken @"memoryKeyVoipPushToken"
 #define memoryKeyAgentId @"memoryKeyAgentId"
 #define memoryKeyInstallId @"memoryKeyInstallId"
 

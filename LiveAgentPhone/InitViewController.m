@@ -21,7 +21,9 @@
     @private
     NSString *phoneId;
     NSString *remotePushToken;
+    NSString *remoteApnsToken;
     NSString *generatedPushToken;
+    NSString *generatedApnsToken;
     AppDelegate *appDelegate;
 }
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -48,7 +50,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 -(void)dealloc {
@@ -66,20 +67,7 @@
 }
 
 - (void) startInit {
-    NSLog(@"Starting init...");
     [self showInitialState]; // hide error message and show activity indicator
-    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-        if (granted) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self permissionsGranted];
-            });
-        } else {
-            [self showPermissionsError];
-        }
-    }];
-}
-
-- (void)permissionsGranted {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:memoryKeyApikey];
     if (apiKey == nil) {
@@ -89,17 +77,10 @@
     }
 }
 
-- (void)showPermissionsError {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *errMsg = stringPermissionDenied;
-        [self showError:errMsg];
-    });
-}
-
 - (void)getPhone {
     if (phoneId != nil && [phoneId length] != 0) {
-        // if phone has been already loaded, just skip calling '/phone' and check 'params' we've got from that
-        [self putPhoneParams];
+        // if phone has been already loaded, just skip calling GET '/phone' and check 'params' we've got from that
+        [appDelegate registerPushNotifications];
         return;
     }
     [Api getPhone:^(NSDictionary* responseObject) {
@@ -170,10 +151,11 @@
             NSDictionary *params = [NSJSONSerialization JSONObjectWithData:objectData options:NSJSONReadingMutableContainers error:nil];
             if (params != nil && [params count] > 0) {
                 remotePushToken = [params objectForKey:@"pushToken"];
+                remoteApnsToken = [params objectForKey:@"apnsToken"];
             }
         }
         // to check if remote pushtoken exists and is equal to pushtoken of this device then we must invoke voip push registration
-        [self putPhoneParams];
+        [appDelegate registerPushNotifications];
     } failure:^(NSString *errorMessage, BOOL unauthorized) {
         if (unauthorized) {
             [self goToLogin];
@@ -183,17 +165,11 @@
     }];
 }
 
-- (void)putPhoneParams {
-    NSLog(@"Registering voip push token in init...");
-    [appDelegate registerVoipNotifications];
-    // appdelegate will bring push token via 'afterPushRegistration' callback
-}
-
 - (void)onLocalNotification:(NSNotification *)notification {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSDictionary *dict = [notification object];
         if (dict == nil) {
-            [self showError:@"Error: notification object is NULL"];
+            [self showError:@"Error: in-app NSNotification object is NULL"];
             return;
         }
         NSString *error = [dict objectForKey:@"error"];
@@ -202,14 +178,14 @@
             return;
         }
         generatedPushToken = [dict objectForKey:@"pushToken"];
-        //    NSLog(@"Push token is: '%@'", pushToken);
-        if (remotePushToken != nil && [remotePushToken isEqualToString:generatedPushToken]) {
-            NSLog(@"Push token of this device has been already registered!");
-            [self goToHome];
-            return;
-        }
+        generatedApnsToken = [dict objectForKey:@"apnsToken"];
+//        if (remotePushToken != nil && [remotePushToken isEqualToString:generatedPushToken]) {
+//            NSLog(@"Push token and Apns token of this device has been already registered!");
+//            [self goToHome];
+//            return;
+//        }
         NSString *deviceId = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        [Api updatePhoneParams:phoneId pushToken:generatedPushToken deviceId:deviceId success:^() {
+        [Api updatePhoneParams:phoneId pushToken:generatedPushToken apnsToken:generatedApnsToken deviceId:deviceId success:^() {
             [self goToHome];
         } failure:^(NSString *errorMessage) {
             [self showError:errorMessage];
@@ -219,13 +195,24 @@
 
 - (void)goToHome {
     [self showInitialState];
-    [self performSegueWithIdentifier:@"goToHome" sender:nil];
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (granted) {
+                [self performSegueWithIdentifier:@"goToHome" sender:nil];
+            } else {
+                NSString *errMsg = stringPermissionDenied;
+                [self showError:errMsg];
+            }
+        });
+    }];
+    
 }
 
 - (void)goToLogin {
     phoneId = nil;
     remotePushToken = nil;
     generatedPushToken = nil;
+    generatedApnsToken = nil;
     [self showInitialState];
     [self performSegueWithIdentifier:@"goToLogin" sender:nil];
 }

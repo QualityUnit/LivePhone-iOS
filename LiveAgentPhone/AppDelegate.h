@@ -17,7 +17,7 @@
 @property (nonatomic, strong) PKPushRegistry *voipRegistry;
 @property (nonatomic, strong) CallManager *callManager;
 
-- (void)registerVoipNotifications;
+- (void)registerPushNotifications;
 
 - (nullable NSString *) getPendingPhoneNumber;
 

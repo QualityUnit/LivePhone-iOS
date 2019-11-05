@@ -392,7 +392,7 @@
     });
 }
 
-+(void)updatePhoneParams:(NSString *)phoneId pushToken:(NSString *)pushToken deviceId:(NSString *)deviceId success:(void (^)(void))success failure:(void (^)(NSString *errorMessage))failure {
++(void)updatePhoneParams:(NSString *)phoneId pushToken:(NSString *)pushToken apnsToken:(NSString *)apnsToken deviceId:(NSString *)deviceId success:(void (^)(void))success failure:(void (^)(NSString *errorMessage))failure {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
         NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
@@ -407,6 +407,9 @@
         [params setObject:deviceId forKey:@"deviceId"];
         [params setObject:@"ios" forKey:@"platform"];
         [params setObject:pushToken forKey:@"pushToken"];
+        if (apnsToken != nil && apnsToken.length > 0) {
+            [params setObject:apnsToken forKey:@"apnsToken"];
+        }
         [params setObject:[NSNumber numberWithBool:[Utils isDebug]] forKey:@"devMode"];
         NSError *jsonError;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:&jsonError];
@@ -422,6 +425,7 @@
             NSLog(@"%@", requestDescription);
             AFHTTPSessionManager *manager = [Net createSessionManager];
             NSString *paramsJsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//            NSLog(@"UpdatePhoneParams: %@", paramsJsonString);
             NSString *encodedParams = [paramsJsonString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
             [manager PUT:[NSString stringWithFormat:@"phones/%@/_updateParams?params=%@", phoneId, encodedParams] parameters:nil success:^(NSURLSessionTask *task, id responseObject) {
                 NSLog(@"SUCCESS '%@'", requestDescription);
