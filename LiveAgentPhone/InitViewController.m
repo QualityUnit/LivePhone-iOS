@@ -46,6 +46,8 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self startInit];
+//    NSUserDefaults *memory = [NSUserDefaults standardUserDefaults];
+//    [memory removeObjectForKey:memoryKeyApikey];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -56,21 +58,12 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (BOOL)existUrlEmailToken {
-    NSUserDefaults *memory = [NSUserDefaults standardUserDefaults];
-    if ([memory objectForKey:memoryKeyUrl] == nil ||
-        [memory objectForKey:memoryKeyEmail] == nil ||
-        [memory objectForKey:memoryKeyApikey] == nil) {
-        return NO;
-    }
-    return YES;
-}
-
 - (void) startInit {
     [self showInitialState]; // hide error message and show activity indicator
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:memoryKeyApikey];
-    if (apiKey == nil) {
+    NSString *apiKeyId = [userDefaults objectForKey:memoryKeyApikeyId];
+    if (apiKey == nil || apiKeyId == nil) {
         [self goToLogin];
     } else {
         [self getPhone];

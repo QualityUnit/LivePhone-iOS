@@ -28,6 +28,7 @@
 #define memoryKeyUrl @"memoryKeyUrl"
 #define memoryKeyEmail @"memoryKeyEmail"
 #define memoryKeyApikey @"memoryKeyApikey"
+#define memoryKeyApikeyId @"memoryKeyApikeyId"
 #define memoryKeySipId @"memoryKeySipId"
 #define memoryKeySipNumber @"memoryKeySipNumber"
 #define memoryKeySipHost @"memoryKeySipHost"
@@ -36,6 +37,7 @@
 #define memoryKeyVoipPushToken @"memoryKeyVoipPushToken"
 #define memoryKeyAgentId @"memoryKeyAgentId"
 #define memoryKeyInstallId @"memoryKeyInstallId"
+#define memoryKeyDeviceId @"memoryKeyDeviceId"
 
 // local notification names
 #define localNotificationIntoInit @"localNotificationIntoInit"

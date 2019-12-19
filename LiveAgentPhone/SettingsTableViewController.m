@@ -7,6 +7,8 @@
 //
 
 #import "SettingsTableViewController.h"
+#import "Api.h"
+#import "Constants.h"
 
 @interface SettingsTableViewController ()
 
@@ -22,5 +24,30 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (IBAction)logout:(id)sender {
+     [Api logout:^(void){
+         NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
+         [defs removeObjectForKey:memoryKeyApikey];
+         [defs synchronize];
+         [self performSegueWithIdentifier:@"goToInitFromHome" sender:nil];
+    } failure:^(NSString * errorMessage){
+        NSString *strError = stringErrorTitle;
+        UIAlertController * alert = [UIAlertController
+                                     alertControllerWithTitle:strError
+                                     message:errorMessage
+                                     preferredStyle:UIAlertControllerStyleAlert];
+        NSString *strOk = stringOk;
+        UIAlertAction* okButton = [UIAlertAction
+                                    actionWithTitle:strOk
+                                    style:UIAlertActionStyleDefault
+                                    handler:^(UIAlertAction * action) {
+                                        // just hide dialog
+                                    }];
+        [alert addAction:okButton];
+        [self presentViewController:alert animated:YES completion:nil];
+    }];
+ }
+
 
 @end

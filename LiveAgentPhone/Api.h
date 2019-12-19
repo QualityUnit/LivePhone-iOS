@@ -11,6 +11,8 @@
 @interface Api : NSObject
 
 + (void)loginWithUrl:(NSString *)apiUrl email:(NSString *)email password:(NSString *)password verificationCode:(NSString * _Nullable)verificationCode success:(void (^)(void))success failure:(void (^)(NSString *errorMessage))failure invalidPassword:(void (^)(void))invalidPassword verificationCodeRequired:(void (^)(void))verificationCodeRequired verificationCodeFailure:(void (^)(void))verificationCodeFailure tooManyLogins:(void (^)(void))tooManyLogins;
++(void)logout:(void (^)(void))success failure:(void (^)(NSString *errorMessage))failure;
++ (void)deleteApiKey:(void (^)(void))success failure:(void (^)(NSString *errorMessage))failure;
 +(void)getDevices:(void (^)(NSArray *devices))success failure:(void (^)(NSString *errorMessage))failure;
 +(void)updateDevice:(NSDictionary*)body success:(void (^)(NSDictionary *device))success failure:(void (^)(NSString *errorMessage))failure;
 +(void)getDepartmentStatusList:(NSString *)deviceId success:(void (^)(NSArray *deparmentList))success failure:(void (^)(NSString *errorMessage))failure;

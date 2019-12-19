@@ -102,18 +102,102 @@
                 // success
                 NSString *apikey = [body objectForKey:@"key"];
                 if (apikey == nil || apikey.length < 1) {
-                    failure(@"Error: API token not found in login response");
+                    failure(@"Error: apikey not found in login response");
+                    return;
+                }
+                NSNumber *apikeyIdNumber = [body objectForKey:@"id"];
+                NSString *apikeyId = [apikeyIdNumber stringValue];
+                if (apikeyId == nil || apikeyId.length < 1) {
+                    failure(@"Error: apikey ID not found in login response");
                     return;
                 }
                 // response is ok because we've got a token, let's save URL, email and token
                 [userDefaults setObject:apiUrl forKey:memoryKeyUrl];
                 [userDefaults setObject:email forKey:memoryKeyEmail];
                 [userDefaults setObject:apikey forKey:memoryKeyApikey];
+                [userDefaults setObject:apikeyId forKey:memoryKeyApikeyId];
                 [userDefaults synchronize];
                 success();
             });
         }] resume];
     });
+}
+
++ (void)logout:(void (^)(void))success failure:(void (^)(NSString *errorMessage))failure {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+    dispatch_async(queue, ^{
+        // build request
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *deviceId = [userDefaults objectForKey:memoryKeyDeviceId];
+        AFHTTPSessionManager *manager = [Net createSessionManager];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/devices/%@", [manager baseURL], deviceId]] cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:timeoutSec];
+        [request setHTTPMethod:@"DELETE"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:[Net getApikey] forHTTPHeaderField:@"apikey"];
+        NSString *requestDescription = [NSString stringWithFormat:@"DELETE /devices/%@", deviceId];
+        NSLog(@"%@", requestDescription);
+        [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+            if (!error) {
+                if (responseObject != nil && [responseObject isKindOfClass:[NSObject class]]) {
+                    NSLog(@"SUCCESS '%@'", requestDescription);
+                    [userDefaults removeObjectForKey:memoryKeyDeviceId];
+                    [Api deleteApiKey:success failure:failure];
+                } else {
+                    NSString *errorMessage = errorMsgCannotParseResponse;
+                    NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
+                    failure(errorMessage); // dispatch on the same thread
+                }
+            } else {
+                NSString *errorMessage = [error localizedDescription];
+                NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    failure(errorMessage);
+                });
+            }
+        }] resume];
+    });
+}
+
++ (void)deleteApiKey:(void (^)(void))success failure:(void (^)(NSString *errorMessage))failure {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+        dispatch_async(queue, ^{
+            // build request
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString *apikeyId = [userDefaults objectForKey:memoryKeyApikeyId];
+            AFHTTPSessionManager *manager = [Net createSessionManager];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/apikeys/%@", [manager baseURL], apikeyId]] cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:timeoutSec];
+            [request setHTTPMethod:@"DELETE"];
+            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [request setValue:[Net getApikey] forHTTPHeaderField:@"apikey"];
+            NSString *requestDescription = [NSString stringWithFormat:@"DELETE /apikeys/%@", apikeyId];
+            NSLog(@"%@", requestDescription);
+            [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+                if (!error) {
+                    if (responseObject != nil && [responseObject isKindOfClass:[NSObject class]]) {
+                        NSLog(@"SUCCESS '%@'", requestDescription);
+                        [userDefaults removeObjectForKey:memoryKeyApikeyId];
+                        [userDefaults removeObjectForKey:memoryKeyApikey];
+                        [userDefaults removeObjectForKey:memoryKeySipId];
+                        [userDefaults removeObjectForKey:memoryKeyAgentId];
+                        [userDefaults removeObjectForKey:memoryKeySipHost];
+                        [userDefaults removeObjectForKey:memoryKeySipUser];
+                        [userDefaults removeObjectForKey:memoryKeySipPassword];
+                        [userDefaults synchronize];
+                        success(); // dispatch on the same thread
+                    } else {
+                        NSString *errorMessage = errorMsgCannotParseResponse;
+                        NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
+                        failure(errorMessage); // dispatch on the same thread
+                    }
+                } else {
+                    NSString *errorMessage = [error localizedDescription];
+                    NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        failure(errorMessage);
+                    });
+                }
+            }] resume];
+        });
 }
 
 + (void)getDevices:(void (^)(NSArray *devices))success failure:(void (^)(NSString *errorMessage))failure {
@@ -152,29 +236,28 @@
                 NSArray *response = responseObject;
                 NSLog(@"SUCCESS '%@'", requestDescription);
                 // check if mobile device exists (if no then create it)
-                BOOL isMobileDevice = NO;
                 if (response != nil && [response count] > 0) {
                     for (NSDictionary* device in response) {
                         if ([[device objectForKey:@"type"] isEqualToString:@"A"]) {
-                            isMobileDevice = YES;
-                            break;
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                NSString *deviceId = [device objectForKey:@"id"];
+                                [userDefaults setObject:deviceId forKey:memoryKeyDeviceId];
+                                success(response);
+                            });
+                            return;
                         }
                     }
                 }
-                if (!isMobileDevice) {
-                    [self createDeviceWithPhoneId:phoneId agentId:agentId success:^(NSDictionary *mobileDevice) {
-                        // mobile device successfuly created here and add it to the devices array
-                        NSMutableArray* mutableDevices = [NSMutableArray arrayWithArray:response];
-                        [mutableDevices addObject:mobileDevice];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            success(mutableDevices);
-                        });
-                    } failure:failure];
-                } else {
+                [self createDeviceWithPhoneId:phoneId agentId:agentId success:^(NSDictionary *mobileDevice) {
+                    // mobile device successfuly created here and add it to the devices array
+                    NSMutableArray* mutableDevices = [NSMutableArray arrayWithArray:response];
+                    [mutableDevices addObject:mobileDevice];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        success(responseObject);
+                        NSString *deviceId = [mobileDevice objectForKey:@"id"];
+                        [userDefaults setObject:deviceId forKey:memoryKeyDeviceId];
+                        success(mutableDevices);
                     });
-                }
+                } failure:failure];
             } else {
                 NSString *errorMessage = errorMsgCannotParseResponse;
                 NSLog(@"FAILURE '%@' - %@", requestDescription, errorMessage);
