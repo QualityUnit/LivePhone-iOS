@@ -15,24 +15,28 @@ PODS:
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
   - HexColors (4.0.0)
-  - OpenSSL-Universal (1.0.1.19)
-  - pjsip (2.5.5.2):
-    - OpenSSL-Universal (= 1.0.1.19)
-  - UIView+draggable (1.1.0)
+  - pjsip (2.9.0.2)
+  - "UIView+draggable (1.1.0)"
 
 DEPENDENCIES:
   - AFNetworking (~> 3.1)
   - HexColors (~> 4.0.0)
-  - pjsip (~> 2.5.5.2)
-  - UIView+draggable
+  - pjsip (~> 2.9.0.2)
+  - "UIView+draggable"
+
+SPEC REPOS:
+  trunk:
+    - AFNetworking
+    - HexColors
+    - pjsip
+    - "UIView+draggable"
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   HexColors: 5f95843ef89aff6a72e1fd3a8ebabf205cc43379
-  OpenSSL-Universal: 07489b0316f0f4f53c928e402e2ecbbedf96d93b
-  pjsip: ecfdeef822209118bc343a8f6a858f79cd66c10a
-  UIView+draggable: ddfbeb6bdfdeba63d9ccf32dc9be2b66cc589717
+  pjsip: faa8aa0e79b341155801b87c2ea3015003d05ed9
+  "UIView+draggable": ddfbeb6bdfdeba63d9ccf32dc9be2b66cc589717
 
-PODFILE CHECKSUM: 59b12830642cf567f5f6501641aba035ffe2f382
+PODFILE CHECKSUM: 3023e3fcd5e0c9b167086ecc0d57edcb6b298575
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.8.4

@@ -18,6 +18,7 @@
     MainTabBarController *mainTabBarController;
     NSMutableDictionary *devices;
     NSLayoutConstraint *browserMessageHeight;
+    UIRefreshControl *refreshControl;
 }
 @end
 
@@ -26,6 +27,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     devices = [[NSMutableDictionary alloc] init];
+    refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
+    self.tableView.refreshControl = refreshControl;
     [self refreshAvailability];
 }
 
@@ -76,6 +80,11 @@
     } else {
         [self reloadTable:nil];
     }
+}
+
+- (void)onRefresh {
+    [refreshControl endRefreshing];
+    [self refreshAvailability];
 }
 
 - (void)refreshAvailability {

@@ -14,6 +14,7 @@
 #import "Utils.h"
 #import <AVFoundation/AVFoundation.h>
 #import <UserNotifications/UserNotifications.h>
+#import <AVKit/AVKit.h>
 
 @interface CallManager () {
     @private
@@ -185,6 +186,7 @@
 }
 
 - (void)provider:(CXProvider *)provider performAnswerCallAction:(CXAnswerCallAction *)action {
+    [self configureAudioSession];
     answerCallAction = action;
     // TODO wait until SIP registration is done and SIP call come...
     if (isSipRinging) {
@@ -211,6 +213,7 @@
 }
 
 - (void)provider:(CXProvider *)provider performStartCallAction:(CXStartCallAction *)action {
+    [self configureAudioSession];
     lastRemoteNumber = [[action handle] value];
     NSString *calleeNumberWithPrefix = [NSString stringWithFormat:@"%@%@", calleePrefix, lastRemoteNumber];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -253,6 +256,36 @@
 
 - (void)provider:(CXProvider *)provider didActivateAudioSession:(AVAudioSession *)audioSession {
     setAudioDevice();
+//    AVAudioSession *avAudioSession = [AVAudioSession sharedInstance];
+//    NSError* error;
+//    NSArray *availableInputs = [avAudioSession availableInputs];
+//
+//    for (AVAudioSessionPortDescription *input in availableInputs) {
+//        if ([input.portType isEqualToString:AVAudioSessionPortBluetoothHFP]) {
+//            NSLog(@"Yess!");
+//        }
+//    }
+//    if(![avAudioSession
+//         setCategory:AVAudioSessionCategoryPlayAndRecord
+//         mode:AVAudioSessionModeVoiceChat
+//         options:AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionAllowBluetoothA2DP
+//         error:&error]) {
+//        NSLog(@"AVAudioSession error AVAudioSessionCategoryPlayAndRecord:%@", error);
+//    }
+//    if (![avAudioSession overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error]) {
+//        NSLog(@"AVAudioSession error overrideOutputAudioPort to Reciever:%@", error);
+//    }
+//    if (![avAudioSession setActive:YES error:&error]) {
+//        NSLog(@"AVAudioSession error activating: %@", error);
+//    }
+}
+
+- (void)provider:(CXProvider *)provider didDeactivateAudioSession:(AVAudioSession *)audioSession {
+    AVAudioSession *avAudioSession = [AVAudioSession sharedInstance];
+    NSError* error;
+    if (![avAudioSession setActive:NO error:&error]) {
+        NSLog(@"AVAudioSession error activating: %@", error);
+    }
 }
 
 - (void)goToCalling {
@@ -274,43 +307,20 @@
     }];
 }
 
-- (void)toggleSpeaker {
-    AVAudioSession *avAudioSession = [AVAudioSession sharedInstance];
-    NSError* error;
-    if (!isSpeaker) {
-        //set the audioSession override
-        if(![avAudioSession setCategory:AVAudioSessionCategoryPlayAndRecord
-                            withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth
-                                  error:&error]) {
-            NSLog(@"AVAudioSession error AVAudioSessionCategoryPlayAndRecord:%@", error);
-        }
-        //activate the audio session
-        if (![avAudioSession setActive:YES error:&error]) {
-            NSLog(@"AVAudioSession error activating: %@", error);
-        } else {
-            NSLog(@"Speaker active");
-            isSpeaker = YES;
-        }
-    } else {
-        //Force current audio out through reciever
-        //set the audioSession override
-        if(![avAudioSession setCategory:AVAudioSessionCategoryPlayAndRecord
-                            withOptions:AVAudioSessionCategoryOptionAllowBluetooth
-                                  error:&error]) {
-            NSLog(@"AVAudioSession error AVAudioSessionCategoryPlayAndRecord:%@", error);
-        }
-        if (![avAudioSession overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error]) {
-            NSLog(@"AVAudioSession error overrideOutputAudioPort to Reciever:%@", error);
-        }
-        //activate the audio session
-        if (![avAudioSession setActive:YES error:&error]) {
-            NSLog(@"AVAudioSession error activating: %@", error);
-        } else {
-            NSLog(@"Speaker deactivated");
-            isSpeaker = NO;
-        }
+- (void)configureAudioSession {
+    NSError *audioSessionCategoryError;
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionCategoryError];
+    NSLog(@"Setting AVAudioSessionCategory to \"Play and Record\"");
+    if (audioSessionCategoryError) {
+        NSLog(@"Error setting the correct AVAudioSession category");
     }
-    [self notifySpeaker];
+    // set the mode to voice chat
+    NSError *audioSessionModeError;
+    [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeVoiceChat error:&audioSessionModeError];
+    NSLog(@"Setting AVAudioSessionCategory to \"Mode Voice Chat\"");
+    if (audioSessionModeError) {
+        NSLog(@"Error setting the correct AVAudioSession mode");
+    }
 }
 
 - (void)sendDtmf:(nonnull NSString *) digitsString {
@@ -342,13 +352,6 @@
     [self postCallDataNotificationWithData:obj];
 }
 
-- (void)notifySpeaker {
-    NSMutableDictionary *obj = [NSMutableDictionary dictionary];
-    [obj setObject:CALL_DATA_SPEAKER forKey:CALL_KEY_DATA];
-    [obj setObject:(isSpeaker ? [NSNumber numberWithInt:1] : [NSNumber numberWithInt:0]) forKey:@"result"];
-    [self postCallDataNotificationWithData:obj];
-}
-
 - (void)notifyHold {
     NSMutableDictionary *obj = [NSMutableDictionary dictionary];
     [obj setObject:CALL_DATA_HOLD forKey:CALL_KEY_DATA];
@@ -371,7 +374,6 @@
 
 - (void)notifyAll {
     [self notifyMute];
-    [self notifySpeaker];
     [self notifyRemoteData];
     [self notifyHold];
     [self postCallEventNotificationWithKey:lastEvent message:lastMessage];

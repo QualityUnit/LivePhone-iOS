@@ -11,6 +11,7 @@
 #import "XCPjsua.h"
 #import "Utils.h"
 #import "AppDelegate.h"
+#import <AVKit/AVKit.h>
 
 @interface CallingTableViewController () {
     @private
@@ -18,8 +19,8 @@
 }
 @property (weak, nonatomic) IBOutlet UILabel *callingWithLabel;
 @property (weak, nonatomic) IBOutlet UIButton *buttonMicOff;
-@property (weak, nonatomic) IBOutlet UIButton *buttonSpeaker;
 @property (weak, nonatomic) IBOutlet UIButton *buttonHold;
+@property (weak, nonatomic) UIStackView *audioOutput;
 @property (weak, nonatomic) IBOutlet UILabel *labelState;
 
 @end
@@ -37,6 +38,7 @@
     NSString *strBack = stringBack;
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:strBack style: UIBarButtonItemStylePlain target:self action:@selector(onTapBack)];
     self.navigationItem.leftBarButtonItem = backButton;
+    [self addOutputButton];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -78,13 +80,6 @@
         NSString *remoteName = [dict objectForKey:@"remoteName"];
         if (remoteName != nil && [remoteName length] > 0) {
             [[self callingWithLabel] setText:remoteName];
-        }
-    } else if ([dataType isEqualToString:CALL_DATA_SPEAKER]) {
-        NSNumber *result = [dict objectForKey:@"result"];
-        if ([result intValue] == -1) {
-            [self showState:@"Cannot set or unset speaker"];
-        } else {
-            [self setTintEnabled:[result intValue] onButton:[self buttonSpeaker]];
         }
     } else if ([dataType isEqualToString:CALL_DATA_HOLD]) {
         NSNumber *result = [dict objectForKey:@"result"];
@@ -137,8 +132,15 @@
     [[appDelegate callManager] toggleMute];
 }
 
-- (IBAction)onClickSpeaker:(id)sender {
-    [[appDelegate callManager] toggleSpeaker];
+- (void)addOutputButton {
+    AVRoutePickerView *routePickerView = [AVRoutePickerView new];
+//    routePickerView.backgroundColor = [UIColor greenColor];
+    routePickerView.activeTintColor = [UIColor redColor];
+    routePickerView.tintColor = [UIColor darkGrayColor];
+    [routePickerView.layer setFrame:CGRectMake(0, 0, 64, 64)];
+    [[self audioOutput] insertArrangedSubview:routePickerView atIndex:1];
+    
+//    [[appDelegate callManager] toggleSpeaker];
 }
 
 - (IBAction)onClickHold:(id)sender {

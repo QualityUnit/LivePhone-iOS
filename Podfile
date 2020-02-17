@@ -9,7 +9,7 @@ target 'LiveAgentPhone' do
   pod 'AFNetworking', '~> 3.1'
   #pod 'IQKeyboardManager'
   pod 'HexColors', '~> 4.0.0'
-  pod 'pjsip', '~> 2.5.5.2'
+  pod 'pjsip', '~> 2.9.0.2'
 #  pod 'JVFloatLabeledTextField'
     pod 'UIView+draggable'
 

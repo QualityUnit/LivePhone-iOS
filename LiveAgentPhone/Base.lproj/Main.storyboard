@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="COE-73-soO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="COE-73-soO">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -20,7 +20,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ua6-gi-Idr">
-                                <rect key="frame" x="239" y="240" width="20" height="20"/>
+                                <rect key="frame" x="238" y="240" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TlH-9r-fnz">
@@ -653,23 +653,15 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="500" height="44"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TPJ-dP-yUo">
-                                                            <rect key="frame" x="0.0" y="0.0" width="125" height="44"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="166.5" height="44"/>
                                                             <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             <state key="normal" image="microphone_off"/>
                                                             <connections>
                                                                 <action selector="onClickMute:" destination="a6X-ki-6n9" eventType="touchUpInside" id="n2z-Gu-hkd"/>
                                                             </connections>
                                                         </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8MB-ue-thL">
-                                                            <rect key="frame" x="125" y="0.0" width="125" height="44"/>
-                                                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <state key="normal" image="volume_high"/>
-                                                            <connections>
-                                                                <action selector="onClickSpeaker:" destination="a6X-ki-6n9" eventType="touchUpInside" id="o31-ic-a4d"/>
-                                                            </connections>
-                                                        </button>
                                                         <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cm3-AM-nc9">
-                                                            <rect key="frame" x="250" y="0.0" width="125" height="44"/>
+                                                            <rect key="frame" x="166.5" y="0.0" width="167" height="44"/>
                                                             <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             <state key="normal" image="Dialpad"/>
                                                             <connections>
@@ -677,7 +669,7 @@
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lwf-VD-X8s">
-                                                            <rect key="frame" x="375" y="0.0" width="125" height="44"/>
+                                                            <rect key="frame" x="333.5" y="0.0" width="166.5" height="44"/>
                                                             <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             <state key="normal" image="pause"/>
                                                             <connections>
@@ -686,11 +678,9 @@
                                                         </button>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstAttribute="bottom" secondItem="8MB-ue-thL" secondAttribute="bottom" id="5pJ-gg-YEB"/>
                                                         <constraint firstItem="TPJ-dP-yUo" firstAttribute="top" secondItem="PP4-vq-HUC" secondAttribute="top" id="Luv-6n-fCO"/>
                                                         <constraint firstItem="cm3-AM-nc9" firstAttribute="top" secondItem="PP4-vq-HUC" secondAttribute="top" id="OPE-FV-6Vm"/>
                                                         <constraint firstAttribute="bottom" secondItem="cm3-AM-nc9" secondAttribute="bottom" id="UZX-aN-7CW"/>
-                                                        <constraint firstItem="8MB-ue-thL" firstAttribute="top" secondItem="PP4-vq-HUC" secondAttribute="top" id="h44-zr-yHb"/>
                                                         <constraint firstItem="lwf-VD-X8s" firstAttribute="top" secondItem="PP4-vq-HUC" secondAttribute="top" id="jwU-vt-DVa"/>
                                                         <constraint firstAttribute="bottom" secondItem="lwf-VD-X8s" secondAttribute="bottom" id="mRq-5n-k8B"/>
                                                         <constraint firstAttribute="bottom" secondItem="TPJ-dP-yUo" secondAttribute="bottom" id="nJf-BM-bcG"/>
@@ -771,9 +761,9 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="500" height="500"/>
                     <connections>
+                        <outlet property="audioOutput" destination="PP4-vq-HUC" id="RSo-eu-p9D"/>
                         <outlet property="buttonHold" destination="lwf-VD-X8s" id="cpE-b4-SY6"/>
                         <outlet property="buttonMicOff" destination="TPJ-dP-yUo" id="b7d-o3-2iw"/>
-                        <outlet property="buttonSpeaker" destination="8MB-ue-thL" id="2az-KY-ZVN"/>
                         <outlet property="callingWithLabel" destination="DVn-6f-fap" id="zdx-wj-F1s"/>
                         <outlet property="labelState" destination="67Y-Y9-BO3" id="w2G-0M-8oN"/>
                     </connections>
@@ -1416,7 +1406,6 @@
         <image name="pause" width="24" height="24"/>
         <image name="phoneHangupWhite" width="24" height="24"/>
         <image name="phoneWhite" width="24" height="24"/>
-        <image name="volume_high" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="AZ3-QB-QWR"/>

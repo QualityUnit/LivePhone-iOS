@@ -38,11 +38,11 @@ void postLocalNotification(NSString *eventName ,NSString *errorMessage);
 int registerSipUser(char *sipDomain, char *sipUser, char *sipPassword);
 void incomingCall(char* sipHost, char* sipUser, char* sipPassword, CallManager *callManager);
 int startCalling(char* destUri);
-int waitForIncomingCall();
-void destroySip();
+int waitForIncomingCall(void);
+void destroySip(void);
 NSString* retrieveRemoteNumber(char *remoteUriCharArray);
 NSString* retrieveRemoteName(char *remoteUriCharArray);
-pjsua_call_setting createCallSettings();
+pjsua_call_setting createCallSettings(void);
 
 int initAndRegister(char* sipHost, char* sipUser, char* sipPassword) {
     if (!isPjsuaRunning()) {
@@ -421,10 +421,6 @@ int answerCall() {
 
 int setAudioDevice() {
     // this should be called only from CallKit
-    if (!isOngoingCall()) {
-        NSLog(@"Error while setting audio device: There is no any ongoing call");
-        return 1;
-    }
     NSLog(@"#### Setting audio dev");
     pj_status_t status = pjsua_set_snd_dev(PJMEDIA_AUD_DEFAULT_CAPTURE_DEV, PJMEDIA_AUD_DEFAULT_PLAYBACK_DEV);
     if (status != PJ_SUCCESS) {

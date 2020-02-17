@@ -41,12 +41,6 @@
  */
 - (void)toggleMute;
 
-
-/**
- Toggle speaker on or off
- */
-- (void)toggleSpeaker;
-
 /**
  Toggle hold on or off
  */

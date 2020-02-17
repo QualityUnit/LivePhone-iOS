@@ -28,7 +28,6 @@
 // call data values
 #define CALL_DATA_MUTE @"CALL_DATA_MUTE"
 #define CALL_DATA_REMOTE @"CALL_DATA_REMOTE"
-#define CALL_DATA_SPEAKER @"CALL_DATA_SPEAKER"
 #define CALL_DATA_HOLD @"CALL_DATA_HOLD"
 
 /**
@@ -53,19 +52,20 @@ void incomingCall(char* sipHost, char* sipUser, char* sipPassword, CallManager *
 /**
  Set audio device properly
  */
-int setAudioDevice();
+int setAudioDevice(void);
+
 
 /**
  Answer ringing call
 
  @return 0 if OK otherwise 1
  */
-int answerCall();
+int answerCall(void);
 
 /**
  * End ongoing VoIP calls
  */
-void endCall();
+void endCall(void);
 
 
 /**
@@ -73,12 +73,12 @@ void endCall();
 
  @return YES if is active otherwise NO
  */
-BOOL isPjsuaRunning();
+BOOL isPjsuaRunning(void);
 
 /**
  * Check if any ongoing call is happening right now
  */
-BOOL isOngoingCall();
+BOOL isOngoingCall(void);
 
 /**
  Mute or unmute microphone
@@ -100,7 +100,7 @@ int sendDtmfDigits(char* digitsCharArray);
 /**
  Set hold
  
- @param isHold 
+ @param isHold is hold?
  @return if success return 0 otherwise 1
  */
 int setHold(BOOL isHold);
