@@ -173,7 +173,7 @@
     if (dateDelta > maxPushNotificationDelay) { // get rid of all old push notifications
         return;
     }
-    // swich it
+    // switch it
     if ([type isEqualToString:@"I"]) {
         [self processIncomingCall:payloadDictionary];
     } else if ([type isEqualToString:@"O"]) {

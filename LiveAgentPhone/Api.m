@@ -49,7 +49,7 @@
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:0 error:&error];
         NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/apikeys/_login", [manager baseURL]]] cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:timeoutSec];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@apikeys/_login", [manager baseURL]]] cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:timeoutSec];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         [request setHTTPBody:[jsonString dataUsingEncoding:NSUTF8StringEncoding]];
@@ -130,7 +130,7 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *deviceId = [userDefaults objectForKey:memoryKeyDeviceId];
         AFHTTPSessionManager *manager = [Net createSessionManager];
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/devices/%@", [manager baseURL], deviceId]] cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:timeoutSec];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@devices/%@", [manager baseURL], deviceId]] cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:timeoutSec];
         [request setHTTPMethod:@"DELETE"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         [request setValue:[Net getApikey] forHTTPHeaderField:@"apikey"];
@@ -165,7 +165,7 @@
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apikeyId = [userDefaults objectForKey:memoryKeyApikeyId];
             AFHTTPSessionManager *manager = [Net createSessionManager];
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/apikeys/%@", [manager baseURL], apikeyId]] cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:timeoutSec];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@apikeys/%@", [manager baseURL], apikeyId]] cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:timeoutSec];
             [request setHTTPMethod:@"DELETE"];
             [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
             [request setValue:[Net getApikey] forHTTPHeaderField:@"apikey"];
@@ -288,7 +288,7 @@
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:0 error:&error];
         NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/devices", [manager baseURL]]] cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:timeoutSec];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@devices", [manager baseURL]]] cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:timeoutSec];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         [request setValue:[Net getApikey] forHTTPHeaderField:@"apikey"];
@@ -326,7 +326,7 @@
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:body options:0 error:&error];
         NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        NSMutableURLRequest *req = [[AFJSONRequestSerializer serializer ] requestWithMethod:@"PUT" URLString:[NSString stringWithFormat:@"%@/devices/%@", [manager baseURL], deviceId] parameters:nil error:nil];
+        NSMutableURLRequest *req = [[AFJSONRequestSerializer serializer ] requestWithMethod:@"PUT" URLString:[NSString stringWithFormat:@"%@devices/%@", [manager baseURL], deviceId] parameters:nil error:nil];
         req.timeoutInterval = timeoutSec;
         [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         [req setValue:[Net getApikey] forHTTPHeaderField:@"apikey"];
@@ -413,7 +413,7 @@
         NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         NSString *deviceId = [body objectForKey:@"device_id"];
         NSString *departmentId = [body objectForKey:@"department_id"];
-        NSMutableURLRequest *req = [[AFJSONRequestSerializer serializer ] requestWithMethod:@"PUT" URLString:[NSString stringWithFormat:@"%@/devices/%@/departments/%@", [manager baseURL], deviceId, departmentId] parameters:nil error:nil];
+        NSMutableURLRequest *req = [[AFJSONRequestSerializer serializer ] requestWithMethod:@"PUT" URLString:[NSString stringWithFormat:@"%@devices/%@/departments/%@", [manager baseURL], deviceId, departmentId] parameters:nil error:nil];
         req.timeoutInterval = timeoutSec;
         [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         [req setValue:[Net getApikey] forHTTPHeaderField:@"apikey"];
