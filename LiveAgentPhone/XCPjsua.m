@@ -79,25 +79,15 @@ int initAndRegister(char* sipHost, char* sipUser, char* sipPassword) {
             }
             
         }
-        // Add UDP transport.
-//        {
-//            pjsua_transport_config cfg;
-//            pjsua_transport_config_default(&cfg);
-//            cfg.port = 5080;
-//            status = pjsua_transport_create(PJSIP_TRANSPORT_UDP, &cfg, NULL);
-//            if (status != PJ_SUCCESS) {
-//                postLocalNotification(CALL_EVENT_ERROR, @"Error creating UDP transport");
-//                return 1;
-//            }
-//        }
         // Add TCP transport.
         {
             pjsua_transport_config cfg;
             pjsua_transport_config_default(&cfg);
-//            cfg.port = 5080;
+            cfg.port = 5080;
             status = pjsua_transport_create(PJSIP_TRANSPORT_TCP, &cfg, NULL);
             if (status != PJ_SUCCESS) {
                 postLocalNotification(CALL_EVENT_ERROR, @"Error creating TCP transport");
+                return 1;
             }
         }
         // Initialization is done, now start pjsua
