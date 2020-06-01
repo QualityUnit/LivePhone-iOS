@@ -80,21 +80,21 @@ int initAndRegister(char* sipHost, char* sipUser, char* sipPassword) {
             
         }
         // Add UDP transport.
-        {
-            pjsua_transport_config cfg;
-            pjsua_transport_config_default(&cfg);
-            cfg.port = 5080;
-            status = pjsua_transport_create(PJSIP_TRANSPORT_UDP, &cfg, NULL);
-            if (status != PJ_SUCCESS) {
-                postLocalNotification(CALL_EVENT_ERROR, @"Error creating UDP transport");
-                return 1;
-            }
-        }
+//        {
+//            pjsua_transport_config cfg;
+//            pjsua_transport_config_default(&cfg);
+//            cfg.port = 5080;
+//            status = pjsua_transport_create(PJSIP_TRANSPORT_UDP, &cfg, NULL);
+//            if (status != PJ_SUCCESS) {
+//                postLocalNotification(CALL_EVENT_ERROR, @"Error creating UDP transport");
+//                return 1;
+//            }
+//        }
         // Add TCP transport.
         {
             pjsua_transport_config cfg;
             pjsua_transport_config_default(&cfg);
-            cfg.port = 5080;
+//            cfg.port = 5080;
             status = pjsua_transport_create(PJSIP_TRANSPORT_TCP, &cfg, NULL);
             if (status != PJ_SUCCESS) {
                 postLocalNotification(CALL_EVENT_ERROR, @"Error creating TCP transport");
@@ -128,10 +128,10 @@ int registerSipUser(char *sipDomain, char *sipUser, char *sipPassword) {
     pjsua_acc_config_default(&cfg);
     cfg.reg_retry_interval = 0;
     char regUri[MAX_SIP_REG_URI_LENGTH];
-    sprintf(regUri, "sip:%s", sipDomain);
+    sprintf(regUri, "sip:%s;transport=tcp", sipDomain);
     cfg.reg_uri = pj_str(regUri);
     char sipId[MAX_SIP_ID_LENGTH];
-    sprintf(sipId, "sip:%s@%s", sipUser, sipDomain);
+    sprintf(sipId, "sip:%s@%s;transport=tcp", sipUser, sipDomain);
     cfg.id = pj_str(sipId);
     cfg.cred_count = 1;
     cfg.cred_info->realm = pj_str("*");
