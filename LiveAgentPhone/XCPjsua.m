@@ -58,6 +58,8 @@ int initAndRegister(char* sipHost, char* sipUser, char* sipPassword) {
             // general config
             pjsua_config cfg;
             pjsua_config_default (&cfg);
+            cfg.user_agent = pj_str("Pjsua2 iOS");
+            cfg.stun_host = pj_str("stun.pjsip.org");
             // media config
             pjsua_media_config media_cfg;
             pjsua_media_config_default(&media_cfg);
@@ -138,6 +140,8 @@ int registerSipUser(char *sipDomain, char *sipUser, char *sipPassword) {
 }
 
 int startCalling(char* destUri) {
+    char destUriPostfix[] = ";transport=tcp";
+    strcat(destUri, destUriPostfix);
     postLocalNotification(CALL_EVENT_STARTING_CALL, nil);
     pj_str_t uri = pj_str(destUri);
     pjsua_call_setting call_settings = createCallSettings();
