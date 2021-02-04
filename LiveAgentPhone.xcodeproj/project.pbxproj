@@ -34,6 +34,7 @@
 		309997A91F976222003C035D /* MainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 309997A81F976222003C035D /* MainTabBarController.m */; };
 		30AEF1291E5B085D00D92FB1 /* CallManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 30AEF1281E5B085D00D92FB1 /* CallManager.m */; };
 		30AEF1311E61D0AE00D92FB1 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 30AEF1301E61D0AE00D92FB1 /* NSString+MD5.m */; };
+		30B1067C24F7A1F5004BF2B3 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30B1067B24F7A1F5004BF2B3 /* WebKit.framework */; };
 		30B8D8D31EBE3E5600B61EB3 /* DtmfTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30B8D8D21EBE3E5600B61EB3 /* DtmfTableViewController.m */; };
 		30BDC0D01F505CA600596FF8 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30BDC0CF1F505CA600596FF8 /* Intents.framework */; };
 		30DE2DD7206255D400F8F0C7 /* InitCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30DE2DD6206255D400F8F0C7 /* InitCallViewController.m */; };
@@ -131,6 +132,7 @@
 		30AEF1281E5B085D00D92FB1 /* CallManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallManager.m; sourceTree = "<group>"; };
 		30AEF12F1E61D0AE00D92FB1 /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
 		30AEF1301E61D0AE00D92FB1 /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
+		30B1067B24F7A1F5004BF2B3 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		30B8D8D11EBE3E5600B61EB3 /* DtmfTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DtmfTableViewController.h; sourceTree = "<group>"; };
 		30B8D8D21EBE3E5600B61EB3 /* DtmfTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DtmfTableViewController.m; sourceTree = "<group>"; };
 		30BDC0CF1F505CA600596FF8 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
@@ -166,6 +168,7 @@
 			files = (
 				30BDC0D01F505CA600596FF8 /* Intents.framework in Frameworks */,
 				309862C01E571BE300321C1E /* PushKit.framework in Frameworks */,
+				30B1067C24F7A1F5004BF2B3 /* WebKit.framework in Frameworks */,
 				309862BE1E5337EC00321C1E /* CallKit.framework in Frameworks */,
 				307CD0961E3FF4AE0073DA3B /* SystemConfiguration.framework in Frameworks */,
 				42683EC53062D2FA6CEB64A6 /* Pods_LiveAgentPhone.framework in Frameworks */,
@@ -194,6 +197,7 @@
 		1F98DDA9073D1AE25E7B4435 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				30B1067B24F7A1F5004BF2B3 /* WebKit.framework */,
 				3010DB121F9E91CA00CAAD7B /* AFNetworking.framework */,
 				3010DB131F9E91CA00CAAD7B /* HexColors.framework */,
 				3010DB141F9E91CA00CAAD7B /* UIView_draggable.framework */,

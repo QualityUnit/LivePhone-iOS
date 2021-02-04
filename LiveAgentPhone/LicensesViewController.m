@@ -7,9 +7,10 @@
 //
 
 #import "LicensesViewController.h"
+#import <WebKit/WebKit.h>
 
 @interface LicensesViewController ()
-@property (weak, nonatomic) IBOutlet UIWebView *webView;
+@property (weak, nonatomic) IBOutlet WKWebView *webView;
 
 @end
 
