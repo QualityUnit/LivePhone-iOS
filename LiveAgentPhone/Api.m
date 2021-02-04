@@ -114,7 +114,7 @@
                 // response is ok because we've got a token, let's save URL, email and token
                 [userDefaults setObject:apiUrl forKey:memoryKeyUrl];
                 [userDefaults setObject:email forKey:memoryKeyEmail];
-                [userDefaults setObject:apikey forKey:memoryKeyApikey];
+                [Utils saveToKeychainForKey:keychainKeyApikey value:apikey];
                 [userDefaults setObject:apikeyId forKey:memoryKeyApikeyId];
                 [userDefaults synchronize];
                 success();
@@ -176,12 +176,12 @@
                     if (responseObject != nil && [responseObject isKindOfClass:[NSObject class]]) {
                         NSLog(@"SUCCESS '%@'", requestDescription);
                         [userDefaults removeObjectForKey:memoryKeyApikeyId];
-                        [userDefaults removeObjectForKey:memoryKeyApikey];
+                        [Utils deleteFromKeychainForKey:keychainKeyApikey];
                         [userDefaults removeObjectForKey:memoryKeySipId];
                         [userDefaults removeObjectForKey:memoryKeyAgentId];
                         [userDefaults removeObjectForKey:memoryKeySipHost];
                         [userDefaults removeObjectForKey:memoryKeySipUser];
-                        [userDefaults removeObjectForKey:memoryKeySipPassword];
+                        [Utils deleteFromKeychainForKey:keychainKeySipPassword];
                         [userDefaults synchronize];
                         success(); // dispatch on the same thread
                     } else {
@@ -242,6 +242,7 @@
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 NSString *deviceId = [device objectForKey:@"id"];
                                 [userDefaults setObject:deviceId forKey:memoryKeyDeviceId];
+                                [userDefaults synchronize];
                                 success(response);
                             });
                             return;
@@ -255,6 +256,7 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         NSString *deviceId = [mobileDevice objectForKey:@"id"];
                         [userDefaults setObject:deviceId forKey:memoryKeyDeviceId];
+                        [userDefaults synchronize];
                         success(mutableDevices);
                     });
                 } failure:failure];

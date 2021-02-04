@@ -8,6 +8,7 @@
 
 #import "Net.h"
 #import "Constants.h"
+#import "Utils.h"
 
 @implementation Net
 
@@ -34,7 +35,7 @@
 }
 
 + (NSString *)getApikey {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:memoryKeyApikey];
+    return [Utils loadFromKeychainForKey:keychainKeyApikey deprecatedMemoryKey:deprecatedMemoryKeyApikey];
 }
 
 @end

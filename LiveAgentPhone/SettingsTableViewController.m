@@ -9,6 +9,7 @@
 #import "SettingsTableViewController.h"
 #import "Api.h"
 #import "Constants.h"
+#import "Utils.h"
 
 @interface SettingsTableViewController ()
 
@@ -27,9 +28,9 @@
 
 - (IBAction)logout:(id)sender {
      [Api logout:^(void){
-         NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-         [defs removeObjectForKey:memoryKeyApikey];
-         [defs synchronize];
+//         NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
+//         [Utils deleteFromKeychainForKey:keychainKeyApikey];
+//         [defs synchronize];
          [self performSegueWithIdentifier:@"goToInitFromHome" sender:nil];
     } failure:^(NSString * errorMessage){
         NSString *strError = stringErrorTitle;

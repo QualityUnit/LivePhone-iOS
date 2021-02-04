@@ -20,5 +20,8 @@
 + (nonnull NSString *)createCalleeUriWithPhoneNumber:(nonnull NSString *)phoneNumber sipHost:(nonnull NSString *)sipHost;
 + (BOOL) isDebug;
 + (NSString *)createContactName:(NSDictionary *)dataItem;
++ (void)saveToKeychainForKey:(nonnull NSString *)key value:(nullable NSString *)value;
++ (NSString *)loadFromKeychainForKey:(nonnull NSString *)key deprecatedMemoryKey:(nonnull NSString *)deprecatedMemoryKey;
++ (void)deleteFromKeychainForKey:(nonnull NSString *)key;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "Utils.h"
 #import "Constants.h"
+#import "KFKeychain.h"
 
 @implementation Utils
 
@@ -38,7 +39,7 @@
 
 + (BOOL)isAuthenticated {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *apiKey = [userDefaults objectForKey:memoryKeyApikey];
+    NSString *apiKey = [userDefaults objectForKey:deprecatedMemoryKeyApikey];
     return apiKey != nil;
 }
 
@@ -86,6 +87,28 @@
         }
     }
     return stringToView;
+}
+
++ (void)saveToKeychainForKey:(nonnull NSString *)key value:(nullable NSString *)value {
+    [KFKeychain saveObject:value forKey:key];
+}
+
++ (NSString *)loadFromKeychainForKey:(nonnull NSString *)key deprecatedMemoryKey:(nonnull NSString *)deprecatedMemoryKey {
+    NSString *value = [KFKeychain loadObjectForKey:key];
+    if (value == nil || [value length] == 0) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        value = [userDefaults objectForKey:deprecatedMemoryKey];
+        if (value != nil && [value length] > 0) {
+            [Utils saveToKeychainForKey:key value:value];
+            [userDefaults removeObjectForKey:deprecatedMemoryKey];
+            [userDefaults synchronize];
+        }
+    }
+    return value;
+}
+
++ (void)deleteFromKeychainForKey:(nonnull NSString *)key {
+    [KFKeychain deleteObjectForKey:key];
 }
 
 @end

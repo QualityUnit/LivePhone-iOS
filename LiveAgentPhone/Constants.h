@@ -27,17 +27,21 @@
 #define memoryKeyTypedEmail @"memoryKeyTypedEmail"
 #define memoryKeyUrl @"memoryKeyUrl"
 #define memoryKeyEmail @"memoryKeyEmail"
-#define memoryKeyApikey @"memoryKeyApikey"
+#define deprecatedMemoryKeyApikey @"memoryKeyApikey"
 #define memoryKeyApikeyId @"memoryKeyApikeyId"
 #define memoryKeySipId @"memoryKeySipId"
 #define memoryKeySipNumber @"memoryKeySipNumber"
 #define memoryKeySipHost @"memoryKeySipHost"
 #define memoryKeySipUser @"memoryKeySipUser"
-#define memoryKeySipPassword @"memoryKeySipPassword"
+#define deprecatedMemoryKeySipPassword @"memoryKeySipPassword"
 #define memoryKeyVoipPushToken @"memoryKeyVoipPushToken"
 #define memoryKeyAgentId @"memoryKeyAgentId"
 #define memoryKeyInstallId @"memoryKeyInstallId"
 #define memoryKeyDeviceId @"memoryKeyDeviceId"
+
+// keychain keys
+#define keychainKeyApikey @"com.qualityunit.ios.livePhone.keychainKeyApikey"
+#define keychainKeySipPassword @"com.qualityunit.ios.livePhone.keychainKeySipPassword"
 
 // local notification names
 #define localNotificationIntoInit @"localNotificationIntoInit"

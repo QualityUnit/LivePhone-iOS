@@ -16,6 +16,7 @@
 #import "LoginViewController.h"
 #import <UserNotifications/UserNotifications.h>
 #import "Api.h"
+#import "Utils.h"
 
 @interface InitViewController () {
     @private
@@ -46,8 +47,6 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self startInit];
-//    NSUserDefaults *memory = [NSUserDefaults standardUserDefaults];
-//    [memory removeObjectForKey:memoryKeyApikey];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -61,7 +60,7 @@
 - (void) startInit {
     [self showInitialState]; // hide error message and show activity indicator
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *apiKey = [userDefaults objectForKey:memoryKeyApikey];
+    NSString *apiKey = [Net getApikey];
     NSString *apiKeyId = [userDefaults objectForKey:memoryKeyApikeyId];
     if (apiKey == nil || apiKeyId == nil) {
         [self goToLogin];
@@ -122,7 +121,7 @@
         requiredKey = @"connection_pass";
         requiredValue = [response objectForKey:requiredKey];
         if (requiredValue != nil && [requiredValue length] > 0) {
-            [userDefaults setObject:requiredValue forKey:memoryKeySipPassword];
+            [Utils saveToKeychainForKey:keychainKeySipPassword value:requiredValue];
         } else {
             [self showError:[NSString stringWithFormat:@"Missing SIP value: '%@'", requiredKey]];
             return;

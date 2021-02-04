@@ -85,7 +85,7 @@
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         char *sipHostCharArray = (char *)[[defaults objectForKey:memoryKeySipHost] cStringUsingEncoding:[NSString defaultCStringEncoding]];
         char *sipUserCharArray = (char *)[[defaults objectForKey:memoryKeySipUser] cStringUsingEncoding:[NSString defaultCStringEncoding]];
-        char *sipPasswordCharArray = (char *)[[defaults objectForKey:memoryKeySipPassword] cStringUsingEncoding:[NSString defaultCStringEncoding]];
+        char *sipPasswordCharArray = (char *)[[Utils loadFromKeychainForKey:keychainKeySipPassword deprecatedMemoryKey:deprecatedMemoryKeySipPassword] cStringUsingEncoding:[NSString defaultCStringEncoding]];
         incomingCall(sipHostCharArray, sipUserCharArray, sipPasswordCharArray, self);
         [self initiateRinging];
     } else {
@@ -219,7 +219,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *sipHost = [userDefaults objectForKey:memoryKeySipHost];
     NSString *sipUser = [userDefaults objectForKey:memoryKeySipUser];
-    NSString *sipPassword = [userDefaults objectForKey:memoryKeySipPassword];
+    NSString *sipPassword = [Utils loadFromKeychainForKey:keychainKeySipPassword deprecatedMemoryKey:deprecatedMemoryKeySipPassword];
     NSString *calleeSipUri = [Utils createCalleeUriWithPhoneNumber:calleeNumberWithPrefix sipHost:sipHost];
     makeCall(sipHost, sipUser, sipPassword, calleeSipUri, self, action);
     [self goToCalling];
