@@ -223,6 +223,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     [self processPushNotificationPayload:userInfo];
+    completionHandler(UIBackgroundFetchResultNewData);
 }
 
 - (void)checkVoipPushToken {

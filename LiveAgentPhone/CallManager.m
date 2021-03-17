@@ -97,7 +97,8 @@
 - (void)initiateRinging {
     isSpeaker = NO;
     isMute = NO;
-    lastRemoteNumber = stringUnknown;
+    lastRemoteNumber = @"";
+    lastRemoteName = @"";
     CXHandle *callHandle = [[CXHandle alloc] initWithType:CXHandleTypeGeneric value:lastRemoteNumber];
     CXCallUpdate *callUpdate = [self createDefaultCallupdate];
     [callUpdate setLocalizedCallerName:[self pickRemoteString]];
@@ -117,6 +118,12 @@
 // when there is a real ringing call from SIP
 - (void)onSipStartRinging {
     isSipRinging = YES;
+    // update name in the incoming call notification
+    CXHandle *callHandle = [[CXHandle alloc] initWithType:CXHandleTypeGeneric value:lastRemoteNumber];
+    CXCallUpdate *callUpdate = [self createDefaultCallupdate];
+    [callUpdate setLocalizedCallerName:[self pickRemoteString]];
+    [callUpdate setRemoteHandle:callHandle];
+    [self.callKitProvider reportCallWithUUID:uuid updated:callUpdate];
     if (answerCallAction != nil) {
         // if the user is particularly fast at tapping the accept call button then fulfill pending answerCallAction
         [self answerCall];
