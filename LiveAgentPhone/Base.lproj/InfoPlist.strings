@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  LiveAgentPhone
+
+  Created by Rastislav Kostrab on 07/05/2021.
+  Copyright © 2021 Quality Unit. All rights reserved.
+*/
+NSCameraUsageDescription = "Making and receiving video calls";
+NSMicrophoneUsageDescription = "Making and receiving voice calls";

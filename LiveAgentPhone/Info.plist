@@ -40,7 +40,7 @@
 	<key>NSHumanReadableCopyright</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Making and receiving calls</string>
+	<string>Making and receiving voice calls</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>INStartAudioCallIntent</string>
