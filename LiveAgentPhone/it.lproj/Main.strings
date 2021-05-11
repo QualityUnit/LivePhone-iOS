@@ -1,104 +1,78 @@
-/* Class = "UITabBarItem"; title = "Dialpad"; ObjectID = "3RD-iz-8WO"; */
-"3RD-iz-8WO.title" = "Klávesnica";
 
 /* Class = "UITextField"; placeholder = "URL"; ObjectID = "4Mp-Uz-64v"; */
-"4Mp-Uz-64v.placeholder" = "URL";
+"4Mp-Uz-64v.placeholder" = "Url";
 
 /* Class = "UITextField"; placeholder = "Password"; ObjectID = "5u4-Cg-yP6"; */
-"5u4-Cg-yP6.placeholder" = "Heslo";
+"5u4-Cg-yP6.placeholder" = "Password";
 
 /* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "7ug-Jo-4rR"; */
-"7ug-Jo-4rR.normalTitle" = "Znovu";
+"7ug-Jo-4rR.normalTitle" = "Riprova";
 
 /* Class = "UILabel"; text = "Phone number field is empty"; ObjectID = "9Vn-Lj-D1j"; */
-"9Vn-Lj-D1j.text" = "Pole telefónneho čísla je prázdne";
+"9Vn-Lj-D1j.text" = "Il campo numero di telefono è vuoto";
 
 /* Class = "UIBarButtonItem"; title = "Contacts"; ObjectID = "AOY-Uw-7HF"; */
-"AOY-Uw-7HF.title" = "Kontakty";
+"AOY-Uw-7HF.title" = "Contatti";
 
 /* Class = "UINavigationItem"; title = "About"; ObjectID = "AjC-0h-pVM"; */
-"AjC-0h-pVM.title" = "O aplikácii";
+"AjC-0h-pVM.title" = "Info";
 
 /* Class = "UILabel"; text = "You are logged in into browser app and calls will be redirected into this LivePhone"; ObjectID = "CSp-31-IiW"; */
-"CSp-31-IiW.text" = "Ste prihlásený do aplikácie v prehliadači a hovory budú presmerované do tohto LivePhone";
+"CSp-31-IiW.text" = "Sei connesso all'app del browser e le chiamate saranno reindirizzate in questo LivePhone";
 
 /* Class = "UILabel"; text = "Unknown"; ObjectID = "DVn-6f-fap"; */
-"DVn-6f-fap.text" = "Neznáme";
+"DVn-6f-fap.text" = "Sconosciuto";
 
 /* Class = "UINavigationItem"; title = "Available"; ObjectID = "DmL-hO-BHI"; */
-"DmL-hO-BHI.title" = "Dostupný";
+"DmL-hO-BHI.title" = "Disponibile";
 
 /* Class = "UITableViewSection"; headerTitle = "Your number"; ObjectID = "FyF-6m-Ncb"; */
-"FyF-6m-Ncb.headerTitle" = "Vaše číslo";
+"FyF-6m-Ncb.headerTitle" = "Il tuo numero";
 
 /* Class = "UILabel"; text = "You don't have any outgoing number."; ObjectID = "GrX-Py-oGl"; */
-"GrX-Py-oGl.text" = "Nemáte žiadne číslo vhodné na odchádzajúce hovory.";
-
-/* Class = "UINavigationItem"; title = "Log in"; ObjectID = "I1p-68-TPd"; */
-"I1p-68-TPd.title" = "Prihlásiť sa";
-
-/* Class = "UINavigationItem"; title = "Detail"; ObjectID = "ITP-ss-p1G"; */
-"ITP-ss-p1G.title" = "Detail";
-
-/* Class = "UITextField"; placeholder = "Begin typing..."; ObjectID = "IW1-ED-Hfq"; */
-"IW1-ED-Hfq.placeholder" = "Začnite písať...";
+"GrX-Py-oGl.text" = "Non hai alcun numero in uscita.";
 
 /* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "Kz5-iF-dtd"; */
-"Kz5-iF-dtd.title" = "Kontakty";
+"Kz5-iF-dtd.title" = "Contatti";
 
 /* Class = "UITableViewSection"; headerTitle = "Phone number"; ObjectID = "LjA-d1-obK"; */
-"LjA-d1-obK.headerTitle" = "Telefónne číslo";
+"LjA-d1-obK.headerTitle" = "Numero di telefono";
 
 /* Class = "UITextField"; placeholder = "Email"; ObjectID = "O5h-Wi-SxS"; */
 "O5h-Wi-SxS.placeholder" = "E-mail";
 
 /* Class = "UILabel"; text = "About"; ObjectID = "OMF-bz-iCv"; */
-"OMF-bz-iCv.text" = "O aplikácii";
+"OMF-bz-iCv.text" = "Info";
 
 /* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "P41-Cu-WL2"; */
-"P41-Cu-WL2.normalTitle" = "Znovu";
-
-/* Class = "UINavigationItem"; title = "Dialpad"; ObjectID = "QbA-sZ-peJ"; */
-"QbA-sZ-peJ.title" = "Klávesnica";
-
-/* Class = "UITextField"; placeholder = "Type a number"; ObjectID = "Qgc-JT-yqC"; */
-"Qgc-JT-yqC.placeholder" = "Napíšte číslo";
+"P41-Cu-WL2.normalTitle" = "Riprova";
 
 /* Class = "UITabBarItem"; title = "Availability"; ObjectID = "UGf-Im-WZa"; */
-"UGf-Im-WZa.title" = "Dostupnosť";
+"UGf-Im-WZa.title" = "Disponibilità";
 
 /* Class = "UITabBarItem"; title = "Internal"; ObjectID = "VNr-4W-P1e"; */
-"VNr-4W-P1e.title" = "Interný";
+"VNr-4W-P1e.title" = "Interno";
 
 /* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "dSS-6J-dcg"; */
-"dSS-6J-dcg.normalTitle" = "Odhlásiť";
-
-/* Class = "UIButton"; normalTitle = "Go to login"; ObjectID = "efA-q9-eUH"; */
-"efA-q9-eUH.normalTitle" = "Prejsť na prihlásenie";
+"dSS-6J-dcg.normalTitle" = "Esci";
 
 /* Class = "UILabel"; text = "version"; ObjectID = "gsL-NE-n9M"; */
-"gsL-NE-n9M.text" = "Verzia";
+"gsL-NE-n9M.text" = "versione";
 
 /* Class = "UINavigationItem"; title = "Settings"; ObjectID = "iLC-iN-1qJ"; */
-"iLC-iN-1qJ.title" = "Nastavenia";
-
-/* Class = "UIButton"; normalTitle = "Log in"; ObjectID = "ibJ-q8-Wag"; */
-"ibJ-q8-Wag.normalTitle" = "Prihlásiť sa";
+"iLC-iN-1qJ.title" = "Impostazioni";
 
 /* Class = "UINavigationItem"; title = "Licenses"; ObjectID = "mbP-67-3gA"; */
-"mbP-67-3gA.title" = "Licencie";
+"mbP-67-3gA.title" = "Licenze";
 
 /* Class = "UINavigationItem"; title = "Calling"; ObjectID = "new-HU-zWb"; */
-"new-HU-zWb.title" = "Volá";
+"new-HU-zWb.title" = "Chiamata";
 
 /* Class = "UIBarButtonItem"; title = "Licenses"; ObjectID = "rOj-83-0pd"; */
-"rOj-83-0pd.title" = "Licencie";
+"rOj-83-0pd.title" = "Licenze";
 
 /* Class = "UITabBarItem"; title = "Settings"; ObjectID = "uwg-fx-c4D"; */
-"uwg-fx-c4D.title" = "Nastavenia";
+"uwg-fx-c4D.title" = "Impostazioni";
 
 /* Class = "UINavigationItem"; title = "Calling"; ObjectID = "wie-8H-nC0"; */
-"wie-8H-nC0.title" = "Volá";
-
-/* Class = "UITableViewSection"; headerTitle = "Calling with"; ObjectID = "wva-vJ-zYw"; */
-"wva-vJ-zYw.headerTitle" = "Voláte s";
+"wie-8H-nC0.title" = "Chiamata";

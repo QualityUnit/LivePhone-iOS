@@ -5,5 +5,5 @@
   Created by Rastislav Kostrab on 07/05/2021.
   Copyright © 2021 Quality Unit. All rights reserved.
 */
-NSCameraUsageDescription = "Toto povolenie je potrebne na fungovanie videohovorov";
-NSMicrophoneUsageDescription = "Toto povolenie je potrebné na fungovanie hlasových hovorov";
+"NSCameraUsageDescription" = "Toto povolenie je potrebné na fungovanie video-hovorov";
+"NSMicrophoneUsageDescription" = "Toto povolenie je potrebné na fungovanie hlasových hovorov";

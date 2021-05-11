@@ -1,0 +1,54 @@
+
+/* Class = "UITextField"; placeholder = "URL"; ObjectID = "4Mp-Uz-64v"; */
+"4Mp-Uz-64v.placeholder" = "URL";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "5u4-Cg-yP6"; */
+"5u4-Cg-yP6.placeholder" = "Пароль";
+
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "7ug-Jo-4rR"; */
+"7ug-Jo-4rR.normalTitle" = "Повторить";
+
+/* Class = "UIBarButtonItem"; title = "Contacts"; ObjectID = "AOY-Uw-7HF"; */
+"AOY-Uw-7HF.title" = "Контакты";
+
+/* Class = "UINavigationItem"; title = "About"; ObjectID = "AjC-0h-pVM"; */
+"AjC-0h-pVM.title" = "О программе";
+
+/* Class = "UILabel"; text = "Unknown"; ObjectID = "DVn-6f-fap"; */
+"DVn-6f-fap.text" = "Неизвестен";
+
+/* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "Kz5-iF-dtd"; */
+"Kz5-iF-dtd.title" = "Контакты";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "O5h-Wi-SxS"; */
+"O5h-Wi-SxS.placeholder" = "Email";
+
+/* Class = "UILabel"; text = "About"; ObjectID = "OMF-bz-iCv"; */
+"OMF-bz-iCv.text" = "О программе";
+
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "P41-Cu-WL2"; */
+"P41-Cu-WL2.normalTitle" = "Повторить";
+
+/* Class = "UITabBarItem"; title = "Availability"; ObjectID = "UGf-Im-WZa"; */
+"UGf-Im-WZa.title" = "Доступность";
+
+/* Class = "UITabBarItem"; title = "Internal"; ObjectID = "VNr-4W-P1e"; */
+"VNr-4W-P1e.title" = "Внутренний";
+
+/* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "dSS-6J-dcg"; */
+"dSS-6J-dcg.normalTitle" = "Выход";
+
+/* Class = "UILabel"; text = "version"; ObjectID = "gsL-NE-n9M"; */
+"gsL-NE-n9M.text" = "версия";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "iLC-iN-1qJ"; */
+"iLC-iN-1qJ.title" = "Настройки";
+
+/* Class = "UINavigationItem"; title = "Calling"; ObjectID = "new-HU-zWb"; */
+"new-HU-zWb.title" = "Идет звонок";
+
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "uwg-fx-c4D"; */
+"uwg-fx-c4D.title" = "Настройки";
+
+/* Class = "UINavigationItem"; title = "Calling"; ObjectID = "wie-8H-nC0"; */
+"wie-8H-nC0.title" = "Идет звонок";

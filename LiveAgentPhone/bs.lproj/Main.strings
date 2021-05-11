@@ -1,0 +1,57 @@
+
+/* Class = "UITextField"; placeholder = "URL"; ObjectID = "4Mp-Uz-64v"; */
+"4Mp-Uz-64v.placeholder" = "Url";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "5u4-Cg-yP6"; */
+"5u4-Cg-yP6.placeholder" = "Lozinka";
+
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "7ug-Jo-4rR"; */
+"7ug-Jo-4rR.normalTitle" = "Pokušaj ponovo";
+
+/* Class = "UIBarButtonItem"; title = "Contacts"; ObjectID = "AOY-Uw-7HF"; */
+"AOY-Uw-7HF.title" = "Kontakti";
+
+/* Class = "UINavigationItem"; title = "About"; ObjectID = "AjC-0h-pVM"; */
+"AjC-0h-pVM.title" = "O programu";
+
+/* Class = "UILabel"; text = "Unknown"; ObjectID = "DVn-6f-fap"; */
+"DVn-6f-fap.text" = "Nepoznato";
+
+/* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "Kz5-iF-dtd"; */
+"Kz5-iF-dtd.title" = "Kontakti";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "O5h-Wi-SxS"; */
+"O5h-Wi-SxS.placeholder" = "E-pošta";
+
+/* Class = "UILabel"; text = "About"; ObjectID = "OMF-bz-iCv"; */
+"OMF-bz-iCv.text" = "O programu";
+
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "P41-Cu-WL2"; */
+"P41-Cu-WL2.normalTitle" = "Pokušaj ponovo";
+
+/* Class = "UITabBarItem"; title = "Internal"; ObjectID = "VNr-4W-P1e"; */
+"VNr-4W-P1e.title" = "Interno";
+
+/* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "dSS-6J-dcg"; */
+"dSS-6J-dcg.normalTitle" = "Odjava";
+
+/* Class = "UILabel"; text = "version"; ObjectID = "gsL-NE-n9M"; */
+"gsL-NE-n9M.text" = "verzija";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "iLC-iN-1qJ"; */
+"iLC-iN-1qJ.title" = "Postavke";
+
+/* Class = "UINavigationItem"; title = "Licenses"; ObjectID = "mbP-67-3gA"; */
+"mbP-67-3gA.title" = "Licence";
+
+/* Class = "UINavigationItem"; title = "Calling"; ObjectID = "new-HU-zWb"; */
+"new-HU-zWb.title" = "Poziva";
+
+/* Class = "UIBarButtonItem"; title = "Licenses"; ObjectID = "rOj-83-0pd"; */
+"rOj-83-0pd.title" = "Licence";
+
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "uwg-fx-c4D"; */
+"uwg-fx-c4D.title" = "Postavke";
+
+/* Class = "UINavigationItem"; title = "Calling"; ObjectID = "wie-8H-nC0"; */
+"wie-8H-nC0.title" = "Poziva";

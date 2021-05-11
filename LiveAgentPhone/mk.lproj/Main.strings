@@ -1,0 +1,12 @@
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "5u4-Cg-yP6"; */
+"5u4-Cg-yP6.placeholder" = "лозинка";
+
+/* Class = "UIBarButtonItem"; title = "Contacts"; ObjectID = "AOY-Uw-7HF"; */
+"AOY-Uw-7HF.title" = "Контактие";
+
+/* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "Kz5-iF-dtd"; */
+"Kz5-iF-dtd.title" = "Контактие";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "O5h-Wi-SxS"; */
+"O5h-Wi-SxS.placeholder" = "Email";

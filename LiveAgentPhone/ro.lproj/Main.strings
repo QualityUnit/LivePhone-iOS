@@ -1,0 +1,42 @@
+
+/* Class = "UITextField"; placeholder = "URL"; ObjectID = "4Mp-Uz-64v"; */
+"4Mp-Uz-64v.placeholder" = "URL-ul";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "5u4-Cg-yP6"; */
+"5u4-Cg-yP6.placeholder" = "Parola";
+
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "7ug-Jo-4rR"; */
+"7ug-Jo-4rR.normalTitle" = "Reîncercaţi";
+
+/* Class = "UINavigationItem"; title = "About"; ObjectID = "AjC-0h-pVM"; */
+"AjC-0h-pVM.title" = "Despre";
+
+/* Class = "UILabel"; text = "Unknown"; ObjectID = "DVn-6f-fap"; */
+"DVn-6f-fap.text" = "Necunoscut";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "O5h-Wi-SxS"; */
+"O5h-Wi-SxS.placeholder" = "E-mail";
+
+/* Class = "UILabel"; text = "About"; ObjectID = "OMF-bz-iCv"; */
+"OMF-bz-iCv.text" = "Despre";
+
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "P41-Cu-WL2"; */
+"P41-Cu-WL2.normalTitle" = "Reîncercaţi";
+
+/* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "dSS-6J-dcg"; */
+"dSS-6J-dcg.normalTitle" = "Delogare";
+
+/* Class = "UILabel"; text = "version"; ObjectID = "gsL-NE-n9M"; */
+"gsL-NE-n9M.text" = "versiune";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "iLC-iN-1qJ"; */
+"iLC-iN-1qJ.title" = "Setari";
+
+/* Class = "UINavigationItem"; title = "Calling"; ObjectID = "new-HU-zWb"; */
+"new-HU-zWb.title" = "Suna";
+
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "uwg-fx-c4D"; */
+"uwg-fx-c4D.title" = "Setari";
+
+/* Class = "UINavigationItem"; title = "Calling"; ObjectID = "wie-8H-nC0"; */
+"wie-8H-nC0.title" = "Suna";

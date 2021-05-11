@@ -1,0 +1,24 @@
+
+/* Class = "UITextField"; placeholder = "URL"; ObjectID = "4Mp-Uz-64v"; */
+"4Mp-Uz-64v.placeholder" = "URL";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "5u4-Cg-yP6"; */
+"5u4-Cg-yP6.placeholder" = "Parole";
+
+/* Class = "UILabel"; text = "Unknown"; ObjectID = "DVn-6f-fap"; */
+"DVn-6f-fap.text" = "Nezināms";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "O5h-Wi-SxS"; */
+"O5h-Wi-SxS.placeholder" = "E-pasts";
+
+/* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "dSS-6J-dcg"; */
+"dSS-6J-dcg.normalTitle" = "Beigt darbu";
+
+/* Class = "UILabel"; text = "version"; ObjectID = "gsL-NE-n9M"; */
+"gsL-NE-n9M.text" = "versija";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "iLC-iN-1qJ"; */
+"iLC-iN-1qJ.title" = "Iestatījumi";
+
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "uwg-fx-c4D"; */
+"uwg-fx-c4D.title" = "Iestatījumi";

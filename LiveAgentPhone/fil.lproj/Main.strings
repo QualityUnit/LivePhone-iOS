@@ -1,0 +1,57 @@
+
+/* Class = "UITextField"; placeholder = "URL"; ObjectID = "4Mp-Uz-64v"; */
+"4Mp-Uz-64v.placeholder" = "URL";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "5u4-Cg-yP6"; */
+"5u4-Cg-yP6.placeholder" = "Password";
+
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "7ug-Jo-4rR"; */
+"7ug-Jo-4rR.normalTitle" = "Muling subukan";
+
+/* Class = "UIBarButtonItem"; title = "Contacts"; ObjectID = "AOY-Uw-7HF"; */
+"AOY-Uw-7HF.title" = "Mga kontak";
+
+/* Class = "UINavigationItem"; title = "About"; ObjectID = "AjC-0h-pVM"; */
+"AjC-0h-pVM.title" = "Tungkol";
+
+/* Class = "UILabel"; text = "Unknown"; ObjectID = "DVn-6f-fap"; */
+"DVn-6f-fap.text" = "Hindi malaman";
+
+/* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "Kz5-iF-dtd"; */
+"Kz5-iF-dtd.title" = "Mga kontak";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "O5h-Wi-SxS"; */
+"O5h-Wi-SxS.placeholder" = "Email";
+
+/* Class = "UILabel"; text = "About"; ObjectID = "OMF-bz-iCv"; */
+"OMF-bz-iCv.text" = "Tungkol";
+
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "P41-Cu-WL2"; */
+"P41-Cu-WL2.normalTitle" = "Muling subukan";
+
+/* Class = "UITabBarItem"; title = "Internal"; ObjectID = "VNr-4W-P1e"; */
+"VNr-4W-P1e.title" = "Panloob";
+
+/* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "dSS-6J-dcg"; */
+"dSS-6J-dcg.normalTitle" = "Mag-logout";
+
+/* Class = "UILabel"; text = "version"; ObjectID = "gsL-NE-n9M"; */
+"gsL-NE-n9M.text" = "bersyon";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "iLC-iN-1qJ"; */
+"iLC-iN-1qJ.title" = "Mga setting";
+
+/* Class = "UINavigationItem"; title = "Licenses"; ObjectID = "mbP-67-3gA"; */
+"mbP-67-3gA.title" = "Mga lisensiya";
+
+/* Class = "UINavigationItem"; title = "Calling"; ObjectID = "new-HU-zWb"; */
+"new-HU-zWb.title" = "Tumatawag";
+
+/* Class = "UIBarButtonItem"; title = "Licenses"; ObjectID = "rOj-83-0pd"; */
+"rOj-83-0pd.title" = "Mga lisensiya";
+
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "uwg-fx-c4D"; */
+"uwg-fx-c4D.title" = "Mga setting";
+
+/* Class = "UINavigationItem"; title = "Calling"; ObjectID = "wie-8H-nC0"; */
+"wie-8H-nC0.title" = "Tumatawag";

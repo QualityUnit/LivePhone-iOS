@@ -1,0 +1,57 @@
+
+/* Class = "UITextField"; placeholder = "URL"; ObjectID = "4Mp-Uz-64v"; */
+"4Mp-Uz-64v.placeholder" = "Link";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "5u4-Cg-yP6"; */
+"5u4-Cg-yP6.placeholder" = "Şifre";
+
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "7ug-Jo-4rR"; */
+"7ug-Jo-4rR.normalTitle" = "Yeniden Dene";
+
+/* Class = "UIBarButtonItem"; title = "Contacts"; ObjectID = "AOY-Uw-7HF"; */
+"AOY-Uw-7HF.title" = "İrtibata geçin";
+
+/* Class = "UINavigationItem"; title = "About"; ObjectID = "AjC-0h-pVM"; */
+"AjC-0h-pVM.title" = "Hakkında";
+
+/* Class = "UILabel"; text = "Unknown"; ObjectID = "DVn-6f-fap"; */
+"DVn-6f-fap.text" = "Bilinmeyen";
+
+/* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "Kz5-iF-dtd"; */
+"Kz5-iF-dtd.title" = "İrtibata geçin";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "O5h-Wi-SxS"; */
+"O5h-Wi-SxS.placeholder" = "E-posta";
+
+/* Class = "UILabel"; text = "About"; ObjectID = "OMF-bz-iCv"; */
+"OMF-bz-iCv.text" = "Hakkında";
+
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "P41-Cu-WL2"; */
+"P41-Cu-WL2.normalTitle" = "Yeniden Dene";
+
+/* Class = "UITabBarItem"; title = "Internal"; ObjectID = "VNr-4W-P1e"; */
+"VNr-4W-P1e.title" = "Dahili";
+
+/* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "dSS-6J-dcg"; */
+"dSS-6J-dcg.normalTitle" = "Çıkış";
+
+/* Class = "UILabel"; text = "version"; ObjectID = "gsL-NE-n9M"; */
+"gsL-NE-n9M.text" = "versiyon";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "iLC-iN-1qJ"; */
+"iLC-iN-1qJ.title" = "Ayarlar";
+
+/* Class = "UINavigationItem"; title = "Licenses"; ObjectID = "mbP-67-3gA"; */
+"mbP-67-3gA.title" = "Lisanslar";
+
+/* Class = "UINavigationItem"; title = "Calling"; ObjectID = "new-HU-zWb"; */
+"new-HU-zWb.title" = "Aranıyor";
+
+/* Class = "UIBarButtonItem"; title = "Licenses"; ObjectID = "rOj-83-0pd"; */
+"rOj-83-0pd.title" = "Lisanslar";
+
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "uwg-fx-c4D"; */
+"uwg-fx-c4D.title" = "Ayarlar";
+
+/* Class = "UINavigationItem"; title = "Calling"; ObjectID = "wie-8H-nC0"; */
+"wie-8H-nC0.title" = "Aranıyor";
