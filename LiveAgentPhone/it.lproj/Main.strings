@@ -1,3 +1,5 @@
+/* Class = "UITabBarItem"; title = "Dialpad"; ObjectID = "3RD-iz-8WO"; */
+"3RD-iz-8WO.title" = "Tastiera";
 
 /* Class = "UITextField"; placeholder = "URL"; ObjectID = "4Mp-Uz-64v"; */
 "4Mp-Uz-64v.placeholder" = "Url";
@@ -32,6 +34,15 @@
 /* Class = "UILabel"; text = "You don't have any outgoing number."; ObjectID = "GrX-Py-oGl"; */
 "GrX-Py-oGl.text" = "Non hai alcun numero in uscita.";
 
+/* Class = "UINavigationItem"; title = "Log in"; ObjectID = "I1p-68-TPd"; */
+"I1p-68-TPd.title" = "Accesso";
+
+/* Class = "UINavigationItem"; title = "Detail"; ObjectID = "ITP-ss-p1G"; */
+"ITP-ss-p1G.title" = "Dettaglio";
+
+/* Class = "UITextField"; placeholder = "Begin typing..."; ObjectID = "IW1-ED-Hfq"; */
+"IW1-ED-Hfq.placeholder" = "Iniziare a digitare...";
+
 /* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "Kz5-iF-dtd"; */
 "Kz5-iF-dtd.title" = "Contatti";
 
@@ -47,6 +58,12 @@
 /* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "P41-Cu-WL2"; */
 "P41-Cu-WL2.normalTitle" = "Riprova";
 
+/* Class = "UINavigationItem"; title = "Dialpad"; ObjectID = "QbA-sZ-peJ"; */
+"QbA-sZ-peJ.title" = "Tastiera";
+
+/* Class = "UITextField"; placeholder = "Type a number"; ObjectID = "Qgc-JT-yqC"; */
+"Qgc-JT-yqC.placeholder" = "Digita un numero";
+
 /* Class = "UITabBarItem"; title = "Availability"; ObjectID = "UGf-Im-WZa"; */
 "UGf-Im-WZa.title" = "Disponibilità";
 
@@ -56,11 +73,17 @@
 /* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "dSS-6J-dcg"; */
 "dSS-6J-dcg.normalTitle" = "Esci";
 
+/* Class = "UIButton"; normalTitle = "Go to login"; ObjectID = "efA-q9-eUH"; */
+"efA-q9-eUH.normalTitle" = "Vai al login";
+
 /* Class = "UILabel"; text = "version"; ObjectID = "gsL-NE-n9M"; */
 "gsL-NE-n9M.text" = "versione";
 
 /* Class = "UINavigationItem"; title = "Settings"; ObjectID = "iLC-iN-1qJ"; */
 "iLC-iN-1qJ.title" = "Impostazioni";
+
+/* Class = "UIButton"; normalTitle = "Log in"; ObjectID = "ibJ-q8-Wag"; */
+"ibJ-q8-Wag.normalTitle" = "Accesso";
 
 /* Class = "UINavigationItem"; title = "Licenses"; ObjectID = "mbP-67-3gA"; */
 "mbP-67-3gA.title" = "Licenze";
@@ -76,3 +99,6 @@
 
 /* Class = "UINavigationItem"; title = "Calling"; ObjectID = "wie-8H-nC0"; */
 "wie-8H-nC0.title" = "Chiamata";
+
+/* Class = "UITableViewSection"; headerTitle = "Calling with"; ObjectID = "wva-vJ-zYw"; */
+"wva-vJ-zYw.headerTitle" = "Chiamare con";

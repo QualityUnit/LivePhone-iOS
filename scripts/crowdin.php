@@ -184,6 +184,16 @@ function updateTranslations($sourceFile,$package) {
         }
 		rename($scriptPath . 'temp/mobile/livephone-ios/'.$sourceFile, RES_PATH . '../'. $package.'.lproj/'.$sourceFile);
 		myUnlink($scriptPath . 'temp/mobile/livephone-ios/'.$sourceFile);
+
+		if ($sourceFile === 'InfoPlist.strings') {
+            $fileContent = file_get_contents(RES_PATH . '../'. $package.'.lproj/'.$sourceFile);
+            $fileContent = str_replace(
+                array("\"NSCameraUsageDescription\"", "\"NSMicrophoneUsageDescription\""),
+                array("NSCameraUsageDescription", "NSMicrophoneUsageDescription"),
+                $fileContent
+            );
+            file_put_contents(RES_PATH . '../'. $package.'.lproj/'.$sourceFile, $fileContent);
+        }
 	} else {
 		echo "File ".$sourceFile." hasn't any translated strings. Skipping...\n";
 	}

@@ -32,6 +32,12 @@
 /* Class = "UILabel"; text = "You don't have any outgoing number."; ObjectID = "GrX-Py-oGl"; */
 "GrX-Py-oGl.text" = "No tienes ningún número saliente.";
 
+/* Class = "UINavigationItem"; title = "Detail"; ObjectID = "ITP-ss-p1G"; */
+"ITP-ss-p1G.title" = "Detalle";
+
+/* Class = "UITextField"; placeholder = "Begin typing..."; ObjectID = "IW1-ED-Hfq"; */
+"IW1-ED-Hfq.placeholder" = "Comenzar a escribir...";
+
 /* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "Kz5-iF-dtd"; */
 "Kz5-iF-dtd.title" = "Contactos";
 
@@ -47,6 +53,9 @@
 /* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "P41-Cu-WL2"; */
 "P41-Cu-WL2.normalTitle" = "Reintentar";
 
+/* Class = "UITextField"; placeholder = "Type a number"; ObjectID = "Qgc-JT-yqC"; */
+"Qgc-JT-yqC.placeholder" = "Escribe un número";
+
 /* Class = "UITabBarItem"; title = "Availability"; ObjectID = "UGf-Im-WZa"; */
 "UGf-Im-WZa.title" = "Disponibilidad";
 
@@ -55,6 +64,9 @@
 
 /* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "dSS-6J-dcg"; */
 "dSS-6J-dcg.normalTitle" = "Salir";
+
+/* Class = "UIButton"; normalTitle = "Go to login"; ObjectID = "efA-q9-eUH"; */
+"efA-q9-eUH.normalTitle" = "Ir al inicio de sesión";
 
 /* Class = "UILabel"; text = "version"; ObjectID = "gsL-NE-n9M"; */
 "gsL-NE-n9M.text" = "versión";
@@ -76,3 +88,6 @@
 
 /* Class = "UINavigationItem"; title = "Calling"; ObjectID = "wie-8H-nC0"; */
 "wie-8H-nC0.title" = "Llamando";
+
+/* Class = "UITableViewSection"; headerTitle = "Calling with"; ObjectID = "wva-vJ-zYw"; */
+"wva-vJ-zYw.headerTitle" = "Llamando con";

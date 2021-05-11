@@ -1,3 +1,5 @@
+/* Class = "UITabBarItem"; title = "Dialpad"; ObjectID = "3RD-iz-8WO"; */
+"3RD-iz-8WO.title" = "Teclado de discagem";
 
 /* Class = "UITextField"; placeholder = "URL"; ObjectID = "4Mp-Uz-64v"; */
 "4Mp-Uz-64v.placeholder" = "URL";
@@ -32,6 +34,15 @@
 /* Class = "UILabel"; text = "You don't have any outgoing number."; ObjectID = "GrX-Py-oGl"; */
 "GrX-Py-oGl.text" = "Você não possui nenhum número de saída.";
 
+/* Class = "UINavigationItem"; title = "Log in"; ObjectID = "I1p-68-TPd"; */
+"I1p-68-TPd.title" = "Iniciar sessão";
+
+/* Class = "UINavigationItem"; title = "Detail"; ObjectID = "ITP-ss-p1G"; */
+"ITP-ss-p1G.title" = "Detalhe";
+
+/* Class = "UITextField"; placeholder = "Begin typing..."; ObjectID = "IW1-ED-Hfq"; */
+"IW1-ED-Hfq.placeholder" = "Começar a digitar...";
+
 /* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "Kz5-iF-dtd"; */
 "Kz5-iF-dtd.title" = "Contatos";
 
@@ -47,6 +58,12 @@
 /* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "P41-Cu-WL2"; */
 "P41-Cu-WL2.normalTitle" = "Tentar novamente";
 
+/* Class = "UINavigationItem"; title = "Dialpad"; ObjectID = "QbA-sZ-peJ"; */
+"QbA-sZ-peJ.title" = "Teclado de discagem";
+
+/* Class = "UITextField"; placeholder = "Type a number"; ObjectID = "Qgc-JT-yqC"; */
+"Qgc-JT-yqC.placeholder" = "Digite o número";
+
 /* Class = "UITabBarItem"; title = "Availability"; ObjectID = "UGf-Im-WZa"; */
 "UGf-Im-WZa.title" = "Disponibilidade";
 
@@ -56,11 +73,17 @@
 /* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "dSS-6J-dcg"; */
 "dSS-6J-dcg.normalTitle" = "Sair";
 
+/* Class = "UIButton"; normalTitle = "Go to login"; ObjectID = "efA-q9-eUH"; */
+"efA-q9-eUH.normalTitle" = "Ir para o login";
+
 /* Class = "UILabel"; text = "version"; ObjectID = "gsL-NE-n9M"; */
 "gsL-NE-n9M.text" = "Versão";
 
 /* Class = "UINavigationItem"; title = "Settings"; ObjectID = "iLC-iN-1qJ"; */
 "iLC-iN-1qJ.title" = "Configurações";
+
+/* Class = "UIButton"; normalTitle = "Log in"; ObjectID = "ibJ-q8-Wag"; */
+"ibJ-q8-Wag.normalTitle" = "Iniciar sessão";
 
 /* Class = "UINavigationItem"; title = "Licenses"; ObjectID = "mbP-67-3gA"; */
 "mbP-67-3gA.title" = "Licenças";
@@ -76,3 +99,6 @@
 
 /* Class = "UINavigationItem"; title = "Calling"; ObjectID = "wie-8H-nC0"; */
 "wie-8H-nC0.title" = "Ligando";
+
+/* Class = "UITableViewSection"; headerTitle = "Calling with"; ObjectID = "wva-vJ-zYw"; */
+"wva-vJ-zYw.headerTitle" = "Chamando com";
