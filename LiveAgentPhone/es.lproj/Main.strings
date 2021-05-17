@@ -1,3 +1,5 @@
+/* Class = "UITabBarItem"; title = "Dialpad"; ObjectID = "3RD-iz-8WO"; */
+"3RD-iz-8WO.title" = "Teclado de marcado";
 
 /* Class = "UITextField"; placeholder = "URL"; ObjectID = "4Mp-Uz-64v"; */
 "4Mp-Uz-64v.placeholder" = "URL";
@@ -32,6 +34,9 @@
 /* Class = "UILabel"; text = "You don't have any outgoing number."; ObjectID = "GrX-Py-oGl"; */
 "GrX-Py-oGl.text" = "No tienes ningún número saliente.";
 
+/* Class = "UINavigationItem"; title = "Log in"; ObjectID = "I1p-68-TPd"; */
+"I1p-68-TPd.title" = "Iniciar sesión";
+
 /* Class = "UINavigationItem"; title = "Detail"; ObjectID = "ITP-ss-p1G"; */
 "ITP-ss-p1G.title" = "Detalle";
 
@@ -53,6 +58,9 @@
 /* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "P41-Cu-WL2"; */
 "P41-Cu-WL2.normalTitle" = "Reintentar";
 
+/* Class = "UINavigationItem"; title = "Dialpad"; ObjectID = "QbA-sZ-peJ"; */
+"QbA-sZ-peJ.title" = "Teclado de marcado";
+
 /* Class = "UITextField"; placeholder = "Type a number"; ObjectID = "Qgc-JT-yqC"; */
 "Qgc-JT-yqC.placeholder" = "Escribe un número";
 
@@ -73,6 +81,9 @@
 
 /* Class = "UINavigationItem"; title = "Settings"; ObjectID = "iLC-iN-1qJ"; */
 "iLC-iN-1qJ.title" = "Configuración";
+
+/* Class = "UIButton"; normalTitle = "Log in"; ObjectID = "ibJ-q8-Wag"; */
+"ibJ-q8-Wag.normalTitle" = "Iniciar sesión";
 
 /* Class = "UINavigationItem"; title = "Licenses"; ObjectID = "mbP-67-3gA"; */
 "mbP-67-3gA.title" = "Licencias";

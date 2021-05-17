@@ -1,3 +1,5 @@
+/* Class = "UITabBarItem"; title = "Dialpad"; ObjectID = "3RD-iz-8WO"; */
+"3RD-iz-8WO.title" = "Klawiatura";
 
 /* Class = "UITextField"; placeholder = "URL"; ObjectID = "4Mp-Uz-64v"; */
 "4Mp-Uz-64v.placeholder" = "Url";
@@ -8,17 +10,44 @@
 /* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "7ug-Jo-4rR"; */
 "7ug-Jo-4rR.normalTitle" = "Ponów";
 
+/* Class = "UILabel"; text = "Phone number field is empty"; ObjectID = "9Vn-Lj-D1j"; */
+"9Vn-Lj-D1j.text" = "Pole z numerem telefonu jest puste";
+
 /* Class = "UIBarButtonItem"; title = "Contacts"; ObjectID = "AOY-Uw-7HF"; */
 "AOY-Uw-7HF.title" = "Kontakty";
 
 /* Class = "UINavigationItem"; title = "About"; ObjectID = "AjC-0h-pVM"; */
 "AjC-0h-pVM.title" = "O Aplikacji Live Agent";
 
+/* Class = "UILabel"; text = "You are logged in into browser app and calls will be redirected into this LivePhone"; ObjectID = "CSp-31-IiW"; */
+"CSp-31-IiW.text" = "Jesteś zalogowany do aplikacji w przeglądarce, połączenia zostaną przekierowane do tego LivePhone";
+
 /* Class = "UILabel"; text = "Unknown"; ObjectID = "DVn-6f-fap"; */
 "DVn-6f-fap.text" = "Nieznany";
 
+/* Class = "UINavigationItem"; title = "Available"; ObjectID = "DmL-hO-BHI"; */
+"DmL-hO-BHI.title" = "Dostępny";
+
+/* Class = "UITableViewSection"; headerTitle = "Your number"; ObjectID = "FyF-6m-Ncb"; */
+"FyF-6m-Ncb.headerTitle" = "Twój numer";
+
+/* Class = "UILabel"; text = "You don't have any outgoing number."; ObjectID = "GrX-Py-oGl"; */
+"GrX-Py-oGl.text" = "Nie masz żadnego numeru wychodzącego.";
+
+/* Class = "UINavigationItem"; title = "Log in"; ObjectID = "I1p-68-TPd"; */
+"I1p-68-TPd.title" = "Zaloguj się";
+
+/* Class = "UINavigationItem"; title = "Detail"; ObjectID = "ITP-ss-p1G"; */
+"ITP-ss-p1G.title" = "Szczegóły";
+
+/* Class = "UITextField"; placeholder = "Begin typing..."; ObjectID = "IW1-ED-Hfq"; */
+"IW1-ED-Hfq.placeholder" = "Zacznij pisać...";
+
 /* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "Kz5-iF-dtd"; */
 "Kz5-iF-dtd.title" = "Kontakty";
+
+/* Class = "UITableViewSection"; headerTitle = "Phone number"; ObjectID = "LjA-d1-obK"; */
+"LjA-d1-obK.headerTitle" = "Numer telefonu";
 
 /* Class = "UITextField"; placeholder = "Email"; ObjectID = "O5h-Wi-SxS"; */
 "O5h-Wi-SxS.placeholder" = "Email";
@@ -29,6 +58,12 @@
 /* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "P41-Cu-WL2"; */
 "P41-Cu-WL2.normalTitle" = "Ponów";
 
+/* Class = "UINavigationItem"; title = "Dialpad"; ObjectID = "QbA-sZ-peJ"; */
+"QbA-sZ-peJ.title" = "Klawiatura";
+
+/* Class = "UITextField"; placeholder = "Type a number"; ObjectID = "Qgc-JT-yqC"; */
+"Qgc-JT-yqC.placeholder" = "Wpisz numer";
+
 /* Class = "UITabBarItem"; title = "Availability"; ObjectID = "UGf-Im-WZa"; */
 "UGf-Im-WZa.title" = "Dostępność";
 
@@ -38,11 +73,17 @@
 /* Class = "UIButton"; normalTitle = "Logout"; ObjectID = "dSS-6J-dcg"; */
 "dSS-6J-dcg.normalTitle" = "Wyloguj się";
 
+/* Class = "UIButton"; normalTitle = "Go to login"; ObjectID = "efA-q9-eUH"; */
+"efA-q9-eUH.normalTitle" = "Przejdź do logowania";
+
 /* Class = "UILabel"; text = "version"; ObjectID = "gsL-NE-n9M"; */
 "gsL-NE-n9M.text" = "wersja";
 
 /* Class = "UINavigationItem"; title = "Settings"; ObjectID = "iLC-iN-1qJ"; */
 "iLC-iN-1qJ.title" = "Ustawienia";
+
+/* Class = "UIButton"; normalTitle = "Log in"; ObjectID = "ibJ-q8-Wag"; */
+"ibJ-q8-Wag.normalTitle" = "Zaloguj się";
 
 /* Class = "UINavigationItem"; title = "Licenses"; ObjectID = "mbP-67-3gA"; */
 "mbP-67-3gA.title" = "Licencje";
@@ -58,3 +99,6 @@
 
 /* Class = "UINavigationItem"; title = "Calling"; ObjectID = "wie-8H-nC0"; */
 "wie-8H-nC0.title" = "Dzwoni";
+
+/* Class = "UITableViewSection"; headerTitle = "Calling with"; ObjectID = "wva-vJ-zYw"; */
+"wva-vJ-zYw.headerTitle" = "Dzwonienie z";
