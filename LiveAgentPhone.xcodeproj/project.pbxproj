@@ -222,6 +222,9 @@
 		3015466326528556002C62A2 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3015466426528556002C62A2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3015466526528556002C62A2 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
+		301546CC2655264B002C62A2 /* sr_Latn_ME */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sr_Latn_ME; path = sr_Latn_ME.lproj/Localizable.strings; sourceTree = "<group>"; };
+		301546CD2655264B002C62A2 /* sr_Latn_ME */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sr_Latn_ME; path = sr_Latn_ME.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		301546CE2655264B002C62A2 /* sr_Latn_ME */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sr_Latn_ME; path = sr_Latn_ME.lproj/Main.strings; sourceTree = "<group>"; };
 		30265F5520AAEC9D00F0E7FD /* InternalListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InternalListViewController.h; sourceTree = "<group>"; };
 		30265F5620AAEC9D00F0E7FD /* InternalListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InternalListViewController.m; sourceTree = "<group>"; };
 		30265F5B20AAF88900F0E7FD /* InternalTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InternalTableViewCell.h; sourceTree = "<group>"; };
@@ -790,6 +793,8 @@
 				zh,
 				de,
 				id,
+				sr_Latn_ME,
+				"sr-Latn_ME",
 			);
 			mainGroup = 30E77D5B1DF82B8F00A40AD1;
 			productRefGroup = 30E77D651DF82B8F00A40AD1 /* Products */;
@@ -1028,6 +1033,7 @@
 				301546072652852D002C62A2 /* zh */,
 				301546082652852D002C62A2 /* de */,
 				301546092652852D002C62A2 /* id */,
+				301546CE2655264B002C62A2 /* sr_Latn_ME */,
 			);
 			name = Main.strings;
 			sourceTree = "<group>";
@@ -1078,6 +1084,7 @@
 				3015463526528544002C62A2 /* Base */,
 				3015463626528544002C62A2 /* sl */,
 				3015463726528544002C62A2 /* he */,
+				301546CD2655264B002C62A2 /* sr_Latn_ME */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1128,6 +1135,7 @@
 				3015466326528556002C62A2 /* th */,
 				3015466426528556002C62A2 /* es */,
 				3015466526528556002C62A2 /* el */,
+				301546CC2655264B002C62A2 /* sr_Latn_ME */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
