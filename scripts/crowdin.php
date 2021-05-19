@@ -133,6 +133,7 @@ function packageMapping($package) {
 			'sr-CS' => 'sr',
 			'de-DE' => 'de',
 			'it-IT' => 'it',
+			'me' => 'sr_Latn_ME',
 			'mk-MK' => 'mk',
 			'nl-NL' => 'nl',
 			'vls-BE' => 'nl_BE',
