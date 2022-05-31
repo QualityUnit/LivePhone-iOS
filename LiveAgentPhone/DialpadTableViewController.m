@@ -109,7 +109,7 @@
         NSString *paramJsonStringFilters = [[NSString alloc] initWithData:jsonFilters encoding:NSUTF8StringEncoding];
         NSMutableDictionary *requestParameters = [[NSMutableDictionary alloc] init];
         [requestParameters setObject:paramJsonStringFilters forKey:PARAM_KEY_FILTERS];
-        NSString *requestDescription = [NSString stringWithFormat:@"GET /phone_numbers?%@=%@", PARAM_KEY_FILTERS, paramJsonStringFilters];
+        NSString *requestDescription = [NSString stringWithFormat:@"GET /phone_numbers?_perPage=999&_sortDir=ASC&%@=%@", PARAM_KEY_FILTERS, paramJsonStringFilters];
         NSLog(@"%@", requestDescription);
         AFHTTPSessionManager *manager = [Net createSessionManager];
         [manager GET:@"phone_numbers" parameters:requestParameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {

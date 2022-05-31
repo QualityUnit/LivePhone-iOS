@@ -141,7 +141,9 @@
         if (error) {
             NSLog(@"EndCallAction transaction request failed: %@", [error localizedDescription]);
             [endCallAction fail];
+            return;
         }
+        [endCallAction fulfill];
         if (isMissedCall) {
 //            [self showMissedCall];
         }
