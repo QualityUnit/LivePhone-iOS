@@ -11,20 +11,71 @@
 #import "Constants.h"
 #import "XCPjsua.h"
 #import "Utils.h"
+#import <AVKit/AVKit.h>
 
 #define CALL_DIRECTION_OUTGOING 1
 #define CALL_DIRECTION_INCOMING 2
 #define WAITING_TO_CALL_SEC 5
 
+
 static pjsua_acc_id acc_id;
+
 static pjsua_call_id current_call_id;
+static NSLock *current_call_id_lock;
+static void set_current_call_id(pjsua_call_id new_current_call_id){
+    [current_call_id_lock lock];
+    current_call_id = new_current_call_id;
+    [current_call_id_lock unlock];
+}
 static NSString *sipRemoteNumber;
+static NSLock *sipRemoteNumber_lock;
+static void set_sipRemoteNumber(NSString* new_sipRemoteNumber){
+    [sipRemoteNumber_lock lock];
+    sipRemoteNumber = new_sipRemoteNumber;
+    [sipRemoteNumber_lock unlock];
+}
 static int call_direction;
+static NSLock *call_direction_lock;
+static void set_call_direction(int new_call_direction){
+    [call_direction_lock lock];
+    call_direction = new_call_direction;
+    [call_direction_lock unlock];
+}
 static BOOL waiting_to_call;
+static NSLock *waiting_to_call_lock;
+static void set_waiting_to_call(BOOL new_waiting_to_call){
+    [waiting_to_call_lock lock];
+    waiting_to_call = new_waiting_to_call;
+    [waiting_to_call_lock unlock];
+}
 static BOOL hanging_up_call;
+static NSLock *hanging_up_call_lock;
+static void set_hanging_up_call(BOOL new_hanging_up_call){
+    [hanging_up_call_lock lock];
+    hanging_up_call = new_hanging_up_call;
+    [hanging_up_call_lock unlock];
+}
 static BOOL isMissedCall;
+static NSLock *isMissedCall_lock;
+static void set_isMissedCall(BOOL new_isMissedCall){
+    [isMissedCall_lock lock];
+    isMissedCall = new_isMissedCall;
+    [isMissedCall_lock unlock];
+}
 static CallManager *callManager;
+static NSLock *callManager_lock;
+static void set_callManager(CallManager* new_callManager){
+    [callManager_lock lock];
+    callManager = new_callManager;
+    [callManager_lock unlock];
+}
 static CXStartCallAction *startCallAction;
+static NSLock *startCallAction_lock;
+static void set_startCallAction(CXStartCallAction* new_startCallAction){
+    [startCallAction_lock lock];
+    startCallAction = new_startCallAction;
+    [startCallAction_lock unlock];
+}
 
 const size_t MAX_SIP_ID_LENGTH = 100;
 const size_t MAX_SIP_REG_URI_LENGTH = 100;
@@ -44,6 +95,14 @@ NSString* retrieveRemoteNumber(char *remoteUriCharArray);
 NSString* retrieveRemoteName(char *remoteUriCharArray);
 pjsua_call_setting createCallSettings(void);
 
+void checkCurrentThreadIsRegisteredWithPJSUA(void) {
+    static pj_thread_desc a_thread_desc;
+    static pj_thread_t *a_thread;
+    if (!pj_thread_is_registered()) {
+        pj_thread_register("LPPJSIP", a_thread_desc, &a_thread);
+    }
+}
+
 int initAndRegister(char* sipHost, char* sipUser, char* sipPassword) {
     if (!isPjsuaRunning()) {
         postLocalNotification(CALL_EVENT_INITIALIZING, nil);
@@ -60,6 +119,7 @@ int initAndRegister(char* sipHost, char* sipUser, char* sipPassword) {
             pjsua_config_default (&cfg);
             cfg.user_agent = pj_str("Pjsua2 iOS");
             cfg.stun_host = pj_str("stun.pjsip.org");
+//            cfg.thread_cnt = 1;
             // media config
             pjsua_media_config media_cfg;
             pjsua_media_config_default(&media_cfg);
@@ -140,15 +200,23 @@ int registerSipUser(char *sipDomain, char *sipUser, char *sipPassword) {
 }
 
 int startCalling(char* destUri) {
+    checkCurrentThreadIsRegisteredWithPJSUA();
     char destUriPostfix[] = ";transport=tcp";
     strcat(destUri, destUriPostfix);
     postLocalNotification(CALL_EVENT_STARTING_CALL, nil);
     pj_str_t uri = pj_str(destUri);
     pjsua_call_setting call_settings = createCallSettings();
     pj_status_t status;
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+//    });
+    
     status = pjsua_call_make_call(acc_id, &uri, &call_settings, NULL, NULL, &current_call_id);
     if (status == PJ_SUCCESS) {
-        [startCallAction fulfill];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [startCallAction fulfill];
+        });
+        
     } else {
         postLocalNotification(CALL_EVENT_ERROR, @"Error making call");
         return 1;
@@ -156,13 +224,13 @@ int startCalling(char* destUri) {
     return 0;
 }
 
-int waitForIncomingCall() {
+int waitForIncomingCall(void) {
     postLocalNotification(CALL_EVENT_WAITING_TO_CALL, nil);
-    waiting_to_call = YES;
+    set_waiting_to_call(YES);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, WAITING_TO_CALL_SEC * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         if (waiting_to_call) {
             NSLog(@"#### Destroying SIP because no any call has been come");
-            waiting_to_call = NO;
+            set_waiting_to_call(NO);
             destroySip();
         } else {
             NSLog(@"#### Call has been successfuly come");
@@ -211,7 +279,7 @@ static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_r
     pjsua_call_info ci;
     pjsua_call_get_info(call_id, &ci);
     if (waiting_to_call) {
-        waiting_to_call = NO;
+        set_waiting_to_call(NO);
         char* sip_remote_uri = ci.remote_info.ptr;
         NSString *remoteNumber = retrieveRemoteNumber(sip_remote_uri);
         NSString *remoteName = retrieveRemoteName(sip_remote_uri);
@@ -220,7 +288,7 @@ static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_r
             [callManager setRemoteName:remoteName];
         });
         pjsua_call_answer(call_id, PJSIP_SC_RINGING, NULL, NULL);
-        current_call_id = call_id;
+        set_current_call_id(call_id);
         dispatch_async(dispatch_get_main_queue(), ^{
             [callManager onSipStartRinging];
         });
@@ -231,6 +299,7 @@ static void on_incoming_call(pjsua_acc_id acc_id, pjsua_call_id call_id, pjsip_r
 
 /* Callback called by the library when call's state has changed */
 static void on_call_state(pjsua_call_id call_id, pjsip_event *e) {
+    checkCurrentThreadIsRegisteredWithPJSUA();
     if (current_call_id != call_id) {
         // get rid of states from another calls
         NSLog(@"#### Call IDs not matching!");
@@ -243,27 +312,28 @@ static void on_call_state(pjsua_call_id call_id, pjsip_event *e) {
     if (state == PJSIP_INV_STATE_NULL) {
         return;
     }
-    NSLog(@"##### CALL STATE: %@", [NSString stringWithCString:ci.state_text.ptr encoding:[NSString defaultCStringEncoding]]);
+//    NSLog(@"##### CALL STATE: %@", [NSString stringWithCString:ci.state_text.ptr encoding:[NSString defaultCStringEncoding]]);
     if (state == PJSIP_INV_STATE_EARLY) {
-        isMissedCall = YES;
+        set_isMissedCall(YES);
     } else if (state == PJSIP_INV_STATE_CALLING) {
         postLocalNotification(CALL_EVENT_CALLING, nil);
     } else if (state == PJSIP_INV_STATE_CONNECTING) {
         postLocalNotification(CALL_EVENT_CONNECTING, nil);
     } else if (state == PJSIP_INV_STATE_CONFIRMED) {
         // TODO start measure time here
-        isMissedCall = NO;
+        set_isMissedCall(NO);
         postLocalNotification(CALL_EVENT_CALL_ESTABLISHED, nil);
     } else if (state == PJSIP_INV_STATE_DISCONNECTED) {
         postLocalNotification(CALL_EVENT_CALL_ENDED, nil);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [callManager hangUpCurrentCall:isMissedCall];
-        });
+        [callManager hangUpCurrentCall:isMissedCall];
+        
     }
+    
 }
 
 /* Callback called by the library when call's media state has changed */
 static void on_call_media_state(pjsua_call_id call_id) {
+    checkCurrentThreadIsRegisteredWithPJSUA();
     pjsua_call_info ci;
     pjsua_call_get_info(call_id, &ci);
     NSLog(@"##### MEDIA STATE: %@", [NSString stringWithCString:ci.state_text.ptr encoding:[NSString defaultCStringEncoding]]);
@@ -318,7 +388,7 @@ void postLocalNotification(NSString *eventName ,NSString *message) {
 }
 
 /* create default call settings */
-pjsua_call_setting createCallSettings() {
+pjsua_call_setting createCallSettings(void) {
     pjsua_call_setting call_settings;
     pjsua_call_setting_default(&call_settings);
     call_settings.aud_cnt = 1;
@@ -327,33 +397,34 @@ pjsua_call_setting createCallSettings() {
     return call_settings;
 }
 
-void reInitVariables() {
-    hanging_up_call = NO;
-    waiting_to_call = NO;
-    call_direction = 0;
-    callManager = nil;
-    startCallAction = nil;
-    sipRemoteNumber = nil;
-    isMissedCall = NO;
+void reInitVariables(void) {
+    set_hanging_up_call(NO);
+    set_waiting_to_call(NO);
+    set_call_direction(0);
+    set_callManager(nil);
+    set_startCallAction(nil);
+    set_sipRemoteNumber(nil);
+    set_isMissedCall(NO);
 }
 
 void makeCall(NSString *sipHost, NSString *sipUser, NSString *sipPassword, NSString *sipCalleeUri, CallManager *cm, CXStartCallAction *sca) {
-    reInitVariables();
-    call_direction = CALL_DIRECTION_OUTGOING;
-    callManager = cm;
-    startCallAction = sca;
-    sipRemoteNumber = sipCalleeUri;
-    // make char arrays...
-    char *sipHostCharArray = (char *)[sipHost cStringUsingEncoding:[NSString defaultCStringEncoding]];
-    char *sipUserCharArray = (char *)[sipUser cStringUsingEncoding:[NSString defaultCStringEncoding]];
-    char *sipPasswordCharArray = (char *)[sipPassword cStringUsingEncoding:[NSString defaultCStringEncoding]];
-    initAndRegister(sipHostCharArray, sipUserCharArray, sipPasswordCharArray);
+        checkCurrentThreadIsRegisteredWithPJSUA();
+        reInitVariables();
+        set_call_direction(CALL_DIRECTION_OUTGOING);
+        set_callManager(cm);
+        set_startCallAction(sca);
+        set_sipRemoteNumber(sipCalleeUri);
+        // make char arrays...
+        char *sipHostCharArray = (char *)[sipHost cStringUsingEncoding:[NSString defaultCStringEncoding]];
+        char *sipUserCharArray = (char *)[sipUser cStringUsingEncoding:[NSString defaultCStringEncoding]];
+        char *sipPasswordCharArray = (char *)[sipPassword cStringUsingEncoding:[NSString defaultCStringEncoding]];
+        initAndRegister(sipHostCharArray, sipUserCharArray, sipPasswordCharArray);
 }
 
 void incomingCall(char* sipHost, char* sipUser, char* sipPassword, CallManager *cm) {
     reInitVariables();
-    call_direction = CALL_DIRECTION_INCOMING;
-    callManager = cm;
+    set_call_direction(CALL_DIRECTION_INCOMING);
+    set_callManager(cm);
     initAndRegister(sipHost, sipUser, sipPassword);
 }
 
@@ -376,7 +447,7 @@ int muteMicrophone(BOOL isMute) {
     return 1;
 }
 
-BOOL isPjsuaRunning() {
+BOOL isPjsuaRunning(void) {
     if (pjsua_get_state() != PJSUA_STATE_NULL) {
         return YES;
     } else {
@@ -384,7 +455,7 @@ BOOL isPjsuaRunning() {
     }
 }
 
-BOOL isOngoingCall() {
+BOOL isOngoingCall(void) {
     if (isPjsuaRunning()) {
         pjsua_call_info ci;
         pjsua_call_get_info(current_call_id, &ci);
@@ -395,7 +466,7 @@ BOOL isOngoingCall() {
     return NO;
 }
 
-int answerCall() {
+int answerCall(void) {
     // this should be called only from CallKit
     if (isPjsuaRunning()) {
         pjsua_call_info ci;
@@ -413,15 +484,14 @@ int answerCall() {
     return 1;
 }
 
-int setAudioDevice() {
-    // this should be called only from CallKit
+void setAudioDevice(void) {
+    checkCurrentThreadIsRegisteredWithPJSUA();
     NSLog(@"#### Setting audio dev");
     pj_status_t status = pjsua_set_snd_dev(PJMEDIA_AUD_DEFAULT_CAPTURE_DEV, PJMEDIA_AUD_DEFAULT_PLAYBACK_DEV);
     if (status != PJ_SUCCESS) {
         NSLog(@"Error while setting sound devices");
-        return 1;
     }
-    return 0;
+    NSLog(@"#### Audio dev set");
 }
 
 int sendDtmfDigits(char* digitsCharArray) {
@@ -456,30 +526,47 @@ int setHold(BOOL isHold) {
     return 0;
 }
 
-void endCall() {
-    if (hanging_up_call) {
-        NSLog(@"Call is already hanging up");
-        return;
-    }
-    if (!isPjsuaRunning()) {
-        NSLog(@"Sip library is not running now");
-        return;
-    }
-    if (!isOngoingCall()) {
-        NSLog(@"There is no any ongoing call right now");
+void endCall(void) {
+    @try {
+        if (hanging_up_call) {
+            NSLog(@"Call is already hanging up");
+            return;
+        }
+        NSLog(@"##### hanging_up_call");
+        if (!isPjsuaRunning()) {
+            NSLog(@"Sip library is not running now");
+            return;
+        }
+        NSLog(@"##### isPjsuaRunning");
+        if (!isOngoingCall()) {
+            NSLog(@"There is no any ongoing call right now");
+            destroySip();
+            return;
+        }
+        NSLog(@"##### isOngoingCall");
+        set_hanging_up_call(YES);
+        postLocalNotification(CALL_EVENT_HANGING_UP_CALL, nil);
+        checkCurrentThreadIsRegisteredWithPJSUA();
+        NSLog(@"##### checkCurrentThreadIsRegisteredWithPJSUA");
+        pjsua_call_hangup_all();
+        NSLog(@"##### pjsua_call_hangup_all");
         destroySip();
-        return;
+        NSLog(@"##### destroySip");
     }
-    hanging_up_call = YES;
-    postLocalNotification(CALL_EVENT_HANGING_UP_CALL, nil);
-    pjsua_call_hangup_all();
-    destroySip();
+    @catch (NSException *exception) {
+        NSLog(@"Unable end call: %@", exception);
+    }
 }
 
-void destroySip() {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        reInitVariables(); // we need to reinit variables beacause they are static
+void destroySip(void) {
+    @try {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            reInitVariables(); // we need to reinit variables beacause they are static
+        });
         pjsua_destroy();
-    });
-    
+        NSLog(@"##### pjsua_destroy");
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Unable end call: %@", exception);
+    }
 }

@@ -131,23 +131,25 @@
 }
 
 - (void)hangUpCurrentCall:(BOOL)isMissedCall  {
-    if (uuid == nil) {
-        NSLog(@"Nothing to hang up");
-        return;
-    }
-    CXEndCallAction *endCallAction = [[CXEndCallAction alloc] initWithCallUUID:uuid];
-    CXTransaction *transaction = [[CXTransaction alloc] initWithAction:endCallAction];
-    [self.callKitCallController requestTransaction:transaction completion:^(NSError *error) {
-        if (error) {
-            NSLog(@"EndCallAction transaction request failed: %@", [error localizedDescription]);
-            [endCallAction fail];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (uuid == nil) {
+            NSLog(@"Nothing to hang up");
             return;
         }
-        [endCallAction fulfill];
-        if (isMissedCall) {
-//            [self showMissedCall];
-        }
-    }];
+        CXEndCallAction *endCallAction = [[CXEndCallAction alloc] initWithCallUUID:uuid];
+        CXTransaction *transaction = [[CXTransaction alloc] initWithAction:endCallAction];
+        [self.callKitCallController requestTransaction:transaction completion:^(NSError *error) {
+            if (error) {
+                NSLog(@"EndCallAction transaction request failed: %@", [error localizedDescription]);
+                [endCallAction fail];
+                return;
+            }
+            [endCallAction fulfill];
+            if (isMissedCall) {
+    //            [self showMissedCall];
+            }
+        }];
+    });
 }
 
 - (void)showMissedCall {
@@ -216,7 +218,7 @@
 
 -(void)provider:(CXProvider *)provider performEndCallAction:(CXEndCallAction *)action {
     endCall();
-    [action fulfillWithDateEnded:[NSDate date]];
+//    [action fulfillWithDateEnded:[NSDate date]];
     uuid = nil;
     [appDelegate hideCallFloatingButton];
 }

@@ -52,7 +52,7 @@ void incomingCall(char* sipHost, char* sipUser, char* sipPassword, CallManager *
 /**
  Set audio device properly
  */
-int setAudioDevice(void);
+void setAudioDevice(void);
 
 
 /**

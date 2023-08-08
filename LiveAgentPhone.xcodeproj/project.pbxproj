@@ -229,6 +229,8 @@
 		30265F5620AAEC9D00F0E7FD /* InternalListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InternalListViewController.m; sourceTree = "<group>"; };
 		30265F5B20AAF88900F0E7FD /* InternalTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InternalTableViewCell.h; sourceTree = "<group>"; };
 		30265F5C20AAF88900F0E7FD /* InternalTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InternalTableViewCell.m; sourceTree = "<group>"; };
+		302683712A814AA200178D64 /* UIView_draggable.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UIView_draggable.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		302683752A814B5100178D64 /* UIView_draggable.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UIView_draggable.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		302F84F32643EA500087FDA4 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		302F84FB2643EF690087FDA4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3031E6EA1E03614E00106268 /* InitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InitViewController.h; sourceTree = "<group>"; };
@@ -334,6 +336,8 @@
 		1F98DDA9073D1AE25E7B4435 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				302683752A814B5100178D64 /* UIView_draggable.framework */,
+				302683712A814AA200178D64 /* UIView_draggable.framework */,
 				30B1067B24F7A1F5004BF2B3 /* WebKit.framework */,
 				3010DB121F9E91CA00CAAD7B /* AFNetworking.framework */,
 				3010DB131F9E91CA00CAAD7B /* HexColors.framework */,

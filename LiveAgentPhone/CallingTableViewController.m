@@ -119,13 +119,11 @@
 }
 
 - (void)finish {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIViewController *currentController = [UIApplication sharedApplication].keyWindow.rootViewController;
-        while (currentController.presentedViewController) {
-            currentController = currentController.presentedViewController;
-        }
-        [currentController dismissViewControllerAnimated:YES completion:nil];
-    });
+    UIViewController *currentController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (currentController.presentedViewController) {
+        currentController = currentController.presentedViewController;
+    }
+    [currentController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)onClickMute:(id)sender {
